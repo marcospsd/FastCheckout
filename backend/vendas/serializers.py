@@ -82,9 +82,15 @@ class VendaSerializers(serializers.ModelSerializer):
 
 
 class VendasSecSerializer(serializers.ModelSerializer):
+    corpovenda = CorpoVendaSerializers(source='ordem_venda', many=True, read_only=True)
+    formavenda = FormaVendaSerializers(source='formpag_venda', many=True, read_only=True)
+    vendedorname = VendedorSerializer(source='vendedor', read_only=True)
+    dadoscliente = ClienteSerializers(source='cpf', read_only=True)
+
     class Meta:
         model = Venda
-        fields = ['ordem', 'cpf', 'create_at', 'status', 'total_venda', 'vendedor']
+        fields = ['ordem', 'cpf', 'dadoscliente', 'create_at', 'vendedorname', 'status', 'total_venda',
+                    'vendedor', 'corpovenda', 'formavenda']
         
 
 

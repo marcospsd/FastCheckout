@@ -2,8 +2,6 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StatusBar, StyleSheet, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
-const statusBarHeight = StatusBar.currentHeight
-
 export const TopBar = ({ PageName, navigation }) => {
 
 
@@ -13,6 +11,8 @@ export const TopBar = ({ PageName, navigation }) => {
                 return 'Resumo Venda'
             case 'CreateEditVenda':
                 return "Venda"
+            case 'ConfigPage':
+                return "Configuração"
             default:
                 return PageName
             
@@ -53,11 +53,12 @@ export const TopBar = ({ PageName, navigation }) => {
 const styles = StyleSheet.create({
     header: {
         backgroundColor: '#c52f33',
-        paddingTop: statusBarHeight+10,
+        paddingTop: 10,
         paddingBottom: 10,
         paddingStart: 10,
         paddingEnd: 25,
         flexDirection: 'row',
+
     },
     content: {
         flex: 1,

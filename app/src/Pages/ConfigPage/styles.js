@@ -6,7 +6,7 @@ export const ContainerLogin = styled.View`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 300px;
+    width: 350px;
     background-color: white;
     border-radius: 15px;
 

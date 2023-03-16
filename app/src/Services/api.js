@@ -7,6 +7,12 @@ export const api = axios.create({
     timeout: 15000
 })
 
+export const service = axios.create({
+    baseURL: "",
+    timeout: 5000
+})
+
+
 export const useAxios = (url) => {
     //const { mutate } = useSWRConfig()
     const { data, error, mutate} = useSWR(url, async url => {

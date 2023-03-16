@@ -1,6 +1,7 @@
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import permissions, viewsets
 from .models import *
 from .serializers import *
@@ -31,3 +32,10 @@ class CreateUserView(viewsets.ModelViewSet):
 class AtualizarUserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AtualizaUserSerializer
+
+
+class StatusServer(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, format=None):
+        return Response({ 'status': 'online'})

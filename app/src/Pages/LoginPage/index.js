@@ -5,6 +5,8 @@ import { ContainerLogin } from './styles'
 import IMGLogo from '../../Assets/FAST2.png'
 import { Feather } from '@expo/vector-icons';
 import { AuthContext } from '../../Context/authcontext'
+import AlertSnack from '../../Components/Snackbar'
+
 
 
 const LoginPage = ({ navigation }) => {
@@ -12,11 +14,14 @@ const LoginPage = ({ navigation }) => {
     const [ disabled, setDisabled ] = useState(false)
     const [ viewpass, setViewPass] = useState(true)
     const [ data, setData] = useState({ username: "", password: ""})
+    const [ alert, setAlert ] = useState({ open: false, text: ""})
+
 
     const Entrar = async () => {
         if (data.username && data.password) {
             setDisabled(true)
-            Login(data)
+            const x = await Login(data)
+            if (x) setAlert({ open: true, text: x})
             setDisabled(false)
         }        
 
@@ -25,16 +30,17 @@ const LoginPage = ({ navigation }) => {
 
     return (
     <View style={{ flex: 1, backgroundColor: '#c52f33', alignItems: 'center', justifyContent: 'center'}}>
+        
         <ContainerLogin style={{elevation: 100}}>
-            <Image source={IMGLogo} style={{ width: 290, height: 80, marginBottom: 30, marginTop: 20}} resizeMode="contain"/>
+            <Image source={IMGLogo} style={{ width: 300, height: 100, marginBottom: 30, marginTop: 20}} resizeMode="contain" />
             <TextInput 
-                style={{ width: 250, marginBottom: 10, backgroundColor: 'rgba(201, 201, 201, 0.2)' }} theme={{ colors: { primary: '#c52f33'}}}
+                style={{ width: 300, marginBottom: 10, backgroundColor: 'rgba(201, 201, 201, 0.2)' }} theme={{ colors: { primary: '#c52f33'}}}
                 label="Login"
                 onChangeText={(text) => setData({...data, username: text})}
                 left={ <TextInput.Icon icon="account" color="black" disabled/> }
                 />
             <TextInput 
-                style={{ width: 250, marginBottom: 20, backgroundColor: 'rgba(201, 201, 201, 0.2)',}} theme={{ colors: { primary: '#c52f33'}}}
+                style={{ width: 300, marginBottom: 20, backgroundColor: 'rgba(201, 201, 201, 0.2)',}} theme={{ colors: { primary: '#c52f33'}}}
                 label="Senha"
                 secureTextEntry={viewpass}
                 onChangeText={(text) => setData({...data, password: text})}
@@ -43,11 +49,12 @@ const LoginPage = ({ navigation }) => {
                     <TextInput.Icon icon={viewpass ? 'eye' : 'eye-off'} onPress={() => setViewPass(!viewpass)} />
                 }
                 />
-            <Button mode="contained" style={{ marginBottom: 20}} theme={{ colors: { primary: '#c52f33'}}} onPress={Entrar} disabled={disabled}>Entrar</Button>
+            <Button mode="contained" style={{ width: 150, marginBottom: 20}} theme={{ colors: { primary: '#c52f33'}}} onPress={Entrar} disabled={disabled}>Entrar</Button>
             <TouchableOpacity style={{ marginBottom: 20}} onPress={() => navigation.navigate('ConfigPage')}>
                 <Feather name="settings" size={40} color="black" />
             </TouchableOpacity>
         </ContainerLogin>
+        <AlertSnack text={alert.text} open={alert} setOpen={setAlert} />
     </View>
     )
 }

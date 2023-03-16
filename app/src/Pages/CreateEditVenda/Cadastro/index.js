@@ -3,14 +3,22 @@ import { View, Text, Alert, StyleSheet } from 'react-native'
 import { TextInput, Provider } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
-
+import { ActivityIndicator } from 'react-native-paper'
+import { api } from '../../../Services/api'
 
 
 const Cadastro = () => {
     const { state, setState } = useContext(CreateVendaContext)
+    const [ disabled, setDisabled ] = useState(false)
     const cpfREF = useRef(null)
 
-    
+    const BuscaCPF = () => {
+        const x = api.get(`/cliente/cliente/${cpfREF.current.getRawValue()}/`)
+        .then((res) => {
+            setState({...state, dadoscliente: res.data})
+        })
+        return x
+    }
     console.log(state)
     return ( 
         <View style={{ flex: 1, padding: 10}}>
@@ -22,8 +30,11 @@ const Cadastro = () => {
                     onChangeText={(text) => setState({...state, cpf: text, dadoscliente: {...state.dadoscliente, cpf: text }})}
                     value={state.cpf}
                     onBlur={() => {
+                        setDisabled(true)
                         if (state.cpf.length == 0) return;
                         if (!cpfREF.current.isValid()) return Alert.alert("ERRO !", "CPF Invalido ou Incompleto !", [ { text: 'OK', style: 'cancel'} ], { cancelable: false })
+                        const x = BuscaCPF()
+                        setDisabled(false)
                     }}
                     render={
                         (props) => (
@@ -33,7 +44,13 @@ const Cadastro = () => {
                             ref={cpfREF}
                             />)
                         }
+                    right={() => {
+                        if (disabled) {
+                            <ActivityIndicator />
+                        }
+                    }}
                     theme={{ colors: { primary: '#c52f33'}}}
+                    disabled={disabled}
                         />
                 <TextInput 
                     style={styles.textinput}
@@ -43,6 +60,7 @@ const Cadastro = () => {
                     autoCapitalize="characters"
                     autoCorrect={false}
                     theme={{ colors: { primary: '#c52f33'}}}
+                    disabled={disabled}
                     />
                 <TextInput
                     style={styles.textinput}
@@ -62,6 +80,7 @@ const Cadastro = () => {
                         }} /> )
                     } 
                     theme={{ colors: { primary: '#c52f33'}}}
+                    disabled={disabled}
                     />
                 <TextInput
                     style={styles.textinput}
@@ -72,6 +91,7 @@ const Cadastro = () => {
                     autoCapitalize="characters"
                     autoCorrect={false}
                     theme={{ colors: { primary: '#c52f33'}}}
+                    disabled={disabled}
                     />
             </Provider>
         </View>

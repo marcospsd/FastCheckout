@@ -27,8 +27,8 @@ export const AuthProvider = ({children}) => {
         loadStorageData()
     }, [])
 
-    const Login = (data) => {
-        api.post('/auth/', data)
+    const Login = async (data) => {
+        const x = api.post('/auth/', data)
         .then((res) => {
             setUser(res.data)
             api.defaults.headers.Authorization = `token ${res.data.token}`
@@ -36,9 +36,10 @@ export const AuthProvider = ({children}) => {
             AsyncStorage.setItem('@tokenuser', res.data.token)
         })
         .catch((err) => {
-            return JSON.stringify(err.data)
+           return "Não foi possivel fazer login com as credencias fornecidas."
         })
-        console.log(user)
+        
+        return x
     }
 
     const Logout = async () => {

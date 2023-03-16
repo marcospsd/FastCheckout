@@ -10,6 +10,7 @@ import OptionsButtonsVenda from '../../Components/OptionsButtonsVenda';
 
 const ViewVenda = ({ navigation, route }) => {
     const data = route.params.data
+
     return (
     <View style={{ flex: 1}}>
         <TopBar navigation={navigation} PageName={route.name} />
@@ -22,7 +23,7 @@ const ViewVenda = ({ navigation, route }) => {
                     </View>
                     <View style={{ flexDirection: 'row'}}>
                         <BoldText>Vendedor:</BoldText>
-                        <NormalText> {data.vendedorname.first_name}</NormalText>
+                        <NormalText> {data.vendedorname?.first_name}</NormalText>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row',justifyContent: 'space-between', marginBottom: 5}}>
@@ -110,7 +111,7 @@ const ViewVenda = ({ navigation, route }) => {
                 </Grid>
             </ContainerResumo>
             <View>
-                <OptionsButtonsVenda venda={data}/>
+                <OptionsButtonsVenda venda={data} navigation={navigation}/>
             </View>
         </ScrollView>
     </View>

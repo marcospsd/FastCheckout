@@ -1,23 +1,26 @@
 import React from 'react'
-import { SafeAreaView,} from 'react-native'
+import { SafeAreaView} from 'react-native'
 import { FlatListDisplay } from '../../../Components/FlatListDisplay'
 import { TopBarHome } from '../../../Components/TopBarHome'
-import { data } from '../../../Functions/test'
-import { useAxios } from '../../../Services/api'
+import { useAxios, api } from '../../../Services/api'
 import LoadingComponent from '../../../Components/LoadingComponent'
 
 
 
 const PendentesView = ({ navigation }) => {
-    const { data } = useAxios('/vendas/venda/')
+    const { data, mutate } = useAxios('/vendas/venda/')
 
-    if (!data) return (<LoadingComponent background="white" color="white"/>)
-
+    const DeleteItem = (item) => {
+        api.delete(`/vendas/venda/${item}/`)
+        .then((res) => {
+            mutate()
+        })
+    }
 
     return (
         <SafeAreaView style={{ flex: 1}}>
             <TopBarHome/>
-            <FlatListDisplay data={data} navigation={navigation}/>
+           { data ? <FlatListDisplay data={data} navigation={navigation} DeleteItem={DeleteItem} mutate={mutate}/> : <LoadingComponent background="white" color="black"/> }
         </SafeAreaView>
     )
 }

@@ -9,6 +9,7 @@ userrouter.register('attuser', AtualizarUserView)
 
 urlpatterns = [
     path("", CustomAuthToken.as_view()),
+    path("status/", StatusServer.as_view())
 ]
 
 

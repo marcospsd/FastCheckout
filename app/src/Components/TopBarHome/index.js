@@ -31,12 +31,13 @@ export const TopBarHome = () => {
 const styles = StyleSheet.create({
     header: {
         backgroundColor: '#c52f33',
-        paddingTop: statusBarHeight+10,
+        paddingTop: 10,
         paddingBottom: 10,
         paddingStart: 10,
         paddingEnd: 10,
         flexDirection: 'row',
-        borderRadius: 15,
+        borderBottomRightRadius: 15,
+        borderBottomLeftRadius:15,
         elevation: 15,
     },
     content: {
