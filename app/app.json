@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "FastCheckout",
+    "slug": "fastcheckoutapp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#C52F33"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#C52F33"
+      },
+      "package": "com.dinizvitoria.fastcheckout",
+      "runtimeVersion": "1.0.0"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2069e253-e2ed-45f0-b74b-15b845b7d779"
+      }
+    }
+  },
+  "name": "fastcheckoutapp"
+}
