@@ -13,13 +13,16 @@ const Cadastro = () => {
     const cpfREF = useRef(null)
 
     const BuscaCPF = () => {
+        setDisabled(true)
         const x = api.get(`/cliente/cliente/${cpfREF.current.getRawValue()}/`)
         .then((res) => {
             setState({...state, dadoscliente: res.data})
         })
+        .finally((res) => setDisabled(false))
         return x
     }
-    console.log(state)
+
+
     return ( 
         <View style={{ flex: 1, padding: 10}}>
             <Provider>
@@ -30,11 +33,9 @@ const Cadastro = () => {
                     onChangeText={(text) => setState({...state, cpf: text, dadoscliente: {...state.dadoscliente, cpf: text }})}
                     value={state.cpf}
                     onBlur={() => {
-                        setDisabled(true)
                         if (state.cpf.length == 0) return;
                         if (!cpfREF.current.isValid()) return Alert.alert("ERRO !", "CPF Invalido ou Incompleto !", [ { text: 'OK', style: 'cancel'} ], { cancelable: false })
-                        const x = BuscaCPF()
-                        setDisabled(false)
+                        if (state.cpf.length == 14) BuscaCPF()
                     }}
                     render={
                         (props) => (
@@ -44,14 +45,10 @@ const Cadastro = () => {
                             ref={cpfREF}
                             />)
                         }
-                    right={() => {
-                        if (disabled) {
-                            <ActivityIndicator />
-                        }
-                    }}
                     theme={{ colors: { primary: '#c52f33'}}}
                     disabled={disabled}
                         />
+                    {disabled == true ?  <ActivityIndicator style={{ position: 'absolute', top: 25, right: 25}}/> : null}
                 <TextInput 
                     style={styles.textinput}
                     label='Nome'

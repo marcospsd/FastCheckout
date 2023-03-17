@@ -8,8 +8,8 @@ export const FlatListDisplay = ({ data, navigation, DeleteItem, mutate }) => {
     const [ refresh, setRefresh] = useState(false)
 
     const onRefresh = () => {
-        setRefresh(false)
         mutate()
+        setRefresh(false)
     }
 
     return (
