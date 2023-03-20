@@ -6,11 +6,29 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Grid} from 'react-native-easy-grid'
 
 
-const CardProducts = ({ data }) => {
+const CardProducts = ({ data, setOpen, setProduto, DeleteItem}) => {
+
+    const DeleteItemAlert = (data) => {
+        Alert.alert(
+            'ATENÇÃO',
+            'Deseja deletar esse item ?', 
+            [
+                {text: 'Deletar', onPress: () => DeleteItem(data)},
+                {text: 'Cancelar', style: 'cancel', color: 'red'}
+            ],
+            { cancelable: false }
+            )
+    }
 
 
     return (
-            <TouchableOpacity activeOpacity={0.7} onPress={() => console.log("EditItem")} onLongPress={() => console.log("DeleteItem")}>
+            <TouchableOpacity 
+                    activeOpacity={0.7} 
+                    onPress={() => {
+                        setProduto(data)
+                        setOpen(true)
+                    }} 
+                    onLongPress={() => DeleteItemAlert(data)}>
                 <Card style={[styles.card]}>
                     <Card.Content style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={styles.iconsview}>
@@ -36,7 +54,7 @@ const CardProducts = ({ data }) => {
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <View style={styles.contentrow}>
                                     <Text style={styles.textprimary}>Desconto: </Text>
-                                    <Text style={styles.textsecundary}>X %</Text>
+                                    <Text style={styles.textsecundary}>{Math.round( (1-(parseInt(data.valor_unitpro)/parseInt(data.valor_unitsis) ) )*100 )} %</Text>
                                 </View>
                             </View>
                         </View>

@@ -11,16 +11,7 @@ const NewState = {
     total_venda: "",
     vendedor: "",
     status: "",
-    corpovenda: [
-        {
-            id: 1,
-            codpro: "1175157",
-            descripro: "OC RBRAN TESTE TESTE TESTE",
-            valor_unitpro: 250,
-            valor_unitsis: 250,
-            quantidade: 1
-        }
-    ],
+    corpovenda: [],
     formavenda: []
 }
 
