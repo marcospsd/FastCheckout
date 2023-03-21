@@ -6,13 +6,17 @@ import CardProducts from '../../../Components/CardProducts'
 import ModalEditProducts from '../../../Components/ModalEditProduct'
 import { Provider } from 'react-native-paper'
 import SearchProducts from '../../../Components/SearchProducts'
+import BarCodeView from '../../../Components/BarCode'
 
 
 const Produtos = ({}) => {
     const { state, setState } = useContext(CreateVendaContext)
     const [ open, setOpen ] = useState(false)
+    const [ barcode, setBarCode ] = useState(false)
     const [ pageadd, setPageAdd] = useState(false)
     const [ produto, setProduto ] = useState(null)
+    const [fabbutton, setFabButton] = useState(false)
+    const [ id, setId] = useState(10000)
 
 
     const EditID = (item) =>{
@@ -26,18 +30,31 @@ const Produtos = ({}) => {
         setState({...state, corpovenda: x})
     }
 
-    const AddItem = (item) =>{
-        setState({...state, corpovenda: [...state.corpovenda, item]})
+    const AddItem = (data) =>{
+        const x = {
+            codpro: data.codigo,
+            descripro: data.descricao,
+            valor_unitsis: data.valor_unitsis,
+            valor_unitpro: data.valor_unitpro,
+            quantidade: 1,
+            id: id
+        }
+        setState({...state, corpovenda: [...state.corpovenda, x]})
+        setId(id+1)
     }
 
     const onPressAddItem = () => {
         setPageAdd(!pageadd)
     }
+
+    const onPressBarCode = () => {
+        setBarCode(!barcode)
+    }
     return ( 
         <View style={{flex: 1}}>
             <Provider>
                 <SearchProducts visible={pageadd} setVisible={setPageAdd} AddItem={AddItem}/>
-                <ModalEditProducts visible={open} setVisible={setOpen} item={produto} setItem={setProduto} EditItem={EditID}/>
+                { open && <ModalEditProducts visible={open} setVisible={setOpen} item={produto} setItem={setProduto} EditItem={EditID}/> }
                 <FlatList
                     style={styles.bottomBar}
                     data={state.corpovenda}
@@ -46,7 +63,8 @@ const Produtos = ({}) => {
                     renderItem={ ({ item }) => <CardProducts data={item} setOpen={setOpen} setProduto={setProduto} DeleteItem={DeleteItem}/>}
                     ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Carrinho Vazio ...</Text></View>}
                 />
-                <FAButton style={{ bottom: 80, right: 60 }} onPressAddItem={onPressAddItem}/>
+                <FAButton style={{ bottom: 80, right: 60 }} onPressAddItem={onPressAddItem} onPressBarCode={onPressBarCode} open={fabbutton} setOpen={setFabButton}/>
+                { barcode && <BarCodeView visible={barcode} setVisible={setBarCode} AddItem={AddItem}/> }
             </Provider>
         </View>
     )

@@ -6,7 +6,8 @@ import { formatDinheiro } from '../../Functions/format';
 
 const ModalEditProducts = ({ visible, setVisible, item, setItem, EditItem, }) => {
     const containerStyle = {backgroundColor: 'white', padding: 30};
-    const [ desc, setDesc] = useState(0)
+    const result = (1-(parseInt(item?.valor_unitpro)/parseInt(item?.valor_unitsis)))*100
+    const [ desc, setDesc] = useState(result ? String(result) : 0)
 
     const PorctoValue = (text) => {
         if (text == "") {
@@ -25,7 +26,7 @@ const ModalEditProducts = ({ visible, setVisible, item, setItem, EditItem, }) =>
         setItem({...item, valor_unitpro: 0})
         return;
       }
-      const result = (parseInt(text)/item.valor_unitsis)
+      const result = 1 - (parseInt(text)/item.valor_unitsis)
       return setDesc(Math.round(result*100))
     }
 

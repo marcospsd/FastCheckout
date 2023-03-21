@@ -8,7 +8,6 @@ import { formatDinheiro } from '../../Functions/format'
 const SearchProducts = ({ visible, setVisible, AddItem}) => {
     const [product, setProduct] = useState("")
     const [result, setResult ] = useState([])
-    const [id, setId] = useState(100000)
 
 
     const SearchItem = (item) => {
@@ -28,16 +27,7 @@ const SearchProducts = ({ visible, setVisible, AddItem}) => {
 
 
     const AdicionarItem = (data) => {
-        const x = {
-            codpro: data.codigo,
-            descripro: data.descricao,
-            valor_unitsis: data.valor_unitsis,
-            valor_unitpro: data.valor_unitpro,
-            quantidade: 1,
-            id: id
-        }
-        AddItem(x)
-        setId(id+1)
+        AddItem(data)
         setResult([])
         setProduct("")
         setVisible(!visible)
@@ -49,7 +39,7 @@ const SearchProducts = ({ visible, setVisible, AddItem}) => {
             <TouchableOpacity style={styles.card} onPress={() => AdicionarItem(data)}>
                 <View>
                     <Text style={styles.text}>{data.codigo + " - " + data.descricao}</Text>
-                    <Text style={styles.text}>{"R$ " + formatDinheiro(data.valor_unitpro)}</Text>
+                    <Text style={styles.text}>{"PROMO: R$ " + formatDinheiro(data.valor_unitpro)}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -73,9 +63,12 @@ const SearchProducts = ({ visible, setVisible, AddItem}) => {
                             setProduct(text)
                             SearchItem(text)
                         }}
+                        style={{ backgroundColor: 'rgba(197, 47, 51, 1)',}}
+                        color={"white"}
+                        
                     />
                     <FlatList 
-                             style={{ marginBottom: 3}}
+                             style={{ marginTop: 6, marginBottom: 3}}
                              data={result}
                              keyExtractor={( item ) => String(item.codigo)}
                              showsVerticalScrollIndicator={false}
@@ -96,15 +89,15 @@ export default SearchProducts;
 const styles = StyleSheet.create({
     card: {
         flex: 1,
-        height: 50,
         backgroundColor: '#F5F5F5',
         borderRadius: 10,
-        marginTop: 3,
-        marginBottom: 3  
+        marginTop: 5,
+        marginBottom: 10,
+        padding: 10
 
     },
     text : {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: 'bold'
     }
 })

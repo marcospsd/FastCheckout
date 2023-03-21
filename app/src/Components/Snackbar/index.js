@@ -13,8 +13,10 @@ const AlertSnack = ({ open, text, setOpen}) => {
         onDismiss={() => setOpen({...open, open: !open})}
         action={{
             label: 'Fechar',
-            onPress: () => setOpen({...open, open:false})
+            onPress: () => setOpen({...open, open:false}),
+            textColor: 'white'
         }}
+
         >
         {text}
     </Snackbar>

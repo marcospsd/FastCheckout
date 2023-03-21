@@ -3,8 +3,7 @@ import { Text, View, StyleSheet, TouchableWithoutFeedback, Animated, Easing } fr
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-const FAButton = ({style, onPressQrCode, onPressCodeBar, onPressAddItem}) => {
-    const [ open ,setOpen] = useState(false)
+const FAButton = ({style, onPressBarCode, onPressAddItem, open, setOpen}) => {
     const animation = useRef(new Animated.Value(0)).current
 
 
@@ -30,7 +29,7 @@ const FAButton = ({style, onPressQrCode, onPressCodeBar, onPressAddItem}) => {
         ]
     }
 
-    const codeBar = {
+    const QrCode = {
         transform: [
             { scale: animation},
             {
@@ -42,7 +41,7 @@ const FAButton = ({style, onPressQrCode, onPressCodeBar, onPressAddItem}) => {
         ]
     }
 
-    const QrCode = {
+    const AddItem = {
         transform: [
             { scale: animation},
             {
@@ -54,30 +53,18 @@ const FAButton = ({style, onPressQrCode, onPressCodeBar, onPressAddItem}) => {
         ]
     }
 
-    const AddItem = {
-        transform: [
-            { scale: animation},
-            {
-                translateY: animation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, -180]
-                })
-            }
-        ]
+    const Press = (onPress) => {
+        onPress()
+        OpenMenu()
     }
     return (
         <View style={[styles.container, style]}>
-             <TouchableWithoutFeedback onPress={onPressCodeBar}>
-                <Animated.View style={[styles.button, styles.submenu, codeBar]}>
-                    <MaterialCommunityIcons name="barcode" size={20} color="white" />
-                </Animated.View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={onPressQrCode}>
+            <TouchableWithoutFeedback onPress={() => Press(onPressBarCode)}>
                 <Animated.View style={[styles.button, styles.submenu, QrCode]}>
                     <AntDesign name="qrcode" size={20} color="white" />
                 </Animated.View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={onPressAddItem}>
+            <TouchableWithoutFeedback onPress={() => Press(onPressAddItem)}>
                 <Animated.View style={[styles.button, styles.submenu, AddItem]}>
                     <AntDesign name="plus" size={20} color="white" />
                 </Animated.View>

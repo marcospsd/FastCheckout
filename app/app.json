@@ -35,7 +35,15 @@
       "eas": {
         "projectId": "2069e253-e2ed-45f0-b74b-15b845b7d779"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "FastCheckout deseja acessar sua camera."
+        }
+      ]
+    ]
   },
   "name": "fastcheckoutapp"
 }
