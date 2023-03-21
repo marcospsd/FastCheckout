@@ -7,15 +7,12 @@ import { Divider, Provider } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons';
 import ModalAddForma from '../../../Components/ModalAddForma'
 
-
-
 const FormaPagamento = () => {
     const { state, setState } = useContext(CreateVendaContext)
     const [ openforma, setOpenForma ] = useState(false)
     const [id, setId] = useState(100000)
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
-
 
     const DeleteItem =(item) => {
         const x = state.formavenda.filter((res) => res.id !== item.id)
@@ -75,9 +72,6 @@ const FormaPagamento = () => {
                     <Text style={styles.primarytext}>Saldo</Text>
                     <Text style={[styles.secundarytext, saldo !== 0 ? { color: 'red'} : { color: 'green'}]}>R$ {formatDinheiro(saldo)}</Text>
                 </View>
-            </View>
-            <View style={styles.container2}>
-                <Text style={styles.tittle}>Formas de Pagamentos</Text>
             </View>
             <Grid style={{ padding: 20}}>
                 <Row style={{height: 'auto', marginBottom: 0}}>

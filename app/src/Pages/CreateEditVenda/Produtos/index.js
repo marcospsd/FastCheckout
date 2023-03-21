@@ -17,6 +17,7 @@ const Produtos = ({}) => {
     const [ produto, setProduto ] = useState(null)
     const [fabbutton, setFabButton] = useState(false)
     const [ id, setId] = useState(10000)
+    const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
 
 
     const EditID = (item) =>{
@@ -39,7 +40,7 @@ const Produtos = ({}) => {
             quantidade: 1,
             id: id
         }
-        setState({...state, corpovenda: [...state.corpovenda, x]})
+        setState({...state, total_venda: total_venda ,corpovenda: [...state.corpovenda, x]})
         setId(id+1)
     }
 

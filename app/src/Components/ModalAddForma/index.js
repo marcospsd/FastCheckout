@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Modal, Portal, TextInput, Button } from 'react-native-paper'
 import { View, Text, StyleSheet} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import AlertSnack from '../../Components/Snackbar'
-
+import { AuthContext} from '../../Context/authcontext'
 
 const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
+    const { user } = useContext(AuthContext)
     const [alert, setAlert] = useState({ open: false, text: ""})
     const [data, setData] = useState({
         forma: "DH",
         parcelas: 1,
         valor: ""
         })
-
+    
     const AddCardItem = () => {
-        if (data.valor > saldo) return setAlert({open: true, text: "o Valor inserio é maior que o saldo para pagamento."})
+        if (data.valor == 0 || data.valor == "") return setAlert({open: true, text: "o Valor inserido não pode ser zerado."})
+        if (data.valor > saldo) return setAlert({open: true, text: "o Valor inserido é maior que o saldo para pagamento."})
         addCard(data)
         setData({
             forma: "DH",
@@ -23,7 +25,7 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
         })
         setVisible(!visible)
     }
-
+    console.log(data)
     return (
         <Portal>
             <Modal visible={visible} onDismiss={() => setVisible(!visible)}>
@@ -35,7 +37,7 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
                         <Text style={styles.primarytext}>Selecione a Forma</Text>
                         <Picker
                             selectedValue={data?.forma}
-                            onValueChange={(itemValue, itemIndex) => setData({...data, forma: itemValue})}
+                            onValueChange={(itemValue, itemIndex) => setData({...data, parcelas: itemValue == "CC" ? data.parcelas : 1 , forma: itemValue})}
                             >
                             <Picker.Item label="Dinheiro" value= "DH"/>
                             <Picker.Item label="Cartão de Crédito" value= "CC"/>
@@ -52,22 +54,22 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
                             enabled={data.forma !== 'CC'? false : true}
                             >
                             <Picker.Item label="1" value= {1}/>
-                            { data.forma == 'CC' && parseInt(valor) >= 300 && <Picker.Item label="2" value= {2}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 600 && <Picker.Item label="3" value= {3}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 800 && <Picker.Item label="4" value= {4}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1000 && <Picker.Item label="5" value= {5}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1200 && <Picker.Item label="6" value= {6}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1400 && <Picker.Item label="7" value= {7}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1600 && <Picker.Item label="8" value= {8}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1800 && <Picker.Item label="9" value= {9}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 2000 && <Picker.Item label="10" value= {10}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 300 || user.tipouser !== "C" && <Picker.Item label="2" value= {2}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 600 || user.tipouser !== "C" && <Picker.Item label="3" value= {3}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 800 || user.tipouser !== "C" && <Picker.Item label="4" value= {4}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1000 || user.tipouser !== "C" && <Picker.Item label="5" value= {5}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1200 || user.tipouser !== "C" && <Picker.Item label="6" value= {6}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1400 || user.tipouser !== "C" && <Picker.Item label="7" value= {7}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1600 || user.tipouser !== "C" && <Picker.Item label="8" value= {8}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1800 || user.tipouser !== "C" && <Picker.Item label="9" value= {9}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 2000 || user.tipouser !== "C" && <Picker.Item label="10" value= {10}/> }
                         </Picker>
                     </View>
                     <View>
                         <Text style={styles.primarytext}>Insira o Valor</Text>
                         <TextInput
                             value={String(data.valor)}
-                            onChangeText={(text)=>setData({...data, valor: text})}
+                            onChangeText={(text)=>setData({...data, valor: parseInt(text)})}
                             keyboardType='numeric'
                             style={{ backgroundColor: '#f9f9f9'}}
                             theme={{ colors: { primary: 'red'}}}

@@ -12,7 +12,7 @@ import { useSWRConfig } from 'swr'
 const OptionsButtonsVenda = ({ venda, navigation }) => {
     const { mutate } = useSWRConfig()
     const [ disabled, setDisabled] = useState(false)
-
+    console.log(venda)
     const AprovarCompra = () => {
         setDisabled(true)
         const x = api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status : "F"})
@@ -35,6 +35,10 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
         .catch((r) => "Algo deu errado !")
         .finally((r) => setDisabled(false))
     }   
+
+    const EditVenda = () => {
+        return navigation.navigate('CreateEditVenda', { data: venda})
+    }
 
     return (
         <Container>
@@ -59,7 +63,7 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
             </TouchableOpacity>
             
             { venda.status == "P" ? 
-            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled}>
+            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EditVenda}>
                 <FontAwesome name="edit" size={40} color="black" />
                 <Text style={styles.textButton}>Editar</Text>
             </TouchableOpacity> : null }

@@ -12,26 +12,7 @@ const NewState = {
     vendedor: "",
     status: "",
     corpovenda: [],
-    formavenda: [
-        {
-            "forma": "CC",
-            "parcelas": 1,
-            "valor": "299",
-            "id": 1
-        },
-        {
-            "forma": "CC",
-            "parcelas": 1,
-            "valor": "299",
-            "id": 2
-        },
-        {
-            "forma": "CC",
-            "parcelas": 1,
-            "valor": "299",
-            "id": 3
-        }
-    ]
+    formavenda: []
 }
 
 
