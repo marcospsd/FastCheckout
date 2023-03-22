@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
-
+import React, { useContext, useState } from 'react';
+import { AuthContext } from './authcontext'
 
 export const CreateVendaContext = React.createContext()
 
 
-const NewState = {
-    ordem: null,
-    cpf: "",
-    dadoscliente: {},
-    total_venda: "",
-    vendedor: "",
-    status: "",
-    corpovenda: [],
-    formavenda: []
-}
-
-
-
 export const ContextVenda = ({ nstate, children }) => {
-    const [ state, setState ] = useState(nstate ? nstate : NewState)
+    const { user } = useContext(AuthContext)
+    const [ state, setState ] = useState(nstate ? nstate : {
+            ordem: null,
+            cpf: "",
+            dadoscliente: {},
+            vendedor: user.id,
+            status: "P",
+            corpovenda: [],
+            formavenda: []
+    })
 
-    const initState = () => setState(NewState)
+    const initState = () => setState({
+        ordem: null,
+        cpf: "",
+        dadoscliente: {},
+        vendedor: user.id,
+        status: "P",
+        corpovenda: [],
+        formavenda: []
+    })
 
     return (
-        <CreateVendaContext.Provider value={{ state, setState, initState }}>
+        <CreateVendaContext.Provider value={{ state, setState, initState, user }}>
             { children }
         </CreateVendaContext.Provider>
     )

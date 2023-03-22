@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { View, ScrollView, Text, StyleSheet } from 'react-native'
 import { CPFReplace, formatDinheiro, FormatTelCel, NameForma } from '../../../Functions/format';
 import { ContainerResumo, BoldText, NormalText, Tittle } from './styles';
@@ -14,30 +14,36 @@ const Resumo = ({ navigation }) => {
     const { mutate } = useSWRConfig()
     const { state, setState } = useContext(CreateVendaContext) 
     const [ alert, setAlert] = useState({ open: false, text: ""})
+    const [ blockbutton ,setBlockButton] = useState(false)
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
-
+    const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
 
     const GerarVenda = () => {
         if (!state.cpf && !state.dadoscliente.nome) return setAlert({open: true, text: "Deve-se informar ao menos um CPF e Nome Completo para gerar da compra."})
         if (state.corpovenda.length == 0) return setAlert({ open: true, text: "Deve-se conter pelo menos um produto para gerar a venda."})
         if (saldo !== 0) return setAlert({ open: true, text: "O Valor do Saldo Devedor deve ser Zerado."})
+        const NewState = {...state, total_venda: parseFloat(total_venda)}
+        setState({...state, total_venda: parseFloat(total_venda)})
+        setBlockButton(!blockbutton)
         if (state.ordem) {
-            api.put(`/vendas/venda/${state.ordem}/`, state)
-            .then((res) => {
-                mutate('/venda/venda/')
-                navigation.goBack()
-            })
-        } else {
-            api.post("/vendas/venda/", state)
+            api.put(`/vendas/venda/${state.ordem}/`, NewState)
             .then((res) => {
                 mutate('/vendas/venda/')
-                navigation.goBack()
+                navigation.navigate("Home")
             })
-            .catch((err) => {
-                console.log(err)
+            .finally((res) => setBlockButton(!blockbutton))
+        } else {
+            api.post("/vendas/venda/", NewState)
+            .then((res) => {
+                mutate('/vendas/venda/')
+                navigation.navigate("Home")
+            })
+            .finally((res) => {
+                setBlockButton(!blockbutton)
             })
         }
     }
+
     return ( 
         <View style={{ flex: 1}}>
         <ScrollView>
@@ -59,7 +65,7 @@ const Resumo = ({ navigation }) => {
                     </View>
                     <View style={{ flexDirection: 'row'}}>
                         <BoldText>Total:</BoldText>
-                        <NormalText> R$ {formatDinheiro(state.total_venda)}</NormalText>
+                        <NormalText> R$ {formatDinheiro(total_venda)}</NormalText>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', marginBottom: 5}}>
@@ -140,7 +146,8 @@ const Resumo = ({ navigation }) => {
                 <Button
                     style={{backgroundColor: '#c52f33'}}
                     mode="contained"
-                    onPress={() => GerarVenda()}
+                    onPress={ () => GerarVenda()}                   
+                    disabled={blockbutton}
                     >{state.ordem ? "Atualizar Venda" : "Gerar Venda"}</Button>
             </View>
             <AlertSnack open={alert} setOpen={setAlert} text={alert.text}/>

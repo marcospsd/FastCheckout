@@ -36,6 +36,7 @@ class VendaSerializers(serializers.ModelSerializer):
                     'vendedor', 'corpovenda', 'formavenda']
         read_only_fields = ['ordem', 'create_at']
 
+
     def create(self, validated_data):
         data1 = validated_data.pop('ordem_venda')
         data2 = validated_data.pop('formpag_venda')

@@ -5,8 +5,7 @@ import {Picker} from '@react-native-picker/picker';
 import AlertSnack from '../../Components/Snackbar'
 import { AuthContext} from '../../Context/authcontext'
 
-const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
-    const { user } = useContext(AuthContext)
+const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo, user }) => {
     const [alert, setAlert] = useState({ open: false, text: ""})
     const [data, setData] = useState({
         forma: "DH",
@@ -54,15 +53,15 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo }) => {
                             enabled={data.forma !== 'CC'? false : true}
                             >
                             <Picker.Item label="1" value= {1}/>
-                            { data.forma == 'CC' && parseInt(valor) >= 300 || user.tipouser !== "C" && <Picker.Item label="2" value= {2}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 600 || user.tipouser !== "C" && <Picker.Item label="3" value= {3}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 800 || user.tipouser !== "C" && <Picker.Item label="4" value= {4}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1000 || user.tipouser !== "C" && <Picker.Item label="5" value= {5}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1200 || user.tipouser !== "C" && <Picker.Item label="6" value= {6}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1400 || user.tipouser !== "C" && <Picker.Item label="7" value= {7}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1600 || user.tipouser !== "C" && <Picker.Item label="8" value= {8}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 1800 || user.tipouser !== "C" && <Picker.Item label="9" value= {9}/> }
-                            { data.forma == 'CC' && parseInt(valor) >= 2000 || user.tipouser !== "C" && <Picker.Item label="10" value= {10}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 300 || user.tipouser !== "V" && <Picker.Item label="2" value= {2}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 600 || user.tipouser !== "V" && <Picker.Item label="3" value= {3}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 800 || user.tipouser !== "V" && <Picker.Item label="4" value= {4}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1000 || user.tipouser !== "V" && <Picker.Item label="5" value= {5}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1200 || user.tipouser !== "V" && <Picker.Item label="6" value= {6}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1400 || user.tipouser !== "V" && <Picker.Item label="7" value= {7}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1600 || user.tipouser !== "V" && <Picker.Item label="8" value= {8}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 1800 || user.tipouser !== "V" && <Picker.Item label="9" value= {9}/> }
+                            { data.forma == 'CC' && parseInt(valor) >= 2000 || user.tipouser !== "V" && <Picker.Item label="10" value= {10}/> }
                         </Picker>
                     </View>
                     <View>

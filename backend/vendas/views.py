@@ -1,6 +1,8 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
+from rest_framework.response import Response
 from datetime import date
 from .models import *
+from clientes.models import Cliente
 from .serializers import *
 from django.db.models import Sum, Count
 
@@ -24,6 +26,15 @@ class VendaViewSet(viewsets.ModelViewSet):
             return Venda.objects.filter(vendedor=self.request.user.id, create_at=date.today(), status="P").order_by("-ordem")
         elif self.request.user.tipouser == 'A':
             return Venda.objects.filter(status='P').order_by("-ordem")
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        cliente = request.data.get('dadoscliente')
+        Cliente.objects.get_or_create(cpf=cliente['cpf'], defaults=cliente)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
 
 class VendaFinalizadaViewSet(viewsets.ModelViewSet):
     queryset = Venda.objects.all()

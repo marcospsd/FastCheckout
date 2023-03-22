@@ -9,7 +9,7 @@ import SearchProducts from '../../../Components/SearchProducts'
 import BarCodeView from '../../../Components/BarCode'
 
 
-const Produtos = ({}) => {
+const Produtos = () => {
     const { state, setState } = useContext(CreateVendaContext)
     const [ open, setOpen ] = useState(false)
     const [ barcode, setBarCode ] = useState(false)
@@ -17,7 +17,7 @@ const Produtos = ({}) => {
     const [ produto, setProduto ] = useState(null)
     const [fabbutton, setFabButton] = useState(false)
     const [ id, setId] = useState(10000)
-    const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
+   
 
 
     const EditID = (item) =>{
@@ -40,7 +40,7 @@ const Produtos = ({}) => {
             quantidade: 1,
             id: id
         }
-        setState({...state, total_venda: total_venda ,corpovenda: [...state.corpovenda, x]})
+        setState({...state, corpovenda: [...state.corpovenda, x]})
         setId(id+1)
     }
 

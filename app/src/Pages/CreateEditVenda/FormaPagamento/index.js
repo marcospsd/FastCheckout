@@ -8,7 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import ModalAddForma from '../../../Components/ModalAddForma'
 
 const FormaPagamento = () => {
-    const { state, setState } = useContext(CreateVendaContext)
+    const { state, setState, user } = useContext(CreateVendaContext)
     const [ openforma, setOpenForma ] = useState(false)
     const [id, setId] = useState(100000)
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
@@ -97,7 +97,7 @@ const FormaPagamento = () => {
             <TouchableOpacity style={styles.buttonfab} activeOpacity={0.9} onPress={() => setOpenForma(!openforma)}>
                 <AntDesign name="plus" size={24} color="white" />
             </TouchableOpacity>
-            { openforma && <ModalAddForma addCard={addCard} setVisible={setOpenForma} visible={openforma} valor={total_venda} saldo={saldo}/>}
+            { openforma && <ModalAddForma addCard={addCard} setVisible={setOpenForma} visible={openforma} valor={total_venda} saldo={saldo} user={user}/>}
             </Provider>
         </View>
     )

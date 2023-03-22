@@ -12,7 +12,8 @@ import { useSWRConfig } from 'swr'
 const OptionsButtonsVenda = ({ venda, navigation }) => {
     const { mutate } = useSWRConfig()
     const [ disabled, setDisabled] = useState(false)
-    console.log(venda)
+
+    
     const AprovarCompra = () => {
         setDisabled(true)
         const x = api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status : "F"})

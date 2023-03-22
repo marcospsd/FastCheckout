@@ -42,6 +42,8 @@ export const telefone = (n) => {
 
 export const CPFReplace = (n) => {return n.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
 
+export const CPFReplace2 = (n) => {return n.replace(/[^0-9]/g, "")}
+
 
 export const NameForma = (x) => {
   switch (x) {

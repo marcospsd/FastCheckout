@@ -5,6 +5,7 @@ import { TextInputMask } from 'react-native-masked-text'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
 import { ActivityIndicator } from 'react-native-paper'
 import { api } from '../../../Services/api'
+import { CPFReplace2 } from '../../../Functions/format'
 
 
 const Cadastro = () => {
@@ -16,7 +17,7 @@ const Cadastro = () => {
         setDisabled(true)
         const x = api.get(`/cliente/cliente/${cpfREF.current.getRawValue()}/`)
         .then((res) => {
-            setState({...state, dadoscliente: res.data})
+            setState({...state, cpf: cpfREF.current.getRawValue(), dadoscliente: res.data})
         })
         .finally((res) => setDisabled(false))
         return x
@@ -30,12 +31,12 @@ const Cadastro = () => {
                     style={styles.textinput}
                     label="CPF"
                     maxLength={14}
-                    onChangeText={(text) => setState({...state, cpf: text, dadoscliente: {...state.dadoscliente, cpf: text }})}
+                    onChangeText={(text) => setState({...state, cpf: CPFReplace2(text), dadoscliente: {...state.dadoscliente, cpf: CPFReplace2(text) }})}
                     value={state.cpf}
                     onBlur={() => {
-                        if (state.cpf.length == 0) return;
+                        if (state.cpf == 0) return;
                         if (!cpfREF.current.isValid()) return Alert.alert("ERRO !", "CPF Invalido ou Incompleto !", [ { text: 'OK', style: 'cancel'} ], { cancelable: false })
-                        if (state.cpf.length == 14) BuscaCPF()
+                        if (state.cpf.length == 11) BuscaCPF()
                     }}
                     render={
                         (props) => (
@@ -63,7 +64,7 @@ const Cadastro = () => {
                     style={styles.textinput}
                     label="Telefone"
                     maxLength={15}
-                    onChangeText={(text) => setState({...state, dadoscliente: {...state.dadoscliente, telefone: text }})}
+                    onChangeText={(text) => setState({...state, dadoscliente: {...state.dadoscliente, telefone: CPFReplace2(text) }})}
                     value={state.dadoscliente.telefone}
                     render = { (props) => (
                         <TextInputMask
