@@ -11,25 +11,41 @@
       "ios": {
         "buildConfiguration": "Debug",
         "resourceClass": "m-medium"
-      }
+      },
+      "channel": "development"
     },
     "preview": {
-        "android": {
-          "buildType": "apk"
-          }
-        },
-        "preview2": {
-          "android": {
-            "gradleCommand": ":app:assembleRelease"
-          }
-        },
-        "preview3": {
-          "developmentClient": true
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m-medium"
       },
+      "channel": "preview",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "channel": "preview2"
+    },
+    "preview3": {
+      "developmentClient": true,
+      "channel": "preview3"
+    },
+    "android-development": {
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "channel": "android-development"
+    },
     "production": {
       "ios": {
         "resourceClass": "m-medium"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {

@@ -1,4 +1,4 @@
-package com.app;
+package com.dinizvitoria.fastcheckout;
 
 import android.app.Application;
 import android.content.res.Configuration;

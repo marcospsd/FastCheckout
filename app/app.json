@@ -3,6 +3,9 @@
     "name": "FastCheckout",
     "slug": "fastcheckoutapp",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -18,6 +21,10 @@
       "supportsTablet": true,
       "runtimeVersion": {
         "policy": "sdkVersion"
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "FastCheckout deseja acessar sua camera.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -26,7 +33,12 @@
         "backgroundColor": "#C52F33"
       },
       "package": "com.dinizvitoria.fastcheckout",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,7 +55,10 @@
           "cameraPermission": "FastCheckout deseja acessar sua camera."
         }
       ]
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/2069e253-e2ed-45f0-b74b-15b845b7d779"
+    }
   },
   "name": "fastcheckoutapp"
 }
