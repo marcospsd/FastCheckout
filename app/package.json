@@ -30,7 +30,8 @@
     "react-native-masked-text": "^1.13.0",
     "react-native-paper": "^5.4.1",
     "styled-components": "^5.3.9",
-    "swr": "^2.1.0"
+    "swr": "^2.1.0",
+    "expo-system-ui": "~2.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -28,6 +28,8 @@
       }
     },
     "android": {
+      "versionCode": 1,
+      "hermesEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#C52F33"
@@ -56,6 +58,7 @@
         }
       ]
     ],
+
     "updates": {
       "url": "https://u.expo.dev/2069e253-e2ed-45f0-b74b-15b845b7d779"
     }
