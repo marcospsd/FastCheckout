@@ -5,7 +5,7 @@ import { TextInput, Button } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TopBar } from '../../Components/TopBar'
 import AlertSnack from '../../Components/Snackbar'
-import { service} from '../../Services/api'
+import { service, api} from '../../Services/api'
 
 
 const ConfigPage = ({navigation, route}) => {
@@ -18,6 +18,7 @@ const ConfigPage = ({navigation, route}) => {
         service.get(`${url}/auth/status/`)
         .then((res) => {
             AsyncStorage.setItem("@urlapi", url)
+            api.defaults.baseURL = url
             return navigation.goBack()
         })
         .catch((err) => {
