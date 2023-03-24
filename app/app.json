@@ -28,8 +28,6 @@
       }
     },
     "android": {
-      "versionCode": 1,
-      "hermesEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#C52F33"
