@@ -1,23 +1,22 @@
 import React from 'react';
-import { Text, Button } from 'react-native';
-
+import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs' 
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons  } from '@expo/vector-icons'
 import PendentesView from '../Pages/Home/Pendentes';
 import FinalizadosView from '../Pages/Home/Finalizados';
 import ViewVenda from '../Pages/ViewVenda';
-
 import { ButtonAddView } from '../Components/ButtonAdd';
 import CreateEditVenda from '../Pages/CreateEditVenda';
 
 
 
-const AppStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AppRoutes = () => {
+
+
 
 
     const TabHome = ({ navigation }) => {
@@ -25,7 +24,7 @@ const AppRoutes = () => {
             <Tab.Navigator
                 screenOptions={{ 
                     headerShown:false, 
-                    unmountOnBlur: true,
+                    unmountOnBlur: false,
                     tabBarStyle: {
                         position: 'absolute',
                         backgroundColor: '#c52f33',
@@ -92,11 +91,11 @@ const AppRoutes = () => {
     }
 
     return (
-            <AppStack.Navigator initialRouteName='Home' screenOptions={{ headerShown:false }}>
-                <AppStack.Screen name='Home' component={TabHome} />
-                <AppStack.Screen name='ViewVenda' component={ViewVenda} />
-                <AppStack.Screen name='CreateEditVenda' component={CreateEditVenda} />
-            </AppStack.Navigator>
+            <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown:false }}>
+                <Stack.Screen name='Home' component={TabHome} />
+                <Stack.Screen name='ViewVenda' component={ViewVenda} />
+                <Stack.Screen name='CreateEditVenda' component={CreateEditVenda} />
+            </Stack.Navigator>
     )
 }
 

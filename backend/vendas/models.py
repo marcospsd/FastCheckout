@@ -19,7 +19,7 @@ class Venda(models.Model):
     hour_at = models.TimeField(auto_now_add=True)
     vendedor = models.ForeignKey(User, related_name='venda_vendedor', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=statusvenda)
-    total_venda = models.DecimalField(max_digits=10, decimal_places=2)
+    total_venda = models.IntegerField()
     prot_pedidovenda = models.CharField(max_length=8, null=True, blank=True)
     prot_filial = models.CharField(max_length=4, null=True, blank=True)
     prot_nf = models.CharField(max_length=20, null=True, blank=True)
@@ -32,8 +32,8 @@ class Corpo_venda(models.Model):
     os = models.ForeignKey(Venda, related_name='ordem_venda', on_delete=models.CASCADE)
     codpro = models.ForeignKey(Produto, related_name='prod_venda', on_delete=models.CASCADE)
     descripro = models.CharField(max_length=50, blank=True, null=True)
-    valor_unitsis = models.DecimalField(max_digits=10, decimal_places=2)
-    valor_unitpro = models.DecimalField(max_digits=10, decimal_places=2)
+    valor_unitsis = models.IntegerField()
+    valor_unitpro = models.IntegerField()
     quantidade = models.PositiveIntegerField()
 
     def __str__(self):
@@ -54,4 +54,4 @@ class Formapagamento(models.Model):
     key = models.ForeignKey(Venda, related_name='formpag_venda', on_delete=models.CASCADE)
     forma = models.CharField(max_length=2, choices=methodos)
     parcelas = models.PositiveIntegerField()
-    valor = models.DecimalField(max_digits=6, decimal_places=2)
+    valor = models.IntegerField()

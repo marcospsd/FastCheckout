@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native'
 import AppRoutes from './approutes';
 import AuthRoutes from './authroutes'
 import { AuthContext } from '../Context/authcontext'
-import { ActivityIndicator } from 'react-native-paper'
 import LoadingComponent from '../Components/LoadingComponent';
 
 

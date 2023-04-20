@@ -36,7 +36,7 @@ const FormaPagamento = () => {
             id: item.id ? item.id : id,
             forma: item.forma,
             parcelas: item.parcelas,
-            valor: item.valor
+            valor: parseInt(item.valor)
         }
         setState({...state, formavenda: [...state.formavenda, x]})
         setId(id+1)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Modal, Portal, Text, TextInput  } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native'
 import { formatDinheiro } from '../../Functions/format';
@@ -8,6 +8,8 @@ const ModalEditProducts = ({ visible, setVisible, item, setItem, EditItem, }) =>
     const containerStyle = {backgroundColor: 'white', padding: 30};
     const result = (1-(parseInt(item?.valor_unitpro)/parseInt(item?.valor_unitsis)))*100
     const [ desc, setDesc] = useState(result ? String(result) : 0)
+    const InputRef = useRef(null)
+
 
     const PorctoValue = (text) => {
         if (text == "") {
@@ -67,6 +69,7 @@ const ModalEditProducts = ({ visible, setVisible, item, setItem, EditItem, }) =>
                       setDesc(text) 
                       PorctoValue(text)
                     }}
+                    autoFocus
                   />
                   <TextInput 
                     style={[styles.textinput, { flex: 1, margin: 5}]}

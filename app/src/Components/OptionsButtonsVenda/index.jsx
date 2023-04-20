@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Container } from './style'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,11 +9,12 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { api } from '../../Services/api';
 import { useSWRConfig } from 'swr'
 
+
+
 const OptionsButtonsVenda = ({ venda, navigation }) => {
     const { mutate } = useSWRConfig()
     const [ disabled, setDisabled] = useState(false)
-
-    
+ 
     const AprovarCompra = () => {
         setDisabled(true)
         const x = api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status : "F"})

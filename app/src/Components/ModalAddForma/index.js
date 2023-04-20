@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { Modal, Portal, TextInput, Button } from 'react-native-paper'
+import React, { useState, useContext, useRef, Suspense } from 'react'
+import { Modal, Portal, TextInput, Button, ActivityIndicator } from 'react-native-paper'
 import { View, Text, StyleSheet} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import AlertSnack from '../../Components/Snackbar'
@@ -12,22 +12,25 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo, user }) => 
         parcelas: 1,
         valor: ""
         })
+    const InputRef = useRef(null)
     
     const AddCardItem = () => {
         if (data.valor == 0 || data.valor == "") return setAlert({open: true, text: "o Valor inserido não pode ser zerado."})
         if (data.valor > saldo) return setAlert({open: true, text: "o Valor inserido é maior que o saldo para pagamento."})
-        addCard(data)
+        const x = {...data, valor: parseInt(data.valor)}
+        addCard(x)
         setData({
             forma: "DH",
             parcelas: 1,
-            valor: 0
+            valor: ""
         })
         setVisible(!visible)
     }
-    console.log(data)
+
     return (
         <Portal>
             <Modal visible={visible} onDismiss={() => setVisible(!visible)}>
+                <Suspense fallback={<ActivityIndicator />} >
                 <View style={{ backgroundColor: 'white', padding: 10}}>
                     <View style={{ alignItems: 'center', justifyContent: 'center', padding: 15}}>
                         <Text style={styles.tittle}>Adicionar Forma de Pagamento</Text>
@@ -68,11 +71,11 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo, user }) => 
                         <Text style={styles.primarytext}>Insira o Valor</Text>
                         <TextInput
                             value={String(data.valor)}
-                            onChangeText={(text)=>setData({...data, valor: parseInt(text)})}
+                            onChangeText={(text)=>setData({...data, valor: text})}
                             keyboardType='numeric'
                             style={{ backgroundColor: '#f9f9f9'}}
                             theme={{ colors: { primary: 'red'}}}
-                            
+                            ref={InputRef}
                             />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -90,6 +93,7 @@ const ModalAddForma = ({ addCard, setVisible, visible, valor, saldo, user }) => 
 
                     <AlertSnack open={alert} setOpen={setAlert} text={alert.text}/>
                 </View>
+                </Suspense>
             </Modal>
         </Portal>
     )

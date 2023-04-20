@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
 import FAButton from '../../../Components/FAButton'
@@ -9,6 +9,7 @@ import SearchProducts from '../../../Components/SearchProducts'
 import BarCodeView from '../../../Components/BarCode'
 
 
+
 const Produtos = () => {
     const { state, setState } = useContext(CreateVendaContext)
     const [ open, setOpen ] = useState(false)
@@ -17,7 +18,6 @@ const Produtos = () => {
     const [ produto, setProduto ] = useState(null)
     const [fabbutton, setFabButton] = useState(false)
     const [ id, setId] = useState(10000)
-   
 
 
     const EditID = (item) =>{
@@ -35,8 +35,8 @@ const Produtos = () => {
         const x = {
             codpro: data.codigo,
             descripro: data.descricao,
-            valor_unitsis: data.valor_unitsis,
-            valor_unitpro: data.valor_unitpro,
+            valor_unitsis: parseInt(data.valor_unitsis),
+            valor_unitpro: parseInt(data.valor_unitpro),
             quantidade: 1,
             id: id
         }
@@ -54,8 +54,6 @@ const Produtos = () => {
     return ( 
         <View style={{flex: 1}}>
             <Provider>
-                <SearchProducts visible={pageadd} setVisible={setPageAdd} AddItem={AddItem}/>
-                { open && <ModalEditProducts visible={open} setVisible={setOpen} item={produto} setItem={setProduto} EditItem={EditID}/> }
                 <FlatList
                     style={styles.bottomBar}
                     data={state.corpovenda}
@@ -65,7 +63,9 @@ const Produtos = () => {
                     ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Carrinho Vazio ...</Text></View>}
                 />
                 <FAButton style={{ bottom: 80, right: 60 }} onPressAddItem={onPressAddItem} onPressBarCode={onPressBarCode} open={fabbutton} setOpen={setFabButton}/>
+                { open && <ModalEditProducts visible={open} setVisible={setOpen} item={produto} setItem={setProduto} EditItem={EditID}/> }
                 { barcode && <BarCodeView visible={barcode} setVisible={setBarCode} AddItem={AddItem}/> }
+                { pageadd && <SearchProducts visible={pageadd} setVisible={setPageAdd} AddItem={AddItem}/> }
             </Provider>
         </View>
     )
