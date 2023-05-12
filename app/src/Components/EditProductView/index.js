@@ -78,7 +78,7 @@ const EditProducts = ({ navigation, route }) => {
                         PorctoValue(text)
                       }}
                       right={
-                        <TextInput.Icon icon={'percent-outline'}/>
+                        <TextInput.Icon icon={'percent-outline'} disabled/>
                       }
                       autoFocus
                     />
