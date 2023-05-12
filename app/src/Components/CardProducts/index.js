@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo, } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import { Card } from 'react-native-paper';
 import { formatDinheiro } from '../../Functions/format'
@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Grid} from 'react-native-easy-grid'
 
 
-const CardProducts = ({ data, setOpen, setProduto, DeleteItem}) => {
+const CardProducts = ({ data, DeleteItem, navigation}) => {
 
     const DeleteItemAlert = (data) => {
         Alert.alert(
@@ -25,8 +25,7 @@ const CardProducts = ({ data, setOpen, setProduto, DeleteItem}) => {
             <TouchableOpacity 
                     activeOpacity={0.7} 
                     onPress={() => {
-                        setProduto(data)
-                        setOpen(true)
+                        navigation.navigate('EditProduct', { data: data})
                     }} 
                     onLongPress={() => DeleteItemAlert(data)}>
                 <Card style={[styles.card]}>
@@ -36,7 +35,7 @@ const CardProducts = ({ data, setOpen, setProduto, DeleteItem}) => {
                                 <FontAwesome5 name="glasses" size={30} color="black" />
                             </View>
                         </View>
-                        <View style={{ flex: 4, flexDirection: 'column', width: '100%'}}>
+                        <View style={{ flex: 1, flexDirection: 'column', width: '100%'}}>
                             <View style={[styles.contentrow, { flexWrap: "wrap"}]}>
                                 <Text style={styles.textprimary}>Codigo: </Text>
                                 <Text style={styles.textsecundary}>{ data.codpro }</Text> 
@@ -64,7 +63,7 @@ const CardProducts = ({ data, setOpen, setProduto, DeleteItem}) => {
     )
 }
 
-export default CardProducts;
+export default memo(CardProducts);
 
 
 const styles = StyleSheet.create({
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
 
     },
     iconsview: {
-        flex: 1.2, 
+        width: '25%', 
         alignItems: 'center', 
         justifyContent: 'center', 
     },

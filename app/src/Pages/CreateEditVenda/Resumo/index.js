@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { View, ScrollView, Text, StyleSheet } from 'react-native'
 import { CPFReplace, formatDinheiro, FormatTelCel, NameForma } from '../../../Functions/format';
 import { ContainerResumo, BoldText, NormalText, Tittle } from './styles';
@@ -7,7 +7,10 @@ import { Col, Row, Grid} from 'react-native-easy-grid'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
 import AlertSnack from '../../../Components/Snackbar'
 import { api } from '../../../Services/api'
-import { useSWRConfig } from 'swr'
+import { useSWRConfig } from 'swr';
+import LottieView from 'lottie-react-native';
+import CheckedJson from './76649-checked.json';
+
 
 
 const Resumo = ({ navigation }) => {
@@ -17,8 +20,11 @@ const Resumo = ({ navigation }) => {
     const [ blockbutton ,setBlockButton] = useState(false)
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
+    const animation = useRef(null)
+
 
     const GerarVenda = () => {
+        
         if (!state.cpf && !state.dadoscliente.nome) return setAlert({open: true, text: "Deve-se informar ao menos um CPF e Nome Completo para gerar da compra."})
         if (state.corpovenda.length == 0) return setAlert({ open: true, text: "Deve-se conter pelo menos um produto para gerar a venda."})
         if (saldo !== 0) return setAlert({ open: true, text: "O Valor do Saldo Devedor deve ser Zerado."})
@@ -29,14 +35,14 @@ const Resumo = ({ navigation }) => {
             api.put(`/vendas/venda/${state.ordem}/`, NewState)
             .then((res) => {
                 mutate('/vendas/venda/')
-                navigation.navigate("Home")
+                animation.current.play() 
             })
             .finally((res) => setBlockButton(!blockbutton))
         } else {
             api.post("/vendas/venda/", NewState)
             .then((res) => {
                 mutate('/vendas/venda/')
-                navigation.navigate("Home")
+                animation.current.play()
             })
             .finally((res) => {
                 setBlockButton(!blockbutton)
@@ -146,11 +152,18 @@ const Resumo = ({ navigation }) => {
                 <Button
                     style={{backgroundColor: '#c52f33'}}
                     mode="contained"
-                    onPress={ () => GerarVenda()}                   
+                    onPress={() => GerarVenda()}                   
                     disabled={blockbutton}
                     >{state.ordem ? "Atualizar Venda" : "Gerar Venda"}</Button>
             </View>
             <AlertSnack open={alert} setOpen={setAlert} text={alert.text}/>
+            <LottieView
+                    loop={false}
+                    style={styles.animation}
+                    ref={animation}
+                    onAnimationFinish={() => navigation.navigate("Home")}
+                    source={CheckedJson}
+                />
         </ScrollView>
     </View>
     )
@@ -171,4 +184,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white'
 },
+    animation: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pointerEvents: 'none'
+    }
 })

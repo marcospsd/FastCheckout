@@ -59,10 +59,10 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
                 <MaterialCommunityIcons name="arrow-u-left-bottom-bold" size={40} color="black" />
                 <Text style={styles.textButton}>Orçamento</Text>
             </TouchableOpacity>: null }
-            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled}>
+            {/* <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled}>
                 <MaterialIcons name="security" size={40} color="black" />
                 <Text style={styles.textButton}>LGPD</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             
             { venda.status == "P" ? 
             <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EditVenda}>

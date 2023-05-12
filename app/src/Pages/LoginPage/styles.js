@@ -8,6 +8,6 @@ export const ContainerLogin = styled.View`
     align-items: center;
     width: 350px;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 16px;
 
 `

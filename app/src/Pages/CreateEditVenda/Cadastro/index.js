@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useState, useContext, } from 'react'
 import { View, Text, Alert, StyleSheet } from 'react-native'
 import { TextInput, Provider } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
@@ -6,6 +6,7 @@ import { CreateVendaContext } from '../../../Context/createvendacontext'
 import { ActivityIndicator } from 'react-native-paper'
 import { api } from '../../../Services/api'
 import { CPFReplace2 } from '../../../Functions/format'
+
 
 
 const Cadastro = () => {
@@ -91,6 +92,7 @@ const Cadastro = () => {
                     theme={{ colors: { primary: '#c52f33'}}}
                     disabled={disabled}
                     />
+
             </Provider>
         </View>
     )

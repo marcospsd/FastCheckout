@@ -115,45 +115,21 @@ const CadastroStep = ({ step, setStep, setData, data }) => {
                 <Coluna>
                     <Button
                     
-                        onClick={() => {
-                            setBlockButton(true)
-                            if (userbanco) {
-                                if( CPFValidated.isValid(cpf) == true){
-                                    api.put(`/cliente/cliente/${cpf}/`, state)
-                                    .then((res) => {
-                                        setStep(step+1)
-                                        setData({...data, cpf: cpf, dadoscliente: {
-                                            nome: nome,
-                                            telefone: telefone,
-                                            email: email
-                                        }})
-                                        setUserBanco(false)
-                                    })
-                                    .catch((err) => {
-                                        setAlert({...alert, open: true, texto: JSON.stringify(err.response.data)})
-                                    })
-                                } else return setAlert({...alert, open: true, texto: "CPF Inválido ou Incompleto"})
-                                setBlockButton(false)
-                            } else {
-                                if( CPFValidated.isValid(cpf) == true){
-                                    api.post(`/cliente/cliente/`, state)
-                                    .then((res) => {
-                                        setStep(step+1)
-                                        setData({...data, cpf: cpf, dadoscliente: {
-                                            nome: nome,
-                                            telefone: telefone,
-                                            email: email
-                                        }})
-                                        setUserBanco(false)
-                                    })                                    
-                                    .catch((err) => {
-                                        setAlert({...alert, open: true, texto: JSON.stringify(err.response.data) })
-                                    })
-                                } else return setAlert({...alert, open: true, texto: "CPF Inválido ou Incompleto"})
-                                setBlockButton(false)
-                            }
-                            
-                        }}
+                    onClick={() => {
+                        setBlockButton(true)
+                        if( CPFValidated.isValid(cpf) == true){
+                                setStep(step+1)
+                                setData({...data, cpf: cpf, dadoscliente: {
+                                    nome: nome,
+                                    telefone: telefone,
+                                    email: email,
+                                    cpf: cpf
+                                }})
+                                setUserBanco(false)
+                        } else return setAlert({...alert, open: true, texto: "CPF Inválido ou Incompleto"}) 
+                        setBlockButton(false)
+                        
+                    }}
                     disabled={blockbutton}>Avançar</Button>
                 </Coluna>
         </ContainerCreate>

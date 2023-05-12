@@ -96,6 +96,7 @@ DATABASES = {
         'USER': 'fastcheckout',
         'PASSWORD': 'Diniz@123',
         'PORT': '3306',
+        # 'HOST': '192.168.31.2',
         'HOST': '10.3.1.5'
     }
 }
@@ -151,8 +152,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.BasicAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { AuthContext } from './authcontext'
 
 export const CreateVendaContext = React.createContext()
@@ -6,6 +6,7 @@ export const CreateVendaContext = React.createContext()
 
 export const ContextVenda = ({ nstate, children }) => {
     const { user } = useContext(AuthContext)
+
     const [ state, setState ] = useState(nstate ? nstate : {
             ordem: null,
             cpf: "",
@@ -15,6 +16,8 @@ export const ContextVenda = ({ nstate, children }) => {
             corpovenda: [],
             formavenda: []
     })
+    
+    const memorizedState = useMemo(() => state, [state])
 
     const initState = () => setState({
         ordem: null,
@@ -27,7 +30,7 @@ export const ContextVenda = ({ nstate, children }) => {
     })
 
     return (
-        <CreateVendaContext.Provider value={{ state, setState, initState, user }}>
+        <CreateVendaContext.Provider value={{ state: memorizedState, setState, initState, user }}>
             { children }
         </CreateVendaContext.Provider>
     )

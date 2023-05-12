@@ -2,7 +2,7 @@ import axios from "axios";
 import useSWR from 'swr'
 
 export const api = axios.create({
-    baseURL: "",
+    baseURL: "http://10.3.1.95:8000",
 });
 
 

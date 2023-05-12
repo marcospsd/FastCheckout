@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Portal, Modal, ActivityIndicator } from 'react-native-paper'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { AntDesign } from '@expo/vector-icons';
 import { api } from '../../Services/api'
+import {TopBar} from '../TopBar'
+import { CreateVendaContext } from '../../Context/createvendacontext'
+import shortid from 'shortid'
 
 
-const BarCodeView = ({ visible, setVisible, AddItem}) => {
+
+const BarCodeView = ({ navigation, route}) => {
+    const { state, setState } = useContext(CreateVendaContext)
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
 
@@ -22,41 +27,44 @@ const BarCodeView = ({ visible, setVisible, AddItem}) => {
     }, [])
 
     const handleBarCodeScanned = ({ type, data }) => {
-        const result = api.get(`/produtos/produto/${data}/`)
+        api.get(`/produtos/produto/${data}/`)
         .then((res) => {
-            return AddItem(res.data)
+            const x = {
+              codpro: res.data.codigo,
+              descripro: res.data.descricao,
+              valor_unitsis: parseInt(res.data.valor_unitsis),
+              valor_unitpro: parseInt(res.data.valor_unitpro),
+              quantidade: 1,
+              id: res.data.id ? res.data.id : shortid.generate()
+              }
+            setState({...state, corpovenda: [...state.corpovenda, x]})
         })
         .catch((err) => {
-            return alert(`Não foi encontrado o produto ${data}.`)
+            alert(`Não foi encontrado o produto ${data}.`)
         })
-        setVisible(!visible);
-        return result
+        .finally((res) =>{
+          return navigation.goBack()
+        })
       };
     
       if (hasPermission === null) {
-        return <View style={{ width: '80%', height: '80%', position: 'absolute', alignSelf: 'center', justifyContent: 'center'}}><ActivityIndicator size={40} color="red"/></View>;
+        return <View style={{ flex :1 }}><ActivityIndicator size={40} color="red"/></View>;
       }
       if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <View><Text>No access to camera</Text></View>
       }
 
 
     return (
-      // <Portal>
-      //   <Modal visible={visible} onDismiss={() => setVisible(!visible)} contentContainerStyle={{width: '100%', height: 500, backgroundColor: 'white'}}>
-      <View style={{ width: '80%', height: '80%', position: 'absolute', alignSelf: 'center'}}>
+      <View style={{ flex: 1}}>
+        <TopBar PageName={route.name} navigation={navigation}/>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ flex: 1}}
+          style={{ flex:1, margin: 0, padding: 0}}
           focusable
 
           />
-        <TouchableOpacity style={{ position: 'absolute', top: 40, right: 10}} onPress={() => setVisible(!visible)}>
-            <AntDesign name="closecircleo" size={35} color="white" />
-        </TouchableOpacity>
       </View>
-        //   </Modal>
-        // </Portal>
     )
 }
 

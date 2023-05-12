@@ -1,14 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Modal, FlatList, TouchableOpacity, View, Text, StyleSheet, TextInput} from 'react-native'
-import { ActivityIndicator, Searchbar } from 'react-native-paper'
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useContext } from 'react'
+import { View, Text, FlatList} from 'react-native'
+import { Searchbar } from 'react-native-paper'
 import { api } from '../../Services/api'
-import { formatDinheiro } from '../../Functions/format'
+import { CreateVendaContext } from '../../Context/createvendacontext';
+import shortid from 'shortid'
+import CardView from '../CardViewProducts'
+import { TopBar } from '../TopBar';
 
-const SearchProducts = ({ visible, setVisible, AddItem}) => {
+
+const SearchProducts = ({navigation, route}) => {
+    const { state, setState } = useContext(CreateVendaContext)
     const [product, setProduct] = useState("")
     const [result, setResult ] = useState([])
-    const SearchRef = useRef(null)
+
 
     const SearchItem = (item) => {
         setProduct(item)
@@ -20,87 +24,46 @@ const SearchProducts = ({ visible, setVisible, AddItem}) => {
         }
     }
 
-    const Close = () => {
-        setResult([])
-        setProduct("")
-        setVisible(!visible)
-    }
-
-
     const AdicionarItem = (data) => {
-        AddItem(data)
+        const x = {
+            codpro: data.codigo,
+            descripro: data.descricao,
+            valor_unitsis: parseInt(data.valor_unitsis),
+            valor_unitpro: parseInt(data.valor_unitpro),
+            quantidade: 1,
+            id: data.id ? data.id : shortid.generate()
+        }
+        setState({...state, corpovenda: [...state.corpovenda, x]})
         setResult([])
         setProduct("")
-        setVisible(!visible)
-
-    }
-
-    const CardView = ({data}) => {
-        return (
-            <TouchableOpacity style={styles.card} onPress={() => AdicionarItem(data)}>
-                <View>
-                    <Text style={styles.text}>{data.codigo + " - " + data.descricao}</Text>
-                    <Text style={styles.text}>{"PROMO: R$ " + formatDinheiro(data.valor_unitpro)}</Text>
-                </View>
-            </TouchableOpacity>
-        )
+        navigation.goBack()
     }
 
 
     return (
-
-        <Modal visible={visible} onShow={() => SearchRef.current.focus()} onDismiss={Close} style={{ padding: 20}} >
-                <View style={{height: 60, flexDirection:'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#c52f33'}}>
-                    <TouchableOpacity
-                        style={{ marginLeft:10 }}
-                        onPress={Close}
-                       
-                        >
-                        <Ionicons name="arrow-back" size={34} color="white" />
-                    </TouchableOpacity>
-                    <Text style={{fontSize: 24, fontWeight: 'bold', marginEnd: 10, color: 'white'}}>Adicionar Produto</Text>
-                </View>
-                <View 
-                style={{ margin: 20}}
-                    >
+            <View style={{ flex:1}} >
+                    <TopBar PageName={route.name} navigation={navigation}/>
+                    <View style={{ padding: 15}}>
                     <Searchbar 
                         value={product}
                         onChangeText={(text) => SearchItem(text)}
-                        style={{ backgroundColor: 'rgba(197, 47, 51, 1)' }}
+                        style={{ backgroundColor: 'rgba(197, 47, 51, 1)', marginTop: 15 }}
                         color={"white"}
                         iconColor={"white"}
-                        ref={SearchRef}
-                      
+                        autoFocus={false}
                         />
                     <FlatList 
                         style={{ marginTop: 6, marginBottom: 3}}
                         data={result}
                         keyExtractor={( item ) => String(item.codigo)}
                         showsVerticalScrollIndicator={false}
-                        renderItem={ ({ item }) => <CardView data={item}/>}
-                        ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Carrinho Vazio ...</Text></View>}
+                        renderItem={ ({ item }) => <CardView AdicionarItem={AdicionarItem} data={item}/>}
+                        ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Lista Vazia ...</Text></View>}
                         />
+                    </View>
               </View>
-         </Modal>
-
-      
     )
 }
 
 export default SearchProducts;
 
-const styles = StyleSheet.create({
-    card: {
-        flex: 1,
-        backgroundColor: '#F5F5F5',
-        borderRadius: 10,
-        marginTop: 5,
-        marginBottom: 10,
-        padding: 10
-
-    },
-    text : {
-        fontSize: 17,
-        fontWeight: 'bold'
-    }
-})

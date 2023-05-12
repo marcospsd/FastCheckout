@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
 import { formatDinheiro, NameForma } from '../../../Functions/format'
 import { Col, Row, Grid} from 'react-native-easy-grid'
 import { Divider, Provider } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons';
-import ModalAddForma from '../../../Components/ModalAddForma'
 
-const FormaPagamento = () => {
-    const { state, setState, user } = useContext(CreateVendaContext)
-    const [ openforma, setOpenForma ] = useState(false)
-    const [id, setId] = useState(100000)
+
+
+const FormaPagamento = ({ navigation }) => {
+    const { state, setState } = useContext(CreateVendaContext)
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
 
@@ -31,16 +30,6 @@ const FormaPagamento = () => {
         )
     }
 
-    const addCard = (item) => {
-        const x = {
-            id: item.id ? item.id : id,
-            forma: item.forma,
-            parcelas: item.parcelas,
-            valor: parseInt(item.valor)
-        }
-        setState({...state, formavenda: [...state.formavenda, x]})
-        setId(id+1)
-    }
 
     const CardFormaPag = ({ item }) => {
         return (
@@ -60,6 +49,7 @@ const FormaPagamento = () => {
 
         )
     }
+
     return ( 
         <View style={{ flex: 1}}>
             <Provider>
@@ -94,10 +84,9 @@ const FormaPagamento = () => {
                         ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não há formas inseridas</Text></View>}
                         />
             </Grid>
-            <TouchableOpacity style={styles.buttonfab} activeOpacity={0.9} onPress={() => setOpenForma(!openforma)}>
+            <TouchableOpacity style={styles.buttonfab} activeOpacity={0.9} onPress={() => navigation.navigate('AddForma', { saldo: saldo})}>
                 <AntDesign name="plus" size={24} color="white" />
             </TouchableOpacity>
-            { openforma && <ModalAddForma addCard={addCard} setVisible={setOpenForma} visible={openforma} valor={total_venda} saldo={saldo} user={user}/>}
             </Provider>
         </View>
     )

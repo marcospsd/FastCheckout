@@ -9,10 +9,20 @@ export const TopBar = ({ PageName, navigation }) => {
         switch (PageName) {
             case 'ViewVenda':
                 return 'Resumo Venda'
-            case 'CreateEditVenda':
+            case 'CreateScreen':
                 return "Venda"
             case 'ConfigPage':
                 return "Configuração"
+            case 'ResumePage':
+                return "Resumo"
+            case 'SearchProduct':
+                return "Pesquisar"
+            case 'BarCode':
+                return "Codigo de Barras"
+            case 'EditProduct':
+                return "Editar Produto"
+            case 'AddForma':
+                return "Forma de Pagamento"
             default:
                 return PageName
             
@@ -20,7 +30,7 @@ export const TopBar = ({ PageName, navigation }) => {
     }
 
     const Back = () => {
-        if (PageName == 'CreateEditVenda') {
+        if (PageName == 'CreateScreen') {
             Alert.alert(
                 'ATENÇÃO',
                 'Deseja voltar ? seus dados serão perdidos !', 

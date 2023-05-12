@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import { Card } from 'react-native-paper';
-import { NameStatus, CPFReplace, formatDinheiro } from '../../Functions/format'
+import { NameStatus, CPFReplaceLGPD as CPFReplace, formatDinheiro } from '../../Functions/format'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import ButtonDelete from "../ButtonDelete";

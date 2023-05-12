@@ -13,7 +13,7 @@ export const ComprovanteVenda = async (data) => {
         "nome_completo": data.dadoscliente.nome,
         "telefone": data.dadoscliente.telefone
     }
-    const url = `http://10.3.1.95:3000/gerarcashback/${encodeURIComponent(JSON.stringify(InfoClientes))}`
+    const url = `https://cashback.cupomdiniz.com.br/gerarcashback/${encodeURIComponent(JSON.stringify(InfoClientes))}`
 
     const GerarQR = async () => {
         const qr = QRCode(0, "M")
@@ -40,9 +40,10 @@ export const ComprovanteVenda = async (data) => {
             font-size: 15pt;
         }
         
-        h1, h4 {
+        h1, h2, h3, h4 {
             text-align: center;
             margin: 0;
+            padding: 0;
         }
 
         p {
@@ -162,13 +163,78 @@ export const ComprovanteVenda = async (data) => {
                 <b>@oticasdinizvitoria</b>
                 <b>@dinizprime_vitoria</b>
                 <br/>
-                <p>Ative seu cashback</p>
+                <h4>Você possui R$ ${formatDinheiro(Math.round(data.total_venda*0.2))} de resgate para desconto em sua proxima compra</h4>
+                <br/>
+                <h2>Ative seu cashback</h2>
                 <img style="width: 300px; height: 300px; align-self: center" src="${base64QRCode}" />
                 <p>Escaneie o QR Code e ative seu cashback para utilizar nas Óticas Diniz.</p>
                 <br/>
                 <br/>
                 <p>PRODUTOS SEM TROCA</p>
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <tr/>
+        <br/>
+        <div class="container">
+        <div class="row">
+            <div class="col">
+                <b>Ordem</b>
+                <p>${data.ordem}</p>
+            </div>
+            <div class="col">
+                <b>CPF</b>
+                <p>${CPFReplace(data.cpf)}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <b>Vendedor</b>
+                <p>${data.vendedorname.first_name}</p>
+            </div>
+            <div class="col">
+                <b>Total da Venda</b>
+                <p>R$ ${formatDinheiro(data.total_venda)}</p>
+            </div>
+        </div>
+        <div class="col1">
+                <b>Nome:</b>
+                <p>${data.dadoscliente.nome}</p>
+        </div>
+        <br/>
+        <hr/>
+        <br/>
+        <h4>Formas de Pagamento</h4>
+        <br/>
+        <table>
+            <tr>
+                <th align="start">Forma</th>
+                <th>Parcelas</th>
+                <th align="end">Valor</th>
+            </tr>
+            ${ data.formavenda.map((formapag) => (
+                `<tr>
+                    <td>${NameForma(formapag.forma)}</td>
+                    <td align="center">${formapag.parcelas}</td>
+                    <td align="end">R$ ${formatDinheiro(formapag.valor)}</td>
+                </tr>`
+            )).join('')}
+        </table>
+        <br/>
+        <hr/>
+        <div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div/>
+        <hr/>
     </div>
     </body>
     </html>`

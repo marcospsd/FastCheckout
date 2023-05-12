@@ -8,15 +8,19 @@ import { AuthContext } from '../../Context/authcontext';
 const statusBarHeight = StatusBar.currentHeight
 
 
-export const TopBarHome = () => {
+export const TopBarHome = ({ navigation }) => {
     const { user, Logout } = useContext(AuthContext)
 
 
     return (
         <View style={styles.header}>
             <View style={styles.content}>
-                <Image source={IMGFAST} style={{width: 60, height: 50, resizeMode: 'contain'}}/>
-                <Text style={styles.text}>{ user.nome ? user.nome : "Usuário"}</Text>
+                
+                    <Image source={IMGFAST} style={{width: 60, height: 50, resizeMode: 'contain'}}/>
+                
+                <TouchableOpacity onPress={() => navigation.navigate('ResumePage')}>
+                    <Text style={styles.text}>{ user.nome ? user.nome : "Usuário"}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity 
                     activeOpacity={0.9}
                     style={styles.buttonUser}

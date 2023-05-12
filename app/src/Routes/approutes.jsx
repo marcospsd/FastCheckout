@@ -8,16 +8,14 @@ import FinalizadosView from '../Pages/Home/Finalizados';
 import ViewVenda from '../Pages/ViewVenda';
 import { ButtonAddView } from '../Components/ButtonAdd';
 import CreateEditVenda from '../Pages/CreateEditVenda';
-
+import ResumePage from '../Pages/ResumePage';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AppRoutes = () => {
-
-
-
 
     const TabHome = ({ navigation }) => {
         return (
@@ -95,8 +93,9 @@ const AppRoutes = () => {
                 <Stack.Screen name='Home' component={TabHome} />
                 <Stack.Screen name='ViewVenda' component={ViewVenda} />
                 <Stack.Screen name='CreateEditVenda' component={CreateEditVenda} />
+                <Stack.Screen name='ResumePage' component={ResumePage} />
             </Stack.Navigator>
     )
 }
 
-export default AppRoutes;
+export default gestureHandlerRootHOC(AppRoutes);
