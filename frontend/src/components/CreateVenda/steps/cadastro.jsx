@@ -26,7 +26,7 @@ const CadastroStep = ({ step, setStep, setData, data }) => {
         email: email
     }
 
-
+    console.log(data)
     const BuscarCPF = () => {
             if ( cpf.length !== 11) {
                 return setAlert({...alert, open: true, texto: "CPF Incompleto, favor verificar"})
