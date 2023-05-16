@@ -114,8 +114,6 @@ export const ReportQrCode = async (data) => {
         </div>
         <div class="avisos">
                 <h3>ATENÇÃO</h3>
-                <p>Esse documento não é um documento
-                    fiscal. ${emailwhats(data)}</p>
                 <p>Qualquer dúvida, entre em contato com
                     nosso DiniZAP pelo telefone (27) 3185-8101. Siga nossas redes sociais e fique por dentro de todas novidades.</p>
                 <b>@oticasdinizvitoria</b>
