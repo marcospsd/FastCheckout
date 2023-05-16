@@ -54,7 +54,7 @@ const ResumePage = ({ navigation, route }) => {
                             <Text style={styles.secundarytext}>{prod.qtd_vendido}</Text>
                         </Col>
                         <Col size={1.2}>
-                            <Text style={styles.secundarytext}>{prod.total}</Text>
+                            <Text style={styles.secundarytext}>R$ {formatDinheiro(prod.total)}</Text>
                         </Col>
                     </Row>
                 ))}
