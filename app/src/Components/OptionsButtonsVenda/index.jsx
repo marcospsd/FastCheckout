@@ -8,7 +8,7 @@ import { ComprovanteVenda} from '../../Reports/viewvenda';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { api } from '../../Services/api';
 import { useSWRConfig } from 'swr'
-
+import { ReportQrCode } from '../../Reports/ReportQrCode';
 
 
 const OptionsButtonsVenda = ({ venda, navigation }) => {
@@ -42,6 +42,12 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
         return navigation.navigate('CreateEditVenda', { data: venda})
     }
 
+    const QrCodeGenerate = async () => {
+        setDisabled(true)
+        await ReportQrCode(venda)
+        setDisabled(false)
+    }
+
     return (
         <Container>
             { venda.status == "P" ? 
@@ -59,10 +65,10 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
                 <MaterialCommunityIcons name="arrow-u-left-bottom-bold" size={40} color="black" />
                 <Text style={styles.textButton}>Orçamento</Text>
             </TouchableOpacity>: null }
-            {/* <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled}>
-                <MaterialIcons name="security" size={40} color="black" />
-                <Text style={styles.textButton}>LGPD</Text>
-            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={QrCodeGenerate}>
+                <MaterialCommunityIcons name="qrcode" size={40} color="black" />
+                <Text style={styles.textButton}>CashBack</Text>
+            </TouchableOpacity>
             
             { venda.status == "P" ? 
             <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EditVenda}>
