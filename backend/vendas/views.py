@@ -37,7 +37,8 @@ class VendaViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
     
     def update(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         cliente = request.data.get('dadoscliente')
         Cliente.objects.update_or_create(cpf=cliente['cpf'], defaults=cliente)
         serializer.is_valid(raise_exception=True)

@@ -49,7 +49,7 @@ const Resumo = ({ navigation }) => {
             })
         }
     }
-
+    console.log(state.ordem)
     return ( 
         <View style={{ flex: 1}}>
         <ScrollView>

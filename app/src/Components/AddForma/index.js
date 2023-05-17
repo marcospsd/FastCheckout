@@ -19,6 +19,7 @@ const AddForma = ({ navigation, route }) => {
         parcelas: 1,
         valor: ""
     })
+    
 
     const AddCardItem = () => {
         if (data.valor == 0 || data.valor == "") return setAlert({ open: true, text: "o Valor inserido não pode ser zerado." })
@@ -67,15 +68,15 @@ const AddForma = ({ navigation, route }) => {
                         enabled={data.forma !== 'CC' ? false : true}
                     >
                         <Picker.Item label="1" value={1} />
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 300 && <Picker.Item label="2" value={2} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 600 && <Picker.Item label="3" value={3} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 800 && <Picker.Item label="4" value={4} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 1000 && <Picker.Item label="5" value={5} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 1200 && <Picker.Item label="6" value={6} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 1400 && <Picker.Item label="7" value={7} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 1600 && <Picker.Item label="8" value={8} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 1800 && <Picker.Item label="9" value={9} />}
-                        {user.tipouser !== "V" || data.forma == 'CC' && parseInt(total_venda) >= 2000 && <Picker.Item label="10" value={10} />}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 300 ? <Picker.Item label="2" value={2} /> : null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 600 ? <Picker.Item label="3" value={3} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 800 ? <Picker.Item label="4" value={4} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 1000 ? <Picker.Item label="5" value={5} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 1200 ? <Picker.Item label="6" value={6} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 1400 ? <Picker.Item label="7" value={7} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 1600 ? <Picker.Item label="8" value={8} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 1800 ? <Picker.Item label="9" value={9} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= 2000 ? <Picker.Item label="10" value={10} />: null}
                     </Picker>
                 </View>
                 <View>
