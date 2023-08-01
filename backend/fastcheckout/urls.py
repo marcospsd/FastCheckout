@@ -33,6 +33,7 @@ urlpatterns = [
     path('cliente/', include(clienterouter.urls)),
     path('vendas/', include(vendarouter.urls)),
     path('vendas/', include('vendas.urls')),
+    path('print/', include('print.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

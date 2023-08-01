@@ -5,6 +5,7 @@ from .models import *
 from clientes.models import Cliente
 from .serializers import *
 from django.db.models import Sum, Count
+from print.functions.prints import ImprimirComprovanteVenda
 
 class CorpoVendaViewSet(viewsets.ModelViewSet):
     queryset = Corpo_venda.objects.all()
@@ -34,6 +35,7 @@ class VendaViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
+        ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
     
     def update(self, request, *args, **kwargs):
@@ -56,7 +58,7 @@ class VendaFinalizadaViewSet(viewsets.ModelViewSet):
         elif self.request.user.tipouser == 'V':
             return Venda.objects.filter(vendedor=self.request.user.id, create_at=date.today(), status="F").order_by("-ordem")
         elif self.request.user.tipouser == 'A':
-            return Venda.objects.filter(status='F').order_by("-ordem")[:15]
+            return Venda.objects.filter(status='F').order_by("-ordem")
 
 class VendaSecView(viewsets.ModelViewSet):
     queryset = Venda.objects.all()

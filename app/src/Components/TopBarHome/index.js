@@ -18,7 +18,9 @@ export const TopBarHome = ({ navigation }) => {
                 
                     <Image source={IMGFAST} style={{width: 60, height: 50, resizeMode: 'contain'}}/>
                 
-                <TouchableOpacity onPress={() => navigation.navigate('ResumePage')}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('ResumePage')}
+                    >
                     <Text style={styles.text}>{ user.nome ? user.nome : "Usuário"}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
