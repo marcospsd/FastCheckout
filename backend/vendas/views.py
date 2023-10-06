@@ -46,7 +46,9 @@ class VendaViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
-        ImprimirComprovanteVenda(serializer.data)
+        if serializer.data['status'] == 'F':
+            if config('PRINT_REDE') == 'True':
+                ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
 
 class VendaFinalizadaViewSet(viewsets.ModelViewSet):
