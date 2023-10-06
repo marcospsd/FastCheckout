@@ -56,10 +56,10 @@ class VendaFinalizadaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.tipouser == 'C':
             return Venda.objects.filter(create_at=date.today(), status="F").order_by("-ordem")
-        elif self.request.user.tipouser == 'V' or self.request.user.tipouser == 'A':
+        elif self.request.user.tipouser == 'V':
             return Venda.objects.filter(vendedor=self.request.user.id, create_at=date.today(), status="F").order_by("-ordem")
-        # elif self.request.user.tipouser == 'A':
-        #     return Venda.objects.filter(status='F').order_by("-ordem")
+        elif self.request.user.tipouser == 'A':
+            return Venda.objects.filter(status='F').order_by("-ordem")
 
 class VendaSecView(viewsets.ModelViewSet):
     queryset = Venda.objects.all()
