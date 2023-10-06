@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
     const [ loading, setLoading ] = useState(true)
     const [ user, setUser ] = useState(null)
+    const [ printer, setPrinter ] = useState(true)
 
     useEffect(() => {
         const loadStorageData = async () => {
@@ -19,6 +20,11 @@ export const AuthProvider = ({children}) => {
                 api.defaults.headers.Authorization = `token ${getTOKEN}`
                 setUser(JSON.parse(getUser))
             }
+            const print = await AsyncStorage.getItem('@printrede')
+            if (!print) {
+                AsyncStorage.setItem('@printrede', 'true')
+            }
+            setPrinter(print == 'true' ? true : false)
             setLoading(false)
         }
         loadStorageData()
@@ -47,7 +53,7 @@ export const AuthProvider = ({children}) => {
     }
 
     return (
-    <AuthContext.Provider value={{ signed: !!user, user, loading, Login, Logout }}>
+    <AuthContext.Provider value={{ signed: !!user, user, loading, Login, Logout, printer, setPrinter }}>
         {children}
     </AuthContext.Provider>)
 }

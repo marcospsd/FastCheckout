@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
+import {AuthContext} from '../../Context/authcontext'
 import { Container } from './style'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,6 +13,7 @@ import { ReportQrCode } from '../../Reports/ReportQrCode';
 
 
 const OptionsButtonsVenda = ({ venda, navigation }) => {
+    const { printer } = useContext(AuthContext)
     const { mutate } = useSWRConfig()
     const [ disabled, setDisabled] = useState(false)
  
@@ -19,7 +21,9 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
         setDisabled(true)
         const x = api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status : "F"})
         .then((r) => {
-            ComprovanteVenda(r.data)
+            if (printer !== true) {
+                ComprovanteVenda(r.data)
+            } 
             mutate('/vendas/venda/')
             navigation.goBack()
         })
@@ -48,6 +52,14 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
         setDisabled(false)
     }
 
+    const ReImprimir = async () => {
+        if(printer == true){
+            api.post('/print/venda/', {"ordem": venda.ordem})
+        } else {
+            ComprovanteVenda(venda)
+        }
+    }
+
     return (
         <Container>
             { venda.status == "P" ? 
@@ -56,7 +68,7 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
                 <Text style={styles.textButton}>Aprovar</Text>
             </TouchableOpacity> : null }
             { venda.status == "F" ?
-            <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={() => ComprovanteVenda(venda)} disabled={disabled}>
+            <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={ReImprimir} disabled={disabled}>
                 <MaterialIcons name="print" size={40} color="black" />
                 <Text style={styles.textButton}>Imprimir</Text>
             </TouchableOpacity> : null }

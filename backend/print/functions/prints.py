@@ -4,6 +4,7 @@ from texttable import Texttable
 import urllib.parse
 import json
 import os
+import base64
 
 def FormasdePag(forma):
     match forma:
@@ -41,7 +42,8 @@ def ImprimirComprovanteVenda(venda):
         "nome_completo": venda["dadoscliente"]["nome"],
         "telefone": venda["dadoscliente"]["telefone"]
     }
-    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{urllib.parse.quote(json.dumps(dadosurl))}"
+#    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{urllib.parse.quote(json.dumps(dadosurl))}"
+    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{base64.b64encode(json.dumps(dadosurl).encode('utf-8')).decode('utf-8')}"
     # Imprimir cabeçalho centralizado
     p.image(img_source=os.path.abspath('print/functions/image.png'))
     p.text("\n\n")
@@ -118,8 +120,9 @@ fique por dentro de todas novidades. \n
     p.text("Aponte a câmera do seu celular  e ative seu Cashback")
     p.set(align='center', width=2, height=1, font='b')
     p.qr(url, size=8)
-    p.text("\n-----------------------\n")
-    p.text("PRODUTOS SEM TROCA\n")
+    p.text(" \n \n \n")
+    p.text("-----------------------\n")
+    p.text("PRODUTOS SEM TROCA \n")
     p.text("-----------------------\n")
     p.cut()
     p.set(align='left', width=2, height=1, font='b', text_type='b', flip=True)
@@ -146,6 +149,16 @@ fique por dentro de todas novidades. \n
     p.text("DATA: ")
     p.set(align='left', width=2, height=1, font='b')
     p.text(f"{venda['create_at']} \n")
+    p.set(align='center', width=2, height=1, font='b', text_type='b')
+    p.text("Forma de Pagamento \n\n\n")
+    p.set(align='left', width=2, height=1, font='b')
+    formpag = Texttable()
+    formpag.set_cols_align(["l", "c", "r"])
+    formpag.set_cols_width([10, 5, 10])
+    formpag.set_deco(Texttable.HEADER)
+    formpag.add_rows(rows=formaitem)
+    p.text(formpag.draw())
+    p.text(' \n\n')
     p.text("-------------------------------")
     p.text("\n\n\n\n\n\n\n\n\n\n\n\n")
     p.text("-------------------------------")

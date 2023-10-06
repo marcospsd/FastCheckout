@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { ContainerLogin } from './styles'
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TopBar } from '../../Components/TopBar'
 import AlertSnack from '../../Components/Snackbar'
 import { service, api} from '../../Services/api'
+import { AuthContext } from '../../Context/authcontext';
 
 
 const ConfigPage = ({navigation, route}) => {
+    const { setPrinter } = useContext(AuthContext)
     const [ url, setUrl] = useState("")
     const [ blockButton, setBlockButton] = useState(false)
     const [ alert, setAlert] = useState({ open: false, text: ""})
+    const [isSwitchOn, setIsSwitchOn] = useState(false);
 
     const Connect = async () => {
         setBlockButton(true)
@@ -34,12 +37,20 @@ const ConfigPage = ({navigation, route}) => {
     useEffect(() => {
         const Init = async () => {
             const x = await AsyncStorage.getItem('@urlapi')
+            const y = await AsyncStorage.getItem('@printrede')
+            console.log(y)
             setUrl(x ? x : "")
+            setIsSwitchOn(y == 'true' ? true : false)
         }
         Init()
     }, [])
 
-    
+    const ImpressaoRede = (x) => {
+        AsyncStorage.setItem('@printrede', String(x))
+        setIsSwitchOn(x)
+        setPrinter(x)
+    }
+ 
     return (
         <View style={{flex: 1, backgroundColor: '#c52f33',}}>
             <TopBar PageName={route.name} navigation={navigation}/>
@@ -54,6 +65,14 @@ const ConfigPage = ({navigation, route}) => {
                         value={url}
                         />
                     <Button mode="contained" style={{ width: 150, marginBottom: 20}} theme={{ colors: { primary: '#c52f33'}}} onPress={Connect} disabled={blockButton}>Conectar</Button>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <Text>Impressão via Rede: </Text>
+                        <Switch 
+                            value={isSwitchOn} 
+                            onValueChange={() => ImpressaoRede(!isSwitchOn)}
+                            color='red'
+                            />
+                    </View>
                 </ContainerLogin>
             </View>
             <AlertSnack text={alert.text} open={alert} setOpen={setAlert} />

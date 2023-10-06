@@ -6,6 +6,7 @@ from clientes.models import Cliente
 from .serializers import *
 from django.db.models import Sum, Count
 from print.functions.prints import ImprimirComprovanteVenda
+from decouple import config
 
 class CorpoVendaViewSet(viewsets.ModelViewSet):
     queryset = Corpo_venda.objects.all()
@@ -35,7 +36,6 @@ class VendaViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
-        ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
     
     def update(self, request, *args, **kwargs):
@@ -46,6 +46,7 @@ class VendaViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
+        ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
 
 class VendaFinalizadaViewSet(viewsets.ModelViewSet):
@@ -55,14 +56,25 @@ class VendaFinalizadaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.tipouser == 'C':
             return Venda.objects.filter(create_at=date.today(), status="F").order_by("-ordem")
-        elif self.request.user.tipouser == 'V':
+        elif self.request.user.tipouser == 'V' or self.request.user.tipouser == 'A':
             return Venda.objects.filter(vendedor=self.request.user.id, create_at=date.today(), status="F").order_by("-ordem")
-        elif self.request.user.tipouser == 'A':
-            return Venda.objects.filter(status='F').order_by("-ordem")
+        # elif self.request.user.tipouser == 'A':
+        #     return Venda.objects.filter(status='F').order_by("-ordem")
 
 class VendaSecView(viewsets.ModelViewSet):
     queryset = Venda.objects.all()
     serializer_class = VendasSecSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        if serializer.data['status'] == 'F':
+            if config('PRINT_REDE') == 'True':
+                ImprimirComprovanteVenda(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
 
 
 class ResumoVendasView(viewsets.ModelViewSet):

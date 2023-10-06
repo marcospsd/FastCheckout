@@ -2,7 +2,7 @@
   "expo": {
     "name": "FastCheckout",
     "slug": "fastcheckoutapp",
-    "version": "1.0.0",
+    "version": "1.5.0",
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
@@ -28,6 +28,7 @@
       }
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#C52F33"

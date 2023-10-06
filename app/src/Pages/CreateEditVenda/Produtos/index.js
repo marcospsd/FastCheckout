@@ -23,7 +23,7 @@ const Produtos = ({navigation}) => {
     }
 
 
-    console.log(state)
+
     return ( 
         <View style={{flex: 1}}>
             <FlatList
