@@ -16,7 +16,6 @@ const ResumoStep = ({ data, setData, step, setStep, close }) => {
       setBlockButton(true)
       api.post(`/vendas/venda/`, data)
       .then((res) => {
-          SenhaVenda(res.data)
           close()
       })
       .catch((err) => {

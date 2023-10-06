@@ -12,14 +12,14 @@ import { api } from '../../services/api'
 import { useSWRConfig } from 'swr'
 
 const ListButtons = ({ data, acaodeletar, retornarcompra, setOpen, setEditModal }) => {
-    const { user } = useContext(AuthContext)
+    const { user, printRede } = useContext(AuthContext)
     const { mutate } = useSWRConfig()
 
 
     const AprovarCompra = async (venda) => {
         await api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status: 'F' })
         .then((res) => {
-            ComprovanteVenda(venda)
+            if (printRede !== true ) {ComprovanteVenda(venda)}
             mutate('/vendas/venda/') 
         })}
     
@@ -71,7 +71,11 @@ const ListButtons = ({ data, acaodeletar, retornarcompra, setOpen, setEditModal 
 
             <IconButton onClick={() => {
               setOpen(false) 
-              ComprovanteVenda(data)
+              if ( printRede == true ) {
+                api.post('/print/venda/', {ordem : data.ordem})
+              } else {
+                ComprovanteVenda(data)
+              }
             }}><PrintIcon/></IconButton>
 
             <IconButton onClick={() => setOpen(false)}><CloseIcon/></IconButton>

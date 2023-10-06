@@ -40,6 +40,21 @@ function ComprovanteVenda(data) {
         }
     }
 
+    
+    const LinkGerado = () => {
+        const dadosurl = {
+            "valor_total": data.total_venda,
+            "ordem": data.ordem,
+            "cpf": data.cpf,
+            "nome_completo": data.dadoscliente.nome,
+            "telefone": data.dadoscliente.telefone
+        }
+  
+
+
+        return `https://cashback.cupomdiniz.com.br/gerarcashback/${btoa(JSON.stringify(dadosurl))}`
+    }
+
 
     const titulo = [];
 
@@ -268,9 +283,31 @@ function ComprovanteVenda(data) {
             alignment: 'center',
             margin: [0,0,0,0],
         },
+
+        {
+            text: '**** Resgate seu CashBack ****',
+            fontSize: 5,
+            margin: [0,5,0,0],
+            alignment: 'center',
+            bold: true,
+        },
+        {
+            text: `ao Resgatar, você terá R$ ${Math.round(data.total_venda*0.20)},00 de desconto em sua próxima compra.`,
+            fontSize: 4,
+            alignment: 'center',
+            margin: [0,5,0,0],
+        },
+        {
+            text: 'Aponte a câmera do seu celular e ative seu Cashback.',
+            fontSize: 4,
+            alignment: 'center',
+            margin: [0,5,0,0],
+        },
+
+
         {
             margin: [0,10,0,0],
-            qr: 'https://www.instagram.com/oticasdinizvitoria/',
+            qr: LinkGerado(),
             fit: '50',
             alignment: 'center'
         },
@@ -322,60 +359,6 @@ function ComprovanteVenda(data) {
             alignment: 'center'
         },
 
-        {
-            text: 'TERMO DE CONSENTIMENTO PARA ARMAZENAMENTO E TRATAMENTO DE DADOS PESSOAIS EM CONFORMIDADE COM A LEI Nº 13.709 (LGPD)',
-            fontSize: 4,
-            bold: true,
-            margin: [0,20,0,0],
-            alignment: 'center'
-            
-        },
-
-        {
-            text: 'Solicitamos o expresso consentimento para coletarmos, tratarmos e armazenarmos seus dados quando julgarmos necessários a prestação de nossos serviços, tais como: nome e sobrenome, endereço para correspondência, endereço de e-mail, informações de pagamento, bem como outras informações de contato on-line ou número de telefone, foto e demais informações requeridas no cadastro. Podemos registrar e gravar todos os dados fornecidos em toda comunicação realizada com nossa equipe, seja por correio eletrônico, mensagens, telefone ou qualquer outro meio. Ao submeter seus dados para pagamento, podemos coletar informações sobre a compra ou transação. Isso abrange suas informações de pagamento, informações de conta e autenticação, além dos dados de faturamento, tais como endereço completo CPF e RG. Compartilhamos seus dados com terceiros, a um tribunal, reguladores ou agências governamentais. Todo os dados que você nos fornece são tratados unicamente para atingir as finalidades acima listadas. Estes dados são armazenados em servidores seguros nossos ou de fornecedores contratados, acessando e utilizados de acordo com nossas políticas e padrões de segurança. Todo o tráfego entre nossos servidores ou entre o seu computador e nossos servidores é encriptado através do protocolo seguro SSL ou semelhante. Nós manteremos as informações que coletamos de você até que ocorra a solicitação de exclusão definitiva por sua parte. Você pode solicitar informações, alteração, esclarecimentos ou exclusão de seus dados por meio do contato: LGPD@DINIZVITORIA.COM.BR',
-            fontSize: 4,
-            margin: [2,5,2,0],
-            alignment: 'justify'
-            
-        },
-
-        {
-            text: 'Eu '+ data.dadoscliente.nome +',',
-            fontSize: 4,
-            margin: [2,8,2,0],
-            alignment: 'justify'
-        },
-        {
-            text: 'Incrito sob o CPF: ' + (data.cpf).replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
-            fontSize: 4,
-            margin: [2,4,2,0],
-            alignment: 'justify'
-        },
-        {
-            text: '(  ) Aceito      (  ) Não Aceito',
-            fontSize: 4,
-            margin: [2,4,2,0],
-            alignment: 'justify'
-        },
-        {
-            text: '_________________________________________',
-            fontSize: 4,
-            margin: [2,17,2,0],
-            alignment: 'center'
-        },
-        {
-            text: 'Assinatura',
-            fontSize: 4,
-            margin: [2,1,2,0],
-            alignment: 'center'            
-        },
-        {
-            text: '--------------------------------------------------------',
-            fontSize: 4,
-            bold: true,
-            margin: [0,10,0,0],
-            alignment: 'center'
-        },
         {
             margin: [0,5,0,0],
             fontSize: 4,

@@ -13,13 +13,15 @@ export const AuthProvicer = ({children}) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [printRede, setPrintRede] = useState(true)
 
     useEffect(() => {
         setUser(null)
         const recoveredUser = localStorage.getItem('id');
         const token = localStorage.getItem('token');
-
+        const rede = localStorage.getItem('printrede') ? JSON.parse(localStorage.getItem('printrede')) : true
         if(recoveredUser && token) {
+            if (rede) { setPrintRede(rede)}
             api.defaults.headers.Authorization = `token ${token}`
             api.get(`/auth/user/${recoveredUser}/`)
             .then((res) => {
@@ -45,6 +47,7 @@ export const AuthProvicer = ({children}) => {
             const id = res.data.id
             localStorage.setItem("token", token);
             localStorage.setItem("id", JSON.stringify(id));
+            localStorage.setItem("printrede", true);
             api.defaults.headers.Authorization = `token ${token}`
             setUser(res.data)
             setLoading(false)
@@ -77,12 +80,13 @@ export const AuthProvicer = ({children}) => {
     const logout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("id")
+        localStorage.removeItem("printrede")
         api.defaults.headers.Authorization = null;
         setUser(null);
         navigate("/login")
     };
 
     return (
-        <AuthContext.Provider value={{ authenticated: !!user, user, loading, login, logout }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ authenticated: !!user, user, loading, login, logout, printRede, setPrintRede }}>{children}</AuthContext.Provider>
     )
 }

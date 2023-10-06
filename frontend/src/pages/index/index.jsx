@@ -15,11 +15,11 @@ import Resumo from './steps/resumo';
 import { CodUser } from '../../components/Functions/functions';
 import Estoque from './steps/estoque';
 import Admin from './steps/admin';
-
-
+import Switch from '@mui/material/Switch';
+import PrintIcon from '@mui/icons-material/Print';
 
 const HomePage = () => {
-    const { user, logout } = useContext(AuthContext)
+    const { user, logout, printRede, setPrintRede } = useContext(AuthContext)
     const [ createmodal, setCreateModal ] = useState(false)
     const [ tipovendas, setTipoVendas ] = useState(user.tipouser == 'E' ? 'estoque': user.tipouser == 'A' ? 'resumo' : 'pendentes')
     const { mutate } = useSWRConfig()
@@ -63,6 +63,11 @@ const HomePage = () => {
         }
     }
 
+    const PrintRede = () => {
+        localStorage.setItem('printrede', !printRede)
+        setPrintRede(!printRede)
+    }
+
 
     return (
         <BigContainer>
@@ -70,6 +75,10 @@ const HomePage = () => {
                 <IconButton onClick={() => logout()} id="logouticon">
                     <LogoutIcon/>
                 </IconButton>
+                <div className='divprint'>
+                    <PrintIcon color='error'/>
+                    <Switch checked={printRede} onChange={PrintRede} color='error'/>
+                </div>
                 <img src={Logo}/>
                 <MenuAddCard>
                     <p id="nameuser"><b>{ user.first_name ? user?.first_name.toUpperCase().split(' ').slice(0, 1).join(' '): null}</b></p>

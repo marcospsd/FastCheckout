@@ -40,13 +40,14 @@ class VendaViewSet(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        statusvenda = instance.status
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         cliente = request.data.get('dadoscliente')
         Cliente.objects.update_or_create(cpf=cliente['cpf'], defaults=cliente)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
-        if serializer.data['status'] == 'F':
+        if serializer.data['status'] == 'F' and statusvenda == 'P':
             if config('PRINT_REDE') == 'True':
                 ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
@@ -69,11 +70,12 @@ class VendaSecView(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        statusvenda = instance.status
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
-        if serializer.data['status'] == 'F':
+        if serializer.data['status'] == 'F' and statusvenda == 'P':
             if config('PRINT_REDE') == 'True':
                 ImprimirComprovanteVenda(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
