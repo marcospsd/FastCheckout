@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-i-&ktv-dnq$4558wf&k@u$s3)1y6+^*q&34-&zlu-i=8(3ukp2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://', 'https://']
+CSRF_TRUSTED_ORIGINS = ['http://', 'https://fastcheckout.dinizvitoria.com.br']
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
