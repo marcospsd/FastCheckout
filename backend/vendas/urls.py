@@ -7,7 +7,7 @@ vendarouter.register('venda', VendaViewSet)
 vendarouter.register('patchvenda', VendaSecView)
 vendarouter.register('vendafinalizada', VendaFinalizadaViewSet)
 vendarouter.register('corpovenda', CorpoVendaViewSet)
-vendarouter.register('formavenda', FormaVendaViewSet)
+vendarouter.register(r'formavenda', FormaVendaViewSet)
 vendarouter.register('resumovendas', ResumoVendasView)
 
 

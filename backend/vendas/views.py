@@ -1,5 +1,7 @@
 from rest_framework import viewsets, generics, views, status
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Case, When, Value, IntegerField
 from datetime import date
 from .models import *
 from clientes.models import Cliente
@@ -14,7 +16,55 @@ class CorpoVendaViewSet(viewsets.ModelViewSet):
 
 class FormaVendaViewSet(viewsets.ModelViewSet):
     queryset = Formapagamento.objects.all()
-    serializer_class = FormaVendaSerializers
+    serializer_class = FormaVendaNSUSerializers
+    parser_classes = (MultiPartParser, FormParser)
+
+    # def get_queryset(self):
+    #     return self.queryset.annotate(
+    #         nsu_order=Case(
+    #             When(nsu__isnull=True, then=Value(0)),
+    #             When(nsu='', then=Value(0)),
+    #             default=Value(1),
+    #             output_field=IntegerField()
+    #         ),
+    #         img_order=Case(
+    #             When(img__isnull=True, then=Value(0)),
+    #             When(img='', then=Value(0)),
+    #             default=Value(1),
+    #             output_field=IntegerField()
+    #         )
+    #     ).order_by('nsu_order', 'img_order', 'key')
+    def get_queryset(self):
+        filtro_dia = self.request.query_params.get('data', None)
+        if filtro_dia:
+            data = filtro_dia
+        else:
+            data = date.today()
+        queryset = self.queryset.select_related('key').annotate(
+            nsu_order=Case(
+                When(nsu__isnull=True, then=Value(0)),
+                When(nsu='', then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField()
+            ),
+            img_order=Case(
+                When(img__isnull=True, then=Value(0)),
+                When(img='', then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField()
+            )
+        ).filter(key__create_at=data, key__status="F").order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
+        return queryset
+    
+    def update(self, request, *args, **kwargs):
+        print(request.data)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
+    
 
 
 class VendaViewSet(viewsets.ModelViewSet):
@@ -173,3 +223,4 @@ class ResumoCondPags(generics.ListAPIView):
                 group by create_at, forma
                 order by create_at, forma
             """)
+    

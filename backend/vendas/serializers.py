@@ -6,6 +6,8 @@ from produtos.serializers import ReposicaoSerializers, SaidaProdutos
 from users.serializers import VendedorSerializer
 from clientes.serializers import ClienteSerializers
 
+
+
 class CorpoVendaSerializers(serializers.ModelSerializer):
     complementos = ReposicaoSerializers(source='codpro', read_only=True)
 
@@ -21,6 +23,13 @@ class FormaVendaSerializers(serializers.ModelSerializer):
         model = Formapagamento
         fields = ['key', 'id', 'forma', 'parcelas', 'valor']
         read_only_fields = ['key']
+
+
+class FormaVendaNSUSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Formapagamento
+        fields = '__all__'
 
 
 

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-i-&ktv-dnq$4558wf&k@u$s3)1y6+^*q&34-&zlu-i=8(3ukp2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://', 'https://fastcheckout.dinizvitoria.com.br']
+CSRF_TRUSTED_ORIGINS = ['https://fastcheckout.dinizvitoria.com.br', 'http://10.0.0.116:8000/']
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
@@ -87,18 +87,18 @@ WSGI_APPLICATION = 'fastcheckout.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
+     },
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSQL_BASE'),
-        'USER': config('MYSQL_USER'),
-        'PASSWORD': config('MYSQL_PASS'),
-        'PORT': '3306',
-        'HOST': config('MYSQL_HOST')
-    }
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': config('MYSQL_BASE'),
+    #     'USER': config('MYSQL_USER'),
+    #     'PASSWORD': config('MYSQL_PASS'),
+    #     'PORT': '3306',
+    #     'HOST': config('MYSQL_HOST')
+    # }
 }
 
 # Password validation

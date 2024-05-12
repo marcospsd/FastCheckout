@@ -4,13 +4,15 @@ from clientes.models import Cliente
 from produtos.models import Produto
 from users.models import User
 from datetime import date
-
+import os
 
 statusvenda = [
     ('P', 'Pendente'),
     ('F', 'Finalizado'),
     ('M', 'Migrado para Protheus')
 ]
+
+
 
 class Venda(models.Model):
     ordem = models.BigAutoField(primary_key=True, auto_created=True)
@@ -19,6 +21,7 @@ class Venda(models.Model):
     hour_at = models.TimeField(auto_now_add=True)
     vendedor = models.ForeignKey(User, related_name='venda_vendedor', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=statusvenda)
+    conciliado = models.BooleanField(default=False)
     total_venda = models.IntegerField()
     prot_pedidovenda = models.CharField(max_length=8, null=True, blank=True)
     prot_filial = models.CharField(max_length=4, null=True, blank=True)
@@ -49,9 +52,29 @@ methodos = [
     ('VE', 'Voucher Exagerado'),
 ]
 
+def upload_to(instance, filename):
+    return 'comprovantes/{}-{}.png'.format(instance.key, instance.pk)
+
 
 class Formapagamento(models.Model):
     key = models.ForeignKey(Venda, related_name='formpag_venda', on_delete=models.CASCADE)
     forma = models.CharField(max_length=2, choices=methodos)
     parcelas = models.PositiveIntegerField()
     valor = models.IntegerField()
+    bandeira = models.CharField(max_length=50, null=True, blank=True)
+    nsu = models.CharField(max_length=15, null=True, blank=True)
+    autorizacao = models.CharField(max_length=10, null=True, blank=True)
+    img = models.ImageField(upload_to=upload_to, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.key)
+    
+    def save(self, *args, **kwargs):
+        try:
+            old_instance = Formapagamento.objects.get(pk=self.pk)
+            if self.img != old_instance.img:
+                if os.path.isfile(old_instance.img.path):
+                    os.remove(old_instance.img.path)
+        except Formapagamento.DoesNotExist:
+            pass
+        super().save(*args, **kwargs)

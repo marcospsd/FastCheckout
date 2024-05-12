@@ -17,6 +17,7 @@ import Estoque from './steps/estoque';
 import Admin from './steps/admin';
 import Switch from '@mui/material/Switch';
 import PrintIcon from '@mui/icons-material/Print';
+import Conciliacao from './steps/conciliacao';
 
 const HomePage = () => {
     const { user, logout, printRede, setPrintRede } = useContext(AuthContext)
@@ -60,6 +61,8 @@ const HomePage = () => {
                 return <Estoque />
             case 'admin':
                 return <Admin />
+            case 'conciliacao':
+                return <Conciliacao/>
         }
     }
 
@@ -92,6 +95,7 @@ const HomePage = () => {
                     value={tipovendas}
                     size="small"
                     exclusive
+                    style={{ flexWrap: 'wrap', alignItems:'center', justifyContent:'center'}}
                     onChange={(e) => setTipoVendas(e.target.value)}
                     aria-label="Platform"
                     >
@@ -100,6 +104,7 @@ const HomePage = () => {
                      { user.tipouser == 'A' || user.tipouser == 'C' || user.tipouser == 'V' ? <ToggleButton value="resumo">Resumo</ToggleButton> : null}
                      { user.tipouser == 'E' ? <ToggleButton value="estoque">Estoque</ToggleButton> : null}
                      { user.tipouser == 'A' || user.tipouser == 'E' ? <ToggleButton value="admin">Admin</ToggleButton> : null}
+                     { user.tipouser == 'A' || user.tipouser == 'E' ? <ToggleButton value="conciliacao">Conciliação</ToggleButton> : null}
                 </ToggleButtonGroup>
                 <br/>
                 { dataToggle() }
