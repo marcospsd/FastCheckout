@@ -11,12 +11,12 @@ import CardConciliador from '../../../components/CardConciliador';
 
 
 const Conciliacao = () => {
-    const {data, mutate} = useAxios("/vendas/formavenda/")
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+    const {data, mutate} = useAxios(`/vendas/formavenda/?data=${date}`)
     const [viewVenda, setViewVenda] = useState(0)
     const [search, setSearch] = useState("")
     const [viewmodal, setViewModal] = useState(false)
     const [datamodal, setDatamodal] = useState(false)
-
 
     if (!data) {
         return (
@@ -27,9 +27,19 @@ const Conciliacao = () => {
         )
     }
 
-
     return (
         <>
+        <Coluna
+            style={{ justifyContent: 'center', marginBottom: 15}}
+            >
+            <TextField
+                size='small'
+                type='date' 
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                
+                />
+        </Coluna>
         <Coluna>
             <TextField id="searchinput" label="Pesquise pela CPF/Nome" size="small" variant="outlined" value={search} onChange={(e) => {setSearch(e.target.value)}} 
                 sx={{ width: '90%', paddingBottom: '20px'}}

@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { NameForma, ValorDinheiro } from '../Functions/functions'
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { Tittle, FormaPagamento, Coluna, Linha} from './styles'
+import { Tittle, FormaPagamento, Coluna, Linha, Absolute} from './styles'
 import { Button, TextField } from '@mui/material';
 import SelectBandeira from '../SelectBandeiras';
+import SelectFormPag from '../SelectFormPag'
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { api } from '../../services/api';
 import AlertText from '../Alerts';
+
 
 
 const ViewConciliador = ({ data, modal, setModal, mutate, setAtualizarVenda}) => {
@@ -23,9 +26,12 @@ const ViewConciliador = ({ data, modal, setModal, mutate, setAtualizarVenda}) =>
         if (newData == data) return;
         setDisabled(true)
         const formData = new FormData()
-        if (newData.nsu) formData.append('nsu', newData.nsu)
-        if (newData.autorizacao) formData.append('autorizacao', newData.autorizacao)
-        if (newData.bandeira) formData.append('bandeira', newData.bandeira)
+        if (newData.nsu && newData.nsu !== data.nsu) formData.append('nsu', newData.nsu)
+        if (newData.autorizacao && newData.autorizacao !== data.autorizacao) formData.append('autorizacao', newData.autorizacao)
+        if (newData.bandeira && newData.bandeira !== data.bandeira) formData.append('bandeira', newData.bandeira)
+        if (newData.forma && newData.forma !== data.forma) formData.append('forma', newData.forma)
+        if (newData.parcelas && newData.parcelas !== data.parcelas) formData.append('parcelas', newData.parcelas)
+        if (newData.valor && newData.valor !== data.valor) formData.append('valor', newData.valor)
         if (img) formData.append("img", img)
         const config = {
             headers: {
@@ -63,6 +69,11 @@ const ViewConciliador = ({ data, modal, setModal, mutate, setAtualizarVenda}) =>
             <Box
                 id='box-create-venda'
             >
+                <Absolute>
+                    <IconButton onClick={() => setModal(false)}>
+                        <CloseIcon/>
+                    </IconButton>
+                </Absolute>
                 <AlertText data={alert} close={() => setAlert({...alert, open: !alert.open })} />
                 <Tittle>
                     <p><strong>CONCILIAR</strong></p>
@@ -78,9 +89,37 @@ const ViewConciliador = ({ data, modal, setModal, mutate, setAtualizarVenda}) =>
                             <td><b>Valor</b></td>
                         </tr>
                         <tr>
-                                <td className='formaconteudo' >{NameForma(data.forma)}</td>
-                                <td className='formaconteudo' >{data.parcelas}</td>
-                                <td className='formaconteudo' >{ValorDinheiro(data.valor)}</td>
+                            <td>                            
+                                <SelectFormPag 
+                                    state={newData} 
+                                    setState={setNewData}/>
+                            </td>
+                            <td>
+                                <TextField
+                                    sx={{ width: 100}}
+                                    inputProps={{
+                                        style: { color: 'white'}
+                                    }}
+                                    type='number'
+                                    size="small"
+                                    value={newData.parcelas}
+                                    onChange={(e) => setNewData({...newData, parcelas: e.target.value})}
+                                    />
+                            </td>
+                            {/* <td>
+                                <TextField
+                                    inputProps={{
+                                        style: { color: 'white'}
+                                    }}
+                                    type="number"
+                                    size="small"
+                                    value={newData.valor}
+                                    onChange={(e) => setNewData({...newData, valor: e.target.value})}
+                                    />
+                            </td>
+                            <td className='formaconteudo' >{NameForma(data.forma)}</td>
+                            <td className='formaconteudo' >{data.parcelas}</td> */}
+                            <td className='formaconteudo' >{ValorDinheiro(data.valor)}</td>
                             </tr>
                         </tbody>
                     </table>

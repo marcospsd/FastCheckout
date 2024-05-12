@@ -65,12 +65,15 @@ export const FormaPagamento = styled.div`
     }
 
     > label {
+        
         align-items: center;
         justify-content: center;
     }
     > table {
+        
         padding: 0.5rem
     }
+
 
 `
 
@@ -120,4 +123,11 @@ export const ButtonList = styled.div`
      .MuiSvgIcon-root {
         font-size: 40px;
     }
+`
+
+export const Absolute = styled.div`
+    display: flex;
+    position: absolute;
+    right: 1px;
+    top: 1px;
 `

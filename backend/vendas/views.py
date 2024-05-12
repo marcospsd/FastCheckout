@@ -53,7 +53,7 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
                 default=Value(1),
                 output_field=IntegerField()
             )
-        ).filter(key__create_at=data, key__status="F").order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
+        ).filter(key__create_at=data, key__status="F", forma__in=["CC", "CD"]).order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
         return queryset
     
     def update(self, request, *args, **kwargs):
