@@ -77,4 +77,6 @@ class Formapagamento(models.Model):
                     os.remove(old_instance.img.path)
         except Formapagamento.DoesNotExist:
             pass
+        except ValueError:
+            pass
         super().save(*args, **kwargs)

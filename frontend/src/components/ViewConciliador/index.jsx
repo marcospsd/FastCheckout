@@ -23,7 +23,6 @@ const ViewConciliador = ({ data, modal, setModal, mutate, setAtualizarVenda}) =>
     const [ alert, setAlert ] = useState({ open: false, texto: "", tipoalert: "warning"})
 
     const AtualizarConciliacao = () => {
-        if (newData == data) return;
         setDisabled(true)
         const formData = new FormData()
         if (newData.nsu && newData.nsu !== data.nsu) formData.append('nsu', newData.nsu)
