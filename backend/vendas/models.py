@@ -21,7 +21,6 @@ class Venda(models.Model):
     hour_at = models.TimeField(auto_now_add=True)
     vendedor = models.ForeignKey(User, related_name='venda_vendedor', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=statusvenda)
-    conciliado = models.BooleanField(default=False)
     total_venda = models.IntegerField()
     prot_pedidovenda = models.CharField(max_length=8, null=True, blank=True)
     prot_filial = models.CharField(max_length=4, null=True, blank=True)
