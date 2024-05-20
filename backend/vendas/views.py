@@ -35,7 +35,7 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
     #         )
     #     ).order_by('nsu_order', 'img_order', 'key')
     def get_queryset(self):
-        if self.requests.method in ['GET']:
+        if self.request.method in ['GET']:
             filtro_dia = self.request.query_params.get('data', None)
             if filtro_dia:
                 data = filtro_dia
