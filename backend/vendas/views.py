@@ -35,26 +35,29 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
     #         )
     #     ).order_by('nsu_order', 'img_order', 'key')
     def get_queryset(self):
-        filtro_dia = self.request.query_params.get('data', None)
-        if filtro_dia:
-            data = filtro_dia
+        if self.requests.method in ['GET']:
+            filtro_dia = self.request.query_params.get('data', None)
+            if filtro_dia:
+                data = filtro_dia
+            else:
+                data = date.today()
+            queryset = self.queryset.select_related('key').annotate(
+                nsu_order=Case(
+                    When(nsu__isnull=True, then=Value(0)),
+                    When(nsu='', then=Value(0)),
+                    default=Value(1),
+                    output_field=IntegerField()
+                ),
+                img_order=Case(
+                    When(img__isnull=True, then=Value(0)),
+                    When(img='', then=Value(0)),
+                    default=Value(1),
+                    output_field=IntegerField()
+                )
+            ).filter(key__create_at=data, key__status="F", forma__in=["CC", "CD"]).order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
+            return queryset
         else:
-            data = date.today()
-        queryset = self.queryset.select_related('key').annotate(
-            nsu_order=Case(
-                When(nsu__isnull=True, then=Value(0)),
-                When(nsu='', then=Value(0)),
-                default=Value(1),
-                output_field=IntegerField()
-            ),
-            img_order=Case(
-                When(img__isnull=True, then=Value(0)),
-                When(img='', then=Value(0)),
-                default=Value(1),
-                output_field=IntegerField()
-            )
-        ).filter(key__create_at=data, key__status="F", forma__in=["CC", "CD"]).order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
-        return queryset
+            return self.queryset
     
     def update(self, request, *args, **kwargs):
         print(request.data)
