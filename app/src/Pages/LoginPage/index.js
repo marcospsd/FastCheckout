@@ -16,7 +16,6 @@ const LoginPage = ({ navigation }) => {
     const [ data, setData] = useState({ username: "", password: ""})
     const [ alert, setAlert ] = useState({ open: false, text: ""})
 
-
     const Entrar = async () => {
         if (data.username && data.password) {
             setDisabled(true)
@@ -36,14 +35,14 @@ const LoginPage = ({ navigation }) => {
             <TextInput 
                 style={{ width: 300, marginBottom: 10, backgroundColor: 'rgba(201, 201, 201, 0.2)' }} theme={{ colors: { primary: '#c52f33'}}}
                 label="Login"
-                onChangeText={(text) => setData({...data, username: text})}
+                onChangeText={(text) => setData({...data, username: text.toLowerCase()})}
                 left={ <TextInput.Icon icon="account" color="black" disabled/> }
                 />
             <TextInput 
                 style={{ width: 300, marginBottom: 20, backgroundColor: 'rgba(201, 201, 201, 0.2)',}} theme={{ colors: { primary: '#c52f33'}}}
                 label="Senha"
                 secureTextEntry={viewpass}
-                onChangeText={(text) => setData({...data, password: text})}
+                onChangeText={(text) => setData({...data, password: text.toLowerCase()})}
                 left={ <TextInput.Icon icon="key" color="black" disabled/> }
                 right={
                     <TextInput.Icon icon={viewpass ? 'eye' : 'eye-off'} onPress={() => setViewPass(!viewpass)} />

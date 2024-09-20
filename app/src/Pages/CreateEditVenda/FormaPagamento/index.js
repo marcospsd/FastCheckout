@@ -30,10 +30,9 @@ const FormaPagamento = ({ navigation }) => {
         )
     }
 
-
     const CardFormaPag = ({ item }) => {
         return (
-            <TouchableOpacity onLongPress={() => Delete(item)} style={{ marginTop: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 15}}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddForma', { item, saldo })} onLongPress={() => Delete(item)} style={{ marginTop: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 15}}>
                 <Row>
                     <Col size={2}>
                         <Text style={styles.secundarytext}>{NameForma(item.forma)}</Text>

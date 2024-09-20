@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { SafeAreaView} from 'react-native'
 import { FlatListDisplay } from '../../../Components/FlatListDisplay'
 import { TopBarHome } from '../../../Components/TopBarHome'
 import { useAxios, api } from '../../../Services/api'
 import LoadingComponent from '../../../Components/LoadingComponent'
+import { useFocusEffect } from '@react-navigation/native'
 
 
 
@@ -18,6 +19,9 @@ const PendentesView = ({ navigation }) => {
         })
     }
 
+    // useFocusEffect(useCallback(() => {
+    //     mutate()
+    // }, []))
     return (
         <SafeAreaView style={{ flex: 1}}>
             <TopBarHome navigation={navigation}/>

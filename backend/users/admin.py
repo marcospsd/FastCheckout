@@ -3,7 +3,7 @@ from .forms import UserCreateForm
 from django.contrib.auth import admin as auth_admin
 
 # Register your models here.
-from .models import User
+from .models import *
 
 
 @admin.register(User)
@@ -14,4 +14,7 @@ class UserAdmin(auth_admin.UserAdmin):
         ("Campos Personalizados", {"fields": ("codvend", "tipouser", )}),
     )
 
-# Register your models here.
+@admin.register(VariaveisdoSistema)
+class VariaveisAdmin(admin.ModelAdmin):
+    model = VariaveisdoSistema
+    list_display = ('chave', 'valor')

@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const api = axios.create({
     baseURL: "",
-    timeout: 15000
+    timeout: 15000,
 })
 
 export const service = axios.create({

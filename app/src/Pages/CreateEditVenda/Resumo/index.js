@@ -24,11 +24,26 @@ const Resumo = ({ navigation }) => {
 
 
     const GerarVenda = () => {
-        
         if (!state.cpf && !state.dadoscliente.nome) return setAlert({open: true, text: "Deve-se informar ao menos um CPF e Nome Completo para gerar da compra."})
         if (state.corpovenda.length == 0) return setAlert({ open: true, text: "Deve-se conter pelo menos um produto para gerar a venda."})
         if (saldo !== 0) return setAlert({ open: true, text: "O Valor do Saldo Devedor deve ser Zerado."})
-        const NewState = {...state, total_venda: parseFloat(total_venda)}
+        const newFormaVenda = state.formavenda.map((item) => {
+                if (/[a-zA-Z]/.test(item.id)) {
+                  const { id, ...rest } = item;
+                  return { ...rest };
+                } else {
+                  return { ...item };
+                }
+              });
+        const newCorpoVenda = state.corpovenda.map((item) => {
+                if (/[a-zA-Z]/.test(item.id)) {
+                  const { id, ...rest } = item;
+                  return { ...rest };
+                } else {
+                  return { ...item };
+                }
+              });
+        const NewState = {...state, total_venda: parseFloat(total_venda), formavenda: newFormaVenda, corpovenda: newCorpoVenda}
         setState({...state, total_venda: parseFloat(total_venda)})
         setBlockButton(!blockbutton)
         if (state.ordem) {

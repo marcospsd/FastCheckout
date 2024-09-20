@@ -4,20 +4,25 @@ import {View, StatusBar, StyleSheet, Text,
 import IMGFAST from '../../Assets/fc.png'
 import { Ionicons } from '@expo/vector-icons';
 import { AuthContext } from '../../Context/authcontext';
+import { useMMKVObject } from 'react-native-mmkv/lib/commonjs/hooks';
+import { storage } from '../../Functions/storage';
 
 const statusBarHeight = StatusBar.currentHeight
 
 
 export const TopBarHome = ({ navigation }) => {
-    const { user, Logout } = useContext(AuthContext)
+    const { Logout } = useContext(AuthContext)
+    const [ user ] = useMMKVObject("FC@USER", storage)
 
 
     return (
         <View style={styles.header}>
             <View style={styles.content}>
-                
+                <TouchableOpacity
+                    onPress={() => navigation.toggleDrawer()}
+                    >
                     <Image source={IMGFAST} style={{width: 60, height: 50, resizeMode: 'contain'}}/>
-                
+                </TouchableOpacity>
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('ResumePage')}
                     >

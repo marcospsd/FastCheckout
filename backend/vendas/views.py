@@ -8,6 +8,7 @@ from clientes.models import Cliente
 from .serializers import *
 from django.db.models import Sum, Count
 from print.functions.prints import ImprimirComprovanteVenda
+from print.functions.comprovantes import ImprimirComprovantePagamento
 from decouple import config
 
 class CorpoVendaViewSet(viewsets.ModelViewSet):
@@ -17,25 +18,10 @@ class CorpoVendaViewSet(viewsets.ModelViewSet):
 class FormaVendaViewSet(viewsets.ModelViewSet):
     queryset = Formapagamento.objects.all()
     serializer_class = FormaVendaNSUSerializers
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser, )
 
-    # def get_queryset(self):
-    #     return self.queryset.annotate(
-    #         nsu_order=Case(
-    #             When(nsu__isnull=True, then=Value(0)),
-    #             When(nsu='', then=Value(0)),
-    #             default=Value(1),
-    #             output_field=IntegerField()
-    #         ),
-    #         img_order=Case(
-    #             When(img__isnull=True, then=Value(0)),
-    #             When(img='', then=Value(0)),
-    #             default=Value(1),
-    #             output_field=IntegerField()
-    #         )
-    #     ).order_by('nsu_order', 'img_order', 'key')
     def get_queryset(self):
-        if self.request.method in ['GET']:
+        if self.request.method in ['GET'] and self.request.user.tipouser == 'A':
             filtro_dia = self.request.query_params.get('data', None)
             if filtro_dia:
                 data = filtro_dia
@@ -43,8 +29,8 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
                 data = date.today()
             queryset = self.queryset.select_related('key').annotate(
                 nsu_order=Case(
-                    When(nsu__isnull=True, then=Value(0)),
-                    When(nsu='', then=Value(0)),
+                    When(nsu_sitef__isnull=True, then=Value(0)),
+                    When(nsu_sitef='', then=Value(0)),
                     default=Value(1),
                     output_field=IntegerField()
                 ),
@@ -54,18 +40,21 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
                     default=Value(1),
                     output_field=IntegerField()
                 )
-            ).filter(key__create_at=data, key__status="F", forma__in=["CC", "CD"]).order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
+            ).filter(key__create_at=data, key__status="F", forma__in=["CC", "CD", "DP"]).order_by('nsu_order', 'img_order', 'key__ordem')  # Ordenar pela data e hora de criação da venda
             return queryset
         else:
             return self.queryset
     
     def update(self, request, *args, **kwargs):
-        print(request.data)
+        printerCliente = request.data.get("printerVias[VIA_CLIENTE]", None)
+        printerEstabelecimento = request.data.get("printerVias[VIA_ESTABELECIMENTO]", None)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
+        if printerCliente and printerEstabelecimento:
+            ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento})
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
     
 
@@ -94,7 +83,7 @@ class VendaViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         statusvenda = instance.status
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer = self.get_serializer(instance, data=request.data)
         cliente = request.data.get('dadoscliente')
         Cliente.objects.update_or_create(cpf=cliente['cpf'], defaults=cliente)
         serializer.is_valid(raise_exception=True)

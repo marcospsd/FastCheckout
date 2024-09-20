@@ -18,3 +18,9 @@ class User(AbstractUser, models.Model):
         super().save(*args, **kwargs)
 
 
+class VariaveisdoSistema(models.Model):
+    chave = models.CharField(max_length=50, unique=True) 
+    valor = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.chave

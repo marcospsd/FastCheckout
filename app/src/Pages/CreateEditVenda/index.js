@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useContext} from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Cadastro from './Cadastro'
@@ -6,7 +6,7 @@ import Produtos from './Produtos'
 import FormaPagamento from './FormaPagamento'
 import Resumo from './Resumo'
 import { TopBar } from '../../Components/TopBar';
-import { ContextVenda } from '../../Context/createvendacontext';
+import { ContextVenda, CreateVendaContext } from '../../Context/createvendacontext';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchProducts from '../../Components/SearchProducts';
@@ -18,10 +18,11 @@ import AddForma from '../../Components/AddForma';
 const CEV = createMaterialTopTabNavigator();
 const STA = createNativeStackNavigator();
 
-const TopBarNavigator = ({ route, navigation}) => {
+const TopBarNavigator = ({route, navigation}) => {
+    const { state } = useContext(CreateVendaContext)
     return (
        <>
-            <TopBar PageName={route.name} navigation={navigation}/>
+            <TopBar PageName={route.name} goBack={() => navigation.goBack()} title={state.ordem ? "Editar Venda" : "Criar Venda"}/>
             <CEV.Navigator
             screenOptions={{ 
                 headerShown:false, 
@@ -78,7 +79,7 @@ const TopBarNavigator = ({ route, navigation}) => {
 
 
 
-const CreateEditVenda = ({ route, navigation }) => {
+const CreateEditVenda = ({ route }) => {
     
     return (
         <ContextVenda nstate={route.params?.data ? route.params.data : null}>

@@ -1,30 +1,26 @@
 import React, { useEffect, useState, createContext } from "react";
 import { api } from '../Services/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMMKVObject, useMMKVString, useMMKVBoolean } from 'react-native-mmkv'
+import { storage } from '../Functions/storage'
 
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [ loading, setLoading ] = useState(true)
-    const [ user, setUser ] = useState(null)
-    const [ printer, setPrinter ] = useState(true)
+    const [ user, setUser ] = useMMKVObject('FC@USER', storage)
+    const [ url ] = useMMKVString('FC@URLBASE', storage)
+    const [ printRede, setPrintRede] = useMMKVBoolean("FC@PRINTREDE", storage)
+    const [ pinpad, setPinPad] = useMMKVObject("FC@PINPAD", storage)
 
+    
     useEffect(() => {
         const loadStorageData = async () => {
-            const baseURL = await AsyncStorage.getItem('@urlapi')
-            const getUser = await AsyncStorage.getItem('@userdata')
-            const getTOKEN = await AsyncStorage.getItem('@tokenuser')
-            api.defaults.baseURL = baseURL
-            if (getUser && getTOKEN) {
-                api.defaults.headers.Authorization = `token ${getTOKEN}`
-                setUser(JSON.parse(getUser))
+            setLoading(true)
+            api.defaults.baseURL = url
+            if (user) {
+                api.defaults.headers.Authorization = `token ${user.token}`
             }
-            const print = await AsyncStorage.getItem('@printrede')
-            if (!print) {
-                AsyncStorage.setItem('@printrede', 'true')
-            }
-            setPrinter(print == 'true' ? true : false)
             setLoading(false)
         }
         loadStorageData()
@@ -34,11 +30,14 @@ export const AuthProvider = ({children}) => {
         const x = api.post('/auth/', data)
         .then((res) => {
             api.defaults.headers.Authorization = `token ${res.data.token}`
-            AsyncStorage.setItem('@userdata', JSON.stringify(res.data))
-            AsyncStorage.setItem('@tokenuser', res.data.token)
             setUser(res.data)
+            setPrintRede(true)
+            setPinPad({
+                habilitar: false,
+                dispositivo: ""
+            })
         })
-        .catch((err) => {
+        .catch(() => {
            return "Não foi possivel fazer login com as credencias fornecidas."
         })
         
@@ -47,13 +46,11 @@ export const AuthProvider = ({children}) => {
 
     const Logout = async () => {
         setUser(null)
-        await AsyncStorage.removeItem('@userdata')
-        await AsyncStorage.removeItem('@tokenuser')
         api.defaults.headers.Authorization = null;
     }
 
     return (
-    <AuthContext.Provider value={{ signed: !!user, user, loading, Login, Logout, printer, setPrinter }}>
+    <AuthContext.Provider value={{ signed: !!user, user, loading, Login, Logout }}>
         {children}
     </AuthContext.Provider>)
 }

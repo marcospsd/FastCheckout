@@ -61,8 +61,9 @@ class Formapagamento(models.Model):
     parcelas = models.PositiveIntegerField()
     valor = models.IntegerField()
     bandeira = models.CharField(max_length=50, null=True, blank=True)
-    nsu = models.CharField(max_length=15, null=True, blank=True)
-    autorizacao = models.CharField(max_length=10, null=True, blank=True)
+    nsu_host = models.CharField(max_length=50, null=True, blank=True)
+    nsu_sitef = models.CharField(max_length=50, null=True, blank=True)
+    autorizacao = models.CharField(max_length=50, null=True, blank=True)
     img = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
     def __str__(self):

@@ -1,30 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { Portal, Modal, ActivityIndicator } from 'react-native-paper'
-import { BarCodeScanner } from 'expo-barcode-scanner'
 import { AntDesign } from '@expo/vector-icons';
 import { api } from '../../Services/api'
 import {TopBar} from '../TopBar'
 import { CreateVendaContext } from '../../Context/createvendacontext'
 import shortid from 'shortid'
+import { CameraView, useCameraPermissions  } from 'expo-camera';
 
 
 
 const BarCodeView = ({ navigation, route}) => {
     const { state, setState } = useContext(CreateVendaContext)
-    const [hasPermission, setHasPermission] = useState(null);
+   
     const [scanned, setScanned] = useState(false);
+    const [permission, requestPermission] = useCameraPermissions()
+    if (!permission) {
+      // Camera permissions are still loading.
+      return <View />;
+    }
+    if (!permission.granted) {
+      // Camera permissions are not granted yet.
+      return requestPermission()
+    }
 
-    useEffect(() => {
-        setHasPermission(null)
-        setScanned(null)
-        const getBarcodeScannerPermissions = async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync()
-            setHasPermission(status === 'granted')
-        }
 
-        getBarcodeScannerPermissions()
-    }, [])
 
     const handleBarCodeScanned = ({ type, data }) => {
         api.get(`/produtos/produto/${data}/`)
@@ -47,23 +47,20 @@ const BarCodeView = ({ navigation, route}) => {
         })
       };
     
-      if (hasPermission === null) {
-        return <View style={{ flex :1 }}><ActivityIndicator size={40} color="red"/></View>;
-      }
-      if (hasPermission === false) {
-        return <View><Text>No access to camera</Text></View>
-      }
 
 
     return (
       <View style={{ flex: 1}}>
-        <TopBar PageName={route.name} navigation={navigation}/>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ flex:1, margin: 0, padding: 0}}
-          focusable
-
-          />
+        <TopBar PageName={route.name} goBack={() => navigation.goBack()} title="Leitor de Código de Barras"/>
+        <CameraView
+            flex={1}
+            facing='back'
+            barcodeScannerSettings={{
+              barcodeTypes: ["qr", "ean13", "code39"],
+            }}
+            onBarcodeScanned={handleBarCodeScanned}
+          >
+        </CameraView>
       </View>
     )
 }

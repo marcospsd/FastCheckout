@@ -51,9 +51,11 @@
     },
     "plugins": [
       [
-        "expo-barcode-scanner",
+        "expo-camera",
         {
-          "cameraPermission": "FastCheckout deseja acessar sua camera."
+          "cameraPermission": "O $(PRODUCT_NAME) deseja acesso a sua Câmera.",
+          "microphonePermission": "O $(PRODUCT_NAME) deseja acesso ao seu Microfone",
+          "recordAudioAndroid": true
         }
       ]
     ],
@@ -61,6 +63,5 @@
     "updates": {
       "url": "https://u.expo.dev/2069e253-e2ed-45f0-b74b-15b845b7d779"
     }
-  },
-  "name": "fastcheckoutapp"
+  }
 }

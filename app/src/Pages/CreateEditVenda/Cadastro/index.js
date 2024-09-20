@@ -54,7 +54,7 @@ const Cadastro = () => {
                 <TextInput 
                     style={styles.textinput}
                     label='Nome'
-                    onChangeText={(text) => setState({...state, dadoscliente: {...state.dadoscliente, nome: text }})}
+                    onChangeText={(text) => setState({...state, dadoscliente: {...state.dadoscliente, nome: text.toUpperCase() }})}
                     value={state.dadoscliente.nome}
                     autoCapitalize="characters"
                     autoCorrect={false}

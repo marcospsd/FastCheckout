@@ -10,15 +10,27 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { api } from '../../Services/api';
 import { useSWRConfig } from 'swr'
 import { ReportQrCode } from '../../Reports/ReportQrCode';
+import { useMMKVBoolean, useMMKVObject } from 'react-native-mmkv';
+import { storage } from '../../Functions/storage';
+import PinPadModal from '../PinPadModal';
+import { adminCliSitef } from '../../Functions/sitef'
 
 
-const OptionsButtonsVenda = ({ venda, navigation }) => {
-    const { printer } = useContext(AuthContext)
+
+const OptionsButtonsVenda = ({ venda, setVenda, navigation }) => {
+    const [ printer ] = useMMKVBoolean('FC@PRINTREDE', storage)
+    const [ pinpad ] = useMMKVObject('FC@PINPAD', storage)
     const { mutate } = useSWRConfig()
     const [ disabled, setDisabled] = useState(false)
- 
+    const [ openModal, setOpenModal] = useState(false)
+
     const AprovarCompra = () => {
         setDisabled(true)
+        const isReceiver = venda.formavenda.filter((item) => ['CC', 'CD', 'DP'].includes(item.forma) && !item.nsu_sitef).length
+        if (pinpad.habilitar == true & isReceiver > 0) {
+            setDisabled(false)
+            return setOpenModal(true)
+        }
         const x = api.patch(`/vendas/patchvenda/${venda.ordem}/`, { status : "F"})
         .then((r) => {
             if (printer !== true) {
@@ -46,21 +58,27 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
         return navigation.navigate('CreateEditVenda', { data: venda})
     }
 
-    const QrCodeGenerate = async () => {
-        setDisabled(true)
-        await ReportQrCode(venda)
-        setDisabled(false)
-    }
-
     const ReImprimir = async () => {
         if(printer == true){
             api.post('/print/venda/', {"ordem": venda.ordem})
+            if (venda.ordem) {
+                const recibo = await adminCliSitef("114") // Modalidade para reimpressão 114
+            }
         } else {
             ComprovanteVenda(venda)
         }
     }
 
+    const EstornoSitef = async () => {
+        const recibo = await adminCliSitef("200", pinpad) // Modalidade para Estorno 200
+        console.log(estorno)
+        if (recibo.success && recibo.success.CODRESP == '0') {
+            api.post('/print/comprovante/', { VIA_CLIENTE: recibo.success.VIA_CLIENTE, VIA_ESTABELECIMENTO: recibo.success.VIA_ESTABELECIMENTO})
+        }
+    }
+
     return (
+        <>
         <Container>
             { venda.status == "P" ? 
             <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={AprovarCompra} disabled={disabled}>
@@ -76,18 +94,22 @@ const OptionsButtonsVenda = ({ venda, navigation }) => {
             <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={OrçamentoBack} disabled={disabled}>
                 <MaterialCommunityIcons name="arrow-u-left-bottom-bold" size={40} color="black" />
                 <Text style={styles.textButton}>Orçamento</Text>
-            </TouchableOpacity>: null }
-            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={QrCodeGenerate}>
-                <MaterialCommunityIcons name="qrcode" size={40} color="black" />
-                <Text style={styles.textButton}>CashBack</Text>
-            </TouchableOpacity>
-            
+            </TouchableOpacity>: null }            
             { venda.status == "P" ? 
             <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EditVenda}>
                 <FontAwesome name="edit" size={40} color="black" />
                 <Text style={styles.textButton}>Editar</Text>
             </TouchableOpacity> : null }
+            { venda.status == "F" ? 
+            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EstornoSitef}>
+                <MaterialCommunityIcons name="cash-remove" size={40} color="black" />
+                <Text style={styles.textButton}>Estorno</Text>
+            </TouchableOpacity> : null }
         </Container>
+        {openModal && <PinPadModal openModal={openModal} closeModal={() => setOpenModal(!openModal)} data={venda} setData={setVenda} AprovarCompra={AprovarCompra}/>}
+
+        </>
+
         )
 
 }

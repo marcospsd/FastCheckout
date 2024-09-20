@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, ScrollView, StyleSheet, Text } from 'react-native'
 import { TopBar } from '../../Components/TopBar';
 import { CPFReplace, formatDinheiro, FormatTelCel, NameForma } from '../../Functions/format';
@@ -9,11 +9,11 @@ import OptionsButtonsVenda from '../../Components/OptionsButtonsVenda';
 
 
 const ViewVenda = ({ navigation, route }) => {
-    const data = route.params.data
+    const [data, setData] = useState(route.params.data)
 
     return (
     <View style={{ flex: 1}}>
-        <TopBar navigation={navigation} PageName={route.name} />
+        <TopBar goBack={() => navigation.goBack()} PageName={route.name} title="Visualizar Venda" />
         <ScrollView>
             <ContainerResumo>
                 <View style={{ flexDirection: 'row',justifyContent: 'space-between', marginBottom: 5}}>
@@ -111,7 +111,7 @@ const ViewVenda = ({ navigation, route }) => {
                 </Grid>
             </ContainerResumo>
             <View>
-                <OptionsButtonsVenda venda={data} navigation={navigation}/>
+                <OptionsButtonsVenda venda={data} navigation={navigation} setVenda={setData}/>
             </View>
         </ScrollView>
     </View>

@@ -113,3 +113,24 @@ export const Dias = (dado) => {
             return "90 Dias"
     }
 }
+
+export const getDateForCLISITEF = () => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+    const day = String(now.getDate()).padStart(2, '0');
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}${month}${day}`; // YYYYMMDD
+    const formattedTime = `${hours}${minutes}${seconds}`; // HHMMSS
+
+    return {
+        date: formattedDate,
+        time: formattedTime
+    };
+}

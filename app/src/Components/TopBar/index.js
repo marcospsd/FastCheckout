@@ -2,32 +2,8 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StatusBar, StyleSheet, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
-export const TopBar = ({ PageName, navigation }) => {
+export const TopBar = ({PageName, title, goBack }) => {
 
-
-    const NameTittle = () => {
-        switch (PageName) {
-            case 'ViewVenda':
-                return 'Resumo Venda'
-            case 'CreateScreen':
-                return "Venda"
-            case 'ConfigPage':
-                return "Configuração"
-            case 'ResumePage':
-                return "Resumo"
-            case 'SearchProduct':
-                return "Pesquisar"
-            case 'BarCode':
-                return "Codigo de Barras"
-            case 'EditProduct':
-                return "Editar Produto"
-            case 'AddForma':
-                return "Forma de Pagamento"
-            default:
-                return PageName
-            
-        }
-    }
 
     const Back = () => {
         if (PageName == 'CreateScreen') {
@@ -35,13 +11,13 @@ export const TopBar = ({ PageName, navigation }) => {
                 'ATENÇÃO',
                 'Deseja voltar ? seus dados serão perdidos !', 
                 [
-                    {text: 'Sair', onPress: () => navigation.goBack()},
+                    {text: 'Sair', onPress: () => goBack()},
                     {text: 'Cancel', style: 'cancel', color: 'red'}
                 ],
                 { cancelable: false }
             )
         } else {
-            return navigation.goBack()
+            return goBack()
         }
     }
 
@@ -54,7 +30,7 @@ export const TopBar = ({ PageName, navigation }) => {
                     onPress={Back} >
                     <Ionicons name="arrow-back" size={34} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.text}>{NameTittle()}</Text>
+                <Text style={styles.text}>{title}</Text>
             </View>
         </View>
     )

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { ListDisplay } from '../ListDisplay'
-
+import { FlashList } from '@shopify/flash-list'
 
 export const FlatListDisplay = ({ data, navigation, DeleteItem, mutate }) => {
     const [ refresh, setRefresh] = useState(false)
@@ -14,7 +14,15 @@ export const FlatListDisplay = ({ data, navigation, DeleteItem, mutate }) => {
 
     return (
             <View style={styles.container}>
-                <FlatList
+                <FlashList
+                    data={data}
+                    keyExtractor={(item) => item.ordem}
+                    renderItem={ ({ item }) => <ListDisplay data={item} navigation={navigation} DeleteItem={DeleteItem}/>}
+                    ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não contém Vendas...</Text></View>}
+                    refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh}/>}
+                    estimatedItemSize={120}
+                    />
+                {/* <FlatList
                 style={styles.bottomBar}
                 data={data}
                 keyExtractor={( item ) => String(item.ordem)}
@@ -22,7 +30,7 @@ export const FlatListDisplay = ({ data, navigation, DeleteItem, mutate }) => {
                 renderItem={ ({ item }) => <ListDisplay data={item} navigation={navigation} DeleteItem={DeleteItem}/>}
                 ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não contém Vendas...</Text></View>}
                 refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh}/>}
-                />
+                /> */}
             </View>
     )
 }

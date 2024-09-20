@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { AuthContext } from '../../Context/authcontext';
 import { TopBar } from '../../Components/TopBar'
 import {formatDinheiro} from '../../Functions/format'
 import { Col, Row, Grid } from 'react-native-easy-grid'
-import { Divider } from 'react-native-paper';
 import { useAxios } from '../../Services/api';
 import LoadingComponent from '../../Components/LoadingComponent'
 import { MaterialIcons } from '@expo/vector-icons';
 import { ResumodeCaixa } from '../../Reports/fechamento';
+import { useMMKVObject } from 'react-native-mmkv/lib/commonjs/hooks';
+import { storage } from '../../Functions/storage';
 
 const ResumePage = ({ navigation, route }) => {
-    const { user } = useContext(AuthContext)
+    const [ user ] = useMMKVObject("FC@USER", storage)
     const { data } = useAxios('/vendas/resumovendas/')
     const { data : remprods } = useAxios('/vendas/resumoprodutos/')
 
@@ -21,7 +21,7 @@ const ResumePage = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <TopBar navigation={navigation} PageName={route.name}/>
+            <TopBar goBack={() => navigation.goBack()} PageName={route.name} title="Resumo de Vendas"/>
                 <View style={styles.container}>
                     <View style={styles.bloco}>
                         <Text style={styles.primarytext}>QTD de Vendas</Text>
