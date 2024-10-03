@@ -6,6 +6,7 @@ import ResumePage from '../Pages/ResumePage';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import MenuRoutes from './menuroutes';
 import SelectedBluetooth from '../Pages/BluetoothSelected';
+import ViewConciliacao from '../Pages/ViewConciliacao';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ const AppRoutes = () => {
                 <Stack.Screen name='CreateEditVenda' component={CreateEditVenda} />
                 <Stack.Screen name='ResumePage' component={ResumePage} />
                 <Stack.Screen name='BluetoothPage' component={SelectedBluetooth}/>
+                <Stack.Screen name='ViewConciliacao' component={ViewConciliacao} />
             </Stack.Navigator>
     )
 }

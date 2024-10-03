@@ -3,21 +3,30 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TopBar } from '../../Components/TopBar'
 import {formatDinheiro} from '../../Functions/format'
 import { Col, Row, Grid } from 'react-native-easy-grid'
-import { useAxios } from '../../Services/api';
+import { api, useAxios } from '../../Services/api';
 import LoadingComponent from '../../Components/LoadingComponent'
 import { MaterialIcons } from '@expo/vector-icons';
 import { ResumodeCaixa } from '../../Reports/fechamento';
 import { useMMKVObject } from 'react-native-mmkv/lib/commonjs/hooks';
 import { storage } from '../../Functions/storage';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 const ResumePage = ({ navigation, route }) => {
     const [ user ] = useMMKVObject("FC@USER", storage)
+    const [ print ] = useMMKVBoolean("FC@PRINTREDE", storage)
     const { data } = useAxios('/vendas/resumovendas/')
     const { data : remprods } = useAxios('/vendas/resumoprodutos/')
 
     if (!data) return <LoadingComponent/>
     if (!remprods) return <LoadingComponent/>
 
+    const Resumo = () => {
+        if (print) {
+            api.post("/print/resumopagamento/")
+        } else {
+            return ResumodeCaixa()
+        }
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -62,7 +71,7 @@ const ResumePage = ({ navigation, route }) => {
             </Grid>
             {user.tipouser == 'C' || user.tipouser == 'A' ? (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 20}}>
-                    <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={() => ResumodeCaixa()}>
+                    <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={Resumo}>
                         <MaterialIcons name="print" size={40} color="black" />
                         <Text style={styles.textButton}>Resumo</Text>
                         <Text style={styles.textButton}>Vendas</Text>

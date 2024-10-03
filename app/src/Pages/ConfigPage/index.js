@@ -33,14 +33,15 @@ const ConfigPage = ({navigation, route}) => {
 
     return (
         <View style={{flex: 1, backgroundColor: '#c52f33',}}>
-            <TopBar PageName={route.name} navigation={() => navigation.goBack()} title={'Configuração'}/>
+            <TopBar PageName={route.name} goBack={() => navigation.goBack()} title={'Configuração'}/>
             <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
                 <ContainerLogin>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginTop: 20}}>Insira uma URL para Conexão</Text>
                     <TextInput
                         style={{ width: 300, marginBottom: 10, backgroundColor: 'rgba(201, 201, 201, 0.2)', marginBottom: 20 }} theme={{ colors: { primary: '#c52f33'}}}
                         label="URL"
-                        onChangeText={(text) => setUrl(text.toLowerCase())}
+                        onChangeText={(text) => setUrl(text)}
+                        autoCapitalize='none'
                         value={url}
                         />
                     <Button mode="contained" style={{ width: 150, marginBottom: 20}} theme={{ colors: { primary: '#c52f33'}}} onPress={Connect} disabled={blockButton}>Conectar</Button>

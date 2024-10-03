@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native'
+import { View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { CreateVendaContext } from '../../../Context/createvendacontext'
-import { formatDinheiro, NameForma } from '../../../Functions/format'
+import { formatDinheiro, NameForma2 } from '../../../Functions/format'
 import { Col, Row, Grid} from 'react-native-easy-grid'
-import { Divider, Provider } from 'react-native-paper'
+import { Provider } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons';
-
+import { HStack, Text, VStack, Divider } from '@gluestack-ui/themed'
+import Feather from '@expo/vector-icons/Feather';
 
 
 const FormaPagamento = ({ navigation }) => {
@@ -14,6 +15,9 @@ const FormaPagamento = ({ navigation }) => {
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
 
     const DeleteItem =(item) => {
+        if (item.nsu_host){
+            return Alert.alert("Error !", "Essa forma de pagamento já possui um pagamento SITEF.\nNão é possivel deletar antes de desassocia-lo.")
+        }
         const x = state.formavenda.filter((res) => res.id !== item.id)
         setState({...state, formavenda: x})
     }
@@ -33,17 +37,14 @@ const FormaPagamento = ({ navigation }) => {
     const CardFormaPag = ({ item }) => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('AddForma', { item, saldo })} onLongPress={() => Delete(item)} style={{ marginTop: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 15}}>
-                <Row>
-                    <Col size={2}>
-                        <Text style={styles.secundarytext}>{NameForma(item.forma)}</Text>
-                    </Col>
-                    <Col size={1}>
-                        <Text style={styles.secundarytext}>{item.parcelas}</Text>
-                    </Col>
-                    <Col size={1.2}>
-                        <Text style={styles.secundarytext}>R$ {formatDinheiro(item.valor)}</Text>
-                    </Col>
-                </Row>
+                <HStack>
+                    <Text w={'40%'}>{NameForma2(item.forma)}</Text>
+                    <Text w={'20%'}>{item.parcelas}</Text>
+                    <Text w={'30%'}>R$ {formatDinheiro(item.valor)}</Text>
+                    <VStack w={'10%'}>
+                            {item?.nsu_host && <Feather name="check-circle" size={24} color="green" />}    
+                    </VStack>
+                </HStack>
             </TouchableOpacity>
 
         )
@@ -62,19 +63,14 @@ const FormaPagamento = ({ navigation }) => {
                     <Text style={[styles.secundarytext, saldo !== 0 ? { color: 'red'} : { color: 'green'}]}>R$ {formatDinheiro(saldo)}</Text>
                 </View>
             </View>
-            <Grid style={{ padding: 20}}>
-                <Row style={{height: 'auto', marginBottom: 0}}>
-                    <Col size={2}>
-                        <Text style={styles.primarytext}>Formas</Text>
-                    </Col>
-                    <Col size={1}>
-                        <Text style={styles.primarytext}>Parcelas</Text>
-                    </Col>
-                    <Col size={1.2}>
-                        <Text style={styles.primarytext}>Valor</Text>
-                    </Col>
-                </Row>
-                <Divider style={{ width: '100%', height: 3, marginBottom: 15}}/>
+            <VStack flex={1} p={10} marginBottom={10}>
+                <HStack>
+                    <Text w={'40%'} fontWeight={'bold'} fontSize={18}>Formas</Text>
+                    <Text w={'20%'} fontWeight={'bold'} fontSize={18}>Parc.</Text>
+                    <Text w={'30%'} fontWeight={'bold'} fontSize={18}>Valor</Text>
+                    <Text w={'10%'} fontWeight={'bold'} fontSize={18}></Text>
+                </HStack>
+                <Divider h={3} bgColor={'#c9c9c9'}/>
                 <FlatList
                         data={state.formavenda}
                         keyExtractor={( item ) => String(item.id)}
@@ -82,7 +78,7 @@ const FormaPagamento = ({ navigation }) => {
                         renderItem={ ({ item }) => <CardFormaPag item={item}/>}
                         ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não há formas inseridas</Text></View>}
                         />
-            </Grid>
+            </VStack>
             <TouchableOpacity style={styles.buttonfab} activeOpacity={0.9} onPress={() => navigation.navigate('AddForma', { saldo: saldo})}>
                 <AntDesign name="plus" size={24} color="white" />
             </TouchableOpacity>
@@ -134,7 +130,7 @@ const styles = StyleSheet.create({
     buttonfab: {
         backgroundColor: '#c52f33',
         position: 'absolute',
-        right: 30,
+        right: 20,
         bottom: 20,
         width: 60,
         height: 60,

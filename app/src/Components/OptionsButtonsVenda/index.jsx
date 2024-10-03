@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from 'react'
-import { Text, StyleSheet, TouchableOpacity, View } from 'react-native'
-import {AuthContext} from '../../Context/authcontext'
+import React, { useState } from 'react'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Container } from './style'
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,11 +8,10 @@ import { ComprovanteVenda} from '../../Reports/viewvenda';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { api } from '../../Services/api';
 import { useSWRConfig } from 'swr'
-import { ReportQrCode } from '../../Reports/ReportQrCode';
 import { useMMKVBoolean, useMMKVObject } from 'react-native-mmkv';
 import { storage } from '../../Functions/storage';
 import PinPadModal from '../PinPadModal';
-import { adminCliSitef } from '../../Functions/sitef'
+
 
 
 
@@ -61,20 +59,13 @@ const OptionsButtonsVenda = ({ venda, setVenda, navigation }) => {
     const ReImprimir = async () => {
         if(printer == true){
             api.post('/print/venda/', {"ordem": venda.ordem})
-            if (venda.ordem) {
-                const recibo = await adminCliSitef("114") // Modalidade para reimpressão 114
-            }
         } else {
             ComprovanteVenda(venda)
         }
     }
 
-    const EstornoSitef = async () => {
-        const recibo = await adminCliSitef("200", pinpad) // Modalidade para Estorno 200
-        console.log(estorno)
-        if (recibo.success && recibo.success.CODRESP == '0') {
-            api.post('/print/comprovante/', { VIA_CLIENTE: recibo.success.VIA_CLIENTE, VIA_ESTABELECIMENTO: recibo.success.VIA_ESTABELECIMENTO})
-        }
+    const Comprovantes = async () => {
+        setOpenModal(!openModal)
     }
 
     return (
@@ -100,10 +91,10 @@ const OptionsButtonsVenda = ({ venda, setVenda, navigation }) => {
                 <FontAwesome name="edit" size={40} color="black" />
                 <Text style={styles.textButton}>Editar</Text>
             </TouchableOpacity> : null }
-            { venda.status == "F" ? 
-            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={EstornoSitef}>
-                <MaterialCommunityIcons name="cash-remove" size={40} color="black" />
-                <Text style={styles.textButton}>Estorno</Text>
+            { venda.status == "F" & pinpad.habilitar ? 
+            <TouchableOpacity style={styles.button} activeOpacity={0.5} disabled={disabled} onPress={Comprovantes}>
+                <MaterialCommunityIcons name="receipt" size={40} color="black" />
+                <Text style={styles.textButton}>Comprov.</Text>
             </TouchableOpacity> : null }
         </Container>
         {openModal && <PinPadModal openModal={openModal} closeModal={() => setOpenModal(!openModal)} data={venda} setData={setVenda} AprovarCompra={AprovarCompra}/>}

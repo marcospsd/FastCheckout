@@ -32,10 +32,24 @@ export const AuthProvider = ({children}) => {
             api.defaults.headers.Authorization = `token ${res.data.token}`
             setUser(res.data)
             setPrintRede(true)
-            setPinPad({
-                habilitar: false,
-                dispositivo: ""
-            })
+            if (!pinpad){
+                    setPinPad({
+                        habilitar: false,
+                        dispositivo: "",
+                        cod_empresa: res.data?.variaveis?.SITEF_CODEMPRESA,
+                        url: res.data?.variaveis?.SITEF_URL,
+                        cnpj: res.data?.variaveis?.SITEF_CNPJ,
+                        cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO
+                    })
+                }
+            if (pinpad) {
+                setPinPad({...pinpad,
+                    cod_empresa: res.data?.variaveis?.SITEF_CODEMPRESA,
+                    url: res.data?.variaveis?.SITEF_URL,
+                    cnpj: res.data?.variaveis?.SITEF_CNPJ,
+                    cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO
+                })
+            }
         })
         .catch(() => {
            return "Não foi possivel fazer login com as credencias fornecidas."

@@ -1,12 +1,13 @@
 import React, { useState, useContext, } from 'react'
 import { TextInput, Button, } from 'react-native-paper'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import AlertSnack from '../../Components/Snackbar'
 import { CreateVendaContext } from '../../Context/createvendacontext';
 import { TopBar } from '../TopBar'
 import { formatDinheiro } from '../../Functions/format'
 import shortid from 'shortid'
+import { VStack, Text as GluestackText } from '@gluestack-ui/themed';
 
 
 const AddForma = ({ navigation, route }) => {
@@ -14,9 +15,7 @@ const AddForma = ({ navigation, route }) => {
     const [alert, setAlert] = useState({ open: false, text: "" })
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
-    const parcelaMin = user.variaveis.length > 0 
-                        ? user.variaveis.find((item) => item.chave === 'PARCELA_MINIMA') 
-                        : null;
+    const parcelaMin = user.variaveis?.PARCELA_MINIMA || "0"
     const [data, setData] = useState( route.params?.item ? route.params.item : {
         forma: "DH",
         parcelas: 1,
@@ -25,6 +24,9 @@ const AddForma = ({ navigation, route }) => {
 
 
     const AddCardItem = () => {
+        if (route.params?.item?.nsu_host) {
+            return Alert.alert("Error !", "Essa forma de pagamento já possui recebimento SITEF vinculado.\nFavor efetuar a desassociação antes de editar.")
+        }
         if (route.params?.item) {
             const x = { ...data, valor: parseInt(data.valor) }
             const y = {
@@ -91,15 +93,15 @@ const AddForma = ({ navigation, route }) => {
                         enabled={data.forma !== 'CC' ? false : true}
                     >
                         <Picker.Item label="1" value={1} />
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*2 ? <Picker.Item label="2" value={2} /> : null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*3 ? <Picker.Item label="3" value={3} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*4 ? <Picker.Item label="4" value={4} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*5 ? <Picker.Item label="5" value={5} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*6 ? <Picker.Item label="6" value={6} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*7 ? <Picker.Item label="7" value={7} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*8 ? <Picker.Item label="8" value={8} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*9 ? <Picker.Item label="9" value={9} />: null}
-                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin.valor)*10 ? <Picker.Item label="10" value={10} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*2 ? <Picker.Item label="2" value={2} /> : null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*3 ? <Picker.Item label="3" value={3} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*4 ? <Picker.Item label="4" value={4} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*5 ? <Picker.Item label="5" value={5} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*6 ? <Picker.Item label="6" value={6} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*7 ? <Picker.Item label="7" value={7} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*8 ? <Picker.Item label="8" value={8} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*9 ? <Picker.Item label="9" value={9} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*10 ? <Picker.Item label="10" value={10} />: null}
                     </Picker>
                 </View>
                 <View>
@@ -119,7 +121,22 @@ const AddForma = ({ navigation, route }) => {
                         style={{ alignSelf: 'center', marginTop: 20, marginBottom: 10, backgroundColor: '#c52f33' }}
                     >{route.params?.item ? "Editar" : "Adicionar"}</Button>
                 </View>
-
+                {data.nsu_host && (
+                    <VStack
+                        marginTop={25}
+                        justifyContent='center'
+                        alignItems='center'
+                        >
+                        <GluestackText>
+                            OBSERVAÇÃO
+                        </GluestackText>
+                        <GluestackText
+                            fontWeight={'bold'}
+                            >Essa forma de pagamento já possui um recebimento SITEF.</GluestackText>
+                        <GluestackText
+                            >NSU: {data.nsu_host}</GluestackText>
+                    </VStack>
+                )}
                 <AlertSnack open={alert} setOpen={setAlert} text={alert.text} />
             </View>
         </View>

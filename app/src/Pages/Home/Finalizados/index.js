@@ -31,9 +31,9 @@ const FinalizadosView = ({ navigation }) => {
                 return venda
             }}) : []
 
-    // useFocusEffect(useCallback(() => {
-    //     mutate()
-    // }, []))
+    useFocusEffect(useCallback(() => {
+        mutate()
+    }, []))
             
     return (
         <SafeAreaView style={{ flex: 1}}>

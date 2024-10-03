@@ -35,14 +35,16 @@ const LoginPage = ({ navigation }) => {
             <TextInput 
                 style={{ width: 300, marginBottom: 10, backgroundColor: 'rgba(201, 201, 201, 0.2)' }} theme={{ colors: { primary: '#c52f33'}}}
                 label="Login"
-                onChangeText={(text) => setData({...data, username: text.toLowerCase()})}
+                autoCapitalize='none'
+                onChangeText={(text) => setData({...data, username: text})}
                 left={ <TextInput.Icon icon="account" color="black" disabled/> }
                 />
             <TextInput 
                 style={{ width: 300, marginBottom: 20, backgroundColor: 'rgba(201, 201, 201, 0.2)',}} theme={{ colors: { primary: '#c52f33'}}}
                 label="Senha"
                 secureTextEntry={viewpass}
-                onChangeText={(text) => setData({...data, password: text.toLowerCase()})}
+                onChangeText={(text) => setData({...data, password: text})}
+                autoCapitalize='none'
                 left={ <TextInput.Icon icon="key" color="black" disabled/> }
                 right={
                     <TextInput.Icon icon={viewpass ? 'eye' : 'eye-off'} onPress={() => setViewPass(!viewpass)} />

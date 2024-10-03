@@ -5,9 +5,11 @@ import { SWRConfig } from 'swr';
 import { AuthProvider } from './src/Context/authcontext';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config as configGluestack } from "./config/gluestack-ui.config"
+import { useState } from 'react';
+import { Splash } from './src/Components/Splash';
 
 export default function App() {
-
+  const [splashComplete, setSplashComplete] = useState(false)
 
   return (
     <GluestackUIProvider
@@ -23,8 +25,13 @@ export default function App() {
       >
         <NavigationContainer>
           <AuthProvider>
-            <StatusBar backgroundColor={'#c52f33'}/>
-            <AppRoutes/>
+            { splashComplete ?
+              <>
+              <AppRoutes/>
+              <StatusBar backgroundColor={'#c52f33'}/>
+              </>              
+              : <Splash onComplete={setSplashComplete} />
+              }
           </AuthProvider>
         </NavigationContainer>
       </SWRConfig>

@@ -9,7 +9,8 @@ import AlertSnack from '../../../Components/Snackbar'
 import { api } from '../../../Services/api'
 import { useSWRConfig } from 'swr';
 import LottieView from 'lottie-react-native';
-import CheckedJson from './76649-checked.json';
+import CheckedJson from './checked.json';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated'
 
 
 
@@ -21,6 +22,32 @@ const Resumo = ({ navigation }) => {
     const saldo = state.corpovenda ? (state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0)) - (state.formavenda.map(x => x.valor).reduce((a, b) => parseInt(a) + parseInt(b), 0)) : 0
     const total_venda = state.corpovenda ? state.corpovenda.map(x => x.valor_unitpro).reduce((a, b) => parseInt(a) + parseInt(b), 0) : 0
     const animation = useRef(null)
+
+  // Shared values for zIndex and opacity
+    const zIndexValue = useSharedValue(0);
+    const opacityValue = useSharedValue(0);
+
+    // Styles animados
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+        zIndex: zIndexValue.value, // Controla o zIndex
+        opacity: withTiming(opacityValue.value, { duration: 500 }), // Controla a opacidade com transição suave
+        };
+    });
+
+    const handlePlayAnimation = () => {
+        zIndexValue.value = 10; // Traz para a frente
+        opacityValue.value = 1; // Torna visível
+
+        if (animation) {
+            animation.current.play()
+    }}
+
+    const FinishPlayAnimation = () => {
+        zIndexValue.value = 0; // Retorna para a trás
+        opacityValue.value = 0; // Torna invisível
+        navigation.navigate("Home")
+    }
 
 
     const GerarVenda = () => {
@@ -50,14 +77,14 @@ const Resumo = ({ navigation }) => {
             api.put(`/vendas/venda/${state.ordem}/`, NewState)
             .then((res) => {
                 mutate('/vendas/venda/')
-                animation.current.play() 
+                handlePlayAnimation() 
             })
             .finally((res) => setBlockButton(!blockbutton))
         } else {
             api.post("/vendas/venda/", NewState)
             .then((res) => {
                 mutate('/vendas/venda/')
-                animation.current.play()
+                handlePlayAnimation()
             })
             .finally((res) => {
                 setBlockButton(!blockbutton)
@@ -67,6 +94,15 @@ const Resumo = ({ navigation }) => {
 
     return ( 
         <View style={{ flex: 1}}>
+            <Animated.View style={[styles.lottieContainer, animatedStyle]}>
+                <LottieView
+                    loop={false}
+                    style={styles.animation}
+                    ref={animation}
+                    onAnimationFinish={FinishPlayAnimation}
+                    source={CheckedJson}
+                />
+            </Animated.View>
         <ScrollView>
             <ContainerResumo>
                 <View style={{ flexDirection: 'row',justifyContent: 'space-between', marginBottom: 5}}>
@@ -167,18 +203,11 @@ const Resumo = ({ navigation }) => {
                 <Button
                     style={{backgroundColor: '#c52f33'}}
                     mode="contained"
-                    onPress={() => GerarVenda()}                   
-                    disabled={blockbutton}
+                    onPress={GerarVenda}                   
+                    // disabled={blockbutton}
                     >{state.ordem ? "Atualizar Venda" : "Gerar Venda"}</Button>
             </View>
             <AlertSnack open={alert} setOpen={setAlert} text={alert.text}/>
-            <LottieView
-                    loop={false}
-                    style={styles.animation}
-                    ref={animation}
-                    onAnimationFinish={() => navigation.navigate("Home")}
-                    source={CheckedJson}
-                />
         </ScrollView>
     </View>
     )
@@ -200,9 +229,17 @@ const styles = StyleSheet.create({
     color: 'white'
 },
     animation: {
+        width: '100%',
+        height: '100%'
+    },
+    lottieContainer: {
         position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        pointerEvents: 'none'
-    }
+        zIndex: 0, // Inicialmente abaixo de tudo
+      },
 })

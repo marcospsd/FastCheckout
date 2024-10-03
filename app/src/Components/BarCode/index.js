@@ -27,6 +27,8 @@ const BarCodeView = ({ navigation, route}) => {
 
 
     const handleBarCodeScanned = ({ type, data }) => {
+        if (scanned) return;
+        setScanned(true)
         api.get(`/produtos/produto/${data}/`)
         .then((res) => {
             const x = {
@@ -38,12 +40,13 @@ const BarCodeView = ({ navigation, route}) => {
               id: res.data.id ? res.data.id : shortid.generate()
               }
             setState({...state, corpovenda: [...state.corpovenda, x]})
+            navigation.goBack()
         })
         .catch((err) => {
             alert(`Não foi encontrado o produto ${data}.`)
         })
-        .finally((res) =>{
-          return navigation.goBack()
+        .finally((res) => {
+          setScanned(false)
         })
       };
     
@@ -58,7 +61,7 @@ const BarCodeView = ({ navigation, route}) => {
             barcodeScannerSettings={{
               barcodeTypes: ["qr", "ean13", "code39"],
             }}
-            onBarcodeScanned={handleBarCodeScanned}
+            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
           >
         </CameraView>
       </View>

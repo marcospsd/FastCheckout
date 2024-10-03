@@ -7,11 +7,9 @@ import { AuthContext } from '../../Context/authcontext';
 import { useMMKVObject } from 'react-native-mmkv/lib/commonjs/hooks';
 import { storage } from '../../Functions/storage';
 
-const statusBarHeight = StatusBar.currentHeight
 
 
 export const TopBarHome = ({ navigation }) => {
-    const { Logout } = useContext(AuthContext)
     const [ user ] = useMMKVObject("FC@USER", storage)
 
 
@@ -27,12 +25,6 @@ export const TopBarHome = ({ navigation }) => {
                     onPress={() => navigation.navigate('ResumePage')}
                     >
                     <Text style={styles.text}>{ user.nome ? user.nome : "Usuário"}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    activeOpacity={0.9}
-                    style={styles.buttonUser}
-                    onPress={() => Logout()}>
-                    <Ionicons name="exit-outline" size={27} color="white" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -61,6 +53,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20,
         fontWeight: 'bold',
+        marginRight: 15
     },
     buttonUser: {
         width: 40,

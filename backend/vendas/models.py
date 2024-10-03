@@ -80,3 +80,23 @@ class Formapagamento(models.Model):
         except ValueError:
             pass
         super().save(*args, **kwargs)
+
+
+class RecebimentoSITEF(models.Model):
+    ordem = models.IntegerField(null=True, blank=True)
+    id_forma = models.IntegerField(null=True, blank=True)
+    cancelado = models.BooleanField(default=False)
+    nsu_host_cancelamento = models.CharField(max_length=50, null=True, blank=True)
+    nsu_sitef_cancelamento = models.CharField(max_length=50, null=True, blank=True)
+    data_cupom = models.DateField(default=date.today)
+    data_cancelamento = models.DateField(null=True, blank=True)
+    nsu_host = models.CharField(max_length=50, null=True, blank=True)
+    nsu_sitef = models.CharField(max_length=50, null=True, blank=True)
+    autorizacao = models.CharField(max_length=50, null=True, blank=True)
+    bandeira =  models.CharField(max_length=50, null=True, blank=True)
+    valor = models.IntegerField(blank=True, null=True)
+    forma = models.CharField(max_length=2, choices=methodos, null=True, blank=True)
+    parcelas = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.ordem)+"__"+str(self.id_forma)

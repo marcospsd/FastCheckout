@@ -5,6 +5,9 @@ import urllib.parse
 import json
 import os
 import base64
+from datetime import date, timedelta, datetime
+from decouple import config
+from .gerarcashback import GerarCupom
 
 def FormasdePag(forma):
     match forma:
@@ -18,9 +21,19 @@ def FormasdePag(forma):
             return 'Dinheiro'
         case 'FO':
             return 'Desc Folha'
+        
+def DataCashBack(venda):
+    data_venda = datetime.strptime(venda, "%d/%m/%Y").date()
+    dias = config("PERIODO_CASHBACK", 0)
+    newData = data_venda + timedelta(days=int(dias))
+    return newData.strftime("%d/%m/%Y")
+
 
 
 def ImprimirComprovanteVenda(venda):
+    bonus = None
+    if config("DINIZBONUS_ATIVAR") == "True":
+        bonus = GerarCupom(venda)
     try:
     # Criar uma instância da impressora
         p = printer.Network(host=config('PRINT_HOST', False), port=9100)
@@ -35,15 +48,15 @@ def ImprimirComprovanteVenda(venda):
     corpoitem = [['Código', 'Desc', 'Valor'],]
     for item in corpovenda:
         corpoitem.append([item['codpro'], item['descripro'], f"{item['valor_unitpro']},00"])
-    dadosurl = {
-        "valor_total": venda['total_venda'],
-        "ordem": venda['ordem'],
-        "cpf": venda["cpf"],
-        "nome_completo": venda["dadoscliente"]["nome"],
-        "telefone": venda["dadoscliente"]["telefone"]
-    }
+    # dadosurl = {
+    #     "valor_total": venda['total_venda'],
+    #     "ordem": venda['ordem'],
+    #     "cpf": venda["cpf"],
+    #     "nome_completo": venda["dadoscliente"]["nome"],
+    #     "telefone": venda["dadoscliente"]["telefone"]
+    # }
 #    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{urllib.parse.quote(json.dumps(dadosurl))}"
-    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{base64.b64encode(json.dumps(dadosurl).encode('utf-8')).decode('utf-8')}"
+#    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{base64.b64encode(json.dumps(dadosurl).encode('utf-8')).decode('utf-8')}"
     # Imprimir cabeçalho centralizado
     p.image(img_source=os.path.abspath('print/functions/image.png'))
     p.text("\n\n")
@@ -97,7 +110,7 @@ def ImprimirComprovanteVenda(venda):
     p.text("AVISO \n\n")
     p.set(align='center', width=2, height=1, font='b')
     aviso = """ Esse documento não é um 
-documento fiscal. Sua notafiscal
+documento fiscal. A nota fiscal
 será enviada através do E-mail
 ou Whatsapp informados no 
 cadastro.
@@ -105,7 +118,7 @@ Qualquer dúvida, entre em
 contato com nosso DiniZAP 
 pelo telefone (27) 3185-8101. 
 Siga nossas redes sociais e 
-fique por dentro de todas novidades. \n
+fique por dentro de todas \nas novidades. \n
 """
     p.text(aviso)
     p.set(align='center', width=2, height=1, font='b', text_type='b')
@@ -113,14 +126,21 @@ fique por dentro de todas novidades. \n
     p.text("@dinizprime_vitoria \n")
     p.text(" \n\n")
     p.set(align='center', width=2, height=2, font='b', text_type='b')
-    p.text("***** Resgate seu CashBack ***** \n")
+    p.text("******** CashBack ******** \n\n")
     p.set(align='center', width=2, height=1, font='b', text_type='b')
-    cashback = f"Ao resgatar, você terá R$ {round(venda['total_venda']*0.20)},00\nde desconto em sua próxima\ncompra \n\n"
+    cashback = f"você receberá no seu whatsapp um CashBack no valor de R$ {round(venda['total_venda']*0.20)},00\npara ser usado em sua próxima\ncompra. \n\n"
     p.text(cashback)
-    p.text("Aponte a câmera do seu celular  e ative seu Cashback")
+    p.text("REGRAS PARA UTILIZAÇÃO:\n")
+    p.set(align='left', width=2, height=1, font='b', text_type='b')
+    p.text("- O valor mínimo da compra deve   ser 3 vezes maior que o valor\n   do CashBack.\n- Não é valido para compras de \nAcessorios e Lentes de Contato.\n")
     p.set(align='center', width=2, height=1, font='b')
-    p.qr(url, size=8)
     p.text(" \n \n \n")
+    if bonus:
+        p.text(f"CASHBACK {str(bonus['id']).zfill(6)} válido entre\n {config('DINIZBONUS_DATE_INIT')} até {DataCashBack(venda['create_at'])}")
+    else:
+        p.text(f"CASHBACK válido entre\n {config('DINIZBONUS_DATE_INIT')} até {DataCashBack(venda['create_at'])}")
+    p.text(" \n \n \n")
+    p.set(align='center', width=2, height=1, font='b')
     p.text("-----------------------\n")
     p.text("PRODUTOS SEM TROCA \n")
     p.text("-----------------------\n")

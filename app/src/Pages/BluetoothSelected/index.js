@@ -77,9 +77,8 @@ const SelectedBluetoothPage = ({ navigation }) => {
   };
 
   const SelelectedDevice = (item) => {
-    console.log(pinpad)
     setPinPad({...pinpad, dispositivo: item.id})
-    return () => navigation.goBack()
+    return navigation.goBack()
   }
 
   const ConfirmSelectedDevice = (item) => {

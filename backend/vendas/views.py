@@ -15,6 +15,7 @@ class CorpoVendaViewSet(viewsets.ModelViewSet):
     queryset = Corpo_venda.objects.all()
     serializer_class = CorpoVendaSerializers
 
+
 class FormaVendaViewSet(viewsets.ModelViewSet):
     queryset = Formapagamento.objects.all()
     serializer_class = FormaVendaNSUSerializers
@@ -54,7 +55,17 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
         serializer.save()
         headers = self.get_success_headers(serializer.data)
         if printerCliente and printerEstabelecimento:
-            ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento})
+            RecebimentoSITEF.objects.create(ordem = request.data.get('key'),
+                                            id_forma = request.data.get('id'),
+                                            nsu_host = request.data.get('nsu_host'),
+                                            nsu_sitef = request.data.get('nsu_sitef'),
+                                            autorizacao = request.data.get('autorizacao'),
+                                            bandeira= request.data.get('bandeira'),
+                                            valor=request.data.get('valor'),
+                                            forma=request.data.get('forma'),
+                                            parcelas=request.data.get('parcelas')
+                                                         )
+            ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento })
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
     
 
@@ -215,4 +226,56 @@ class ResumoCondPags(generics.ListAPIView):
                 group by create_at, forma
                 order by create_at, forma
             """)
-    
+
+class RemoveRecebimentoSITEF(views.APIView):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        estorno = request.data.get('estorno')
+        ordem = request.data.get('ordem')
+        id = request.data.get('id')
+        nsu_host_cancelamento = request.data.get('nsu_host_cancelamento')
+        nsu_sitef_cancelamento = request.data.get('nsu_sitef_cancelamento')
+        printerCliente = request.data.get('VIA_CLIENTE', None)
+        printerEstabelecimento = request.data.get("VIA_ESTABELECIMENTO", None)
+        serializer = Formapagamento.objects.filter(key_id=ordem, id=id).first()
+        if serializer:
+            serializer.nsu_host = None
+            serializer.nsu_sitef = None
+            serializer.bandeira = None
+            serializer.autorizacao = None
+            serializer.save()
+        if estorno == 'T':
+            comprovante = RecebimentoSITEF.objects.filter(ordem=ordem, id_forma=id).first()
+            if comprovante:
+                comprovante.cancelado = True
+                comprovante.nsu_host_cancelamento = nsu_host_cancelamento
+                comprovante.nsu_sitef_cancelamento = nsu_sitef_cancelamento 
+                comprovante.data_cancelamento = date.today()
+                comprovante.save()
+        if printerCliente and printerEstabelecimento:
+            ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento })
+        return Response({"Success": "Atualizada venda com sucesso."})
+
+
+class AssociarRecebimentoSITEF(views.APIView):
+    def post(self, request, *args, **kwargs):
+        ordem = request.data.get('ordem', None)
+        id = request.data.get('id', None)
+        nsu_host = request.data.get('nsu_host', None)
+        nsu_sitef = request.data.get('nsu_sitef', None)
+        autorizacao = request.data.get('autorizacao', None)
+        bandeira = request.data.get('bandeira', None)
+        serializer = Formapagamento.objects.filter(key_id=ordem, id=id).first()
+        if serializer:
+            serializer.nsu_host = nsu_host
+            serializer.nsu_sitef = nsu_sitef
+            if autorizacao & bandeira:
+                serializer.autorizacao = autorizacao
+                serializer.bandeira = bandeira
+            serializer.save()
+        comprovante = RecebimentoSITEF.objects.filter(nsu_host=nsu_host, nsu_sitef=nsu_sitef).first()
+        if comprovante:
+            comprovante.ordem = ordem
+            comprovante.id_forma = id
+            comprovante.save()
+        return Response({"Success": "Atualizado com Sucesso."})

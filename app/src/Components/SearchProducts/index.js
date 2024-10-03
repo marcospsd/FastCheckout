@@ -42,7 +42,7 @@ const SearchProducts = ({navigation, route}) => {
 
     return (
             <View style={{ flex:1}} >
-                    <TopBar PageName={route.name} navigation={navigation}/>
+                    <TopBar PageName={route.name} navigation={navigation} title={"Buscar Produto"} goBack={() => navigation.goBack()}/>
                     <View style={{ padding: 15}}>
                     <Searchbar 
                         value={product}

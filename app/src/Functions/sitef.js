@@ -3,47 +3,42 @@ import * as IntentLauncher from 'expo-intent-launcher';
 
 
 
-const cnpj = "26360882000190"
-const url = "10.3.1.95;10.3.1.95:20036"
-const empresaSitef = "00000000"
-
 const clsitJson = {
     CliSiTef: {
         DiretorioTrace: "./files",
         HabilitaTrace: "1",
-        TraceRotativo: "10",
+        TraceRotativo: "100",
         },
     CliSitefI: {
         DiretorioTrace: "./files",
         HabilitaTrace: "1"
         },
     Geral: {
-        TransacoesHabilitadas: "7;8;16;26;27;28;30;40;43;56;57;58;3203;3624;3627;4178",
+        TransacoesHabilitadas: "7;8;16;26;27;28;30;40;43;56;57;58;113;3203;3624;3627;4178",
         habilitaColetaTaxaEmbarqueIATA: "0",
         habilitaColetaValorEntradaIATA: "0"
         }
     }
 
-const padrao = JSON.stringify(clsitJson)
 
 export const receberCliSitef = async (recebimento, pinpad) => {
     const {date, time} = getDateForCLISITEF()
 
     
     const intentParams = {
-        empresaSitef: empresaSitef,
-        CNPJ_CPF: cnpj,
-        cnpj_automacao: cnpj,
-        enderecoSitef: url,
+        empresaSitef: pinpad.cod_empresa,
+        CNPJ_CPF: pinpad.cnpj,
+        cnpj_automacao: pinpad.cnpj_automacao,
+        enderecoSitef: pinpad.url,
         operador: "0001",
         data: date,
         hora: time,
-        numeroCupom: date+time,
+        numeroCupom: `${date}${recebimento.id}`,
         valor: String(recebimento.valor)+"00",
         timeoutColeta: "30", 
         acessibilidadeVisual: "0",
         comExtra: "0",
-        clsit: padrao
+        clsit: JSON.stringify(clsitJson)
     }
     if (pinpad.dispositivo) {
         intentParams.pinpadMac= pinpad.dispositivo
@@ -74,13 +69,13 @@ export const receberCliSitef = async (recebimento, pinpad) => {
 
 
 export const adminCliSitef = async (modalidade, pinpad) => {
-
     const intentParams = {
-        empresaSitef: empresaSitef,
-        enderecoSitef: url,
-        CNPJ_CPF: cnpj,
-        cnpj_automacao: cnpj,
+        empresaSitef: pinpad.cod_empresa,
+        CNPJ_CPF: pinpad.cnpj,
+        cnpj_automacao: pinpad.cnpj_automacao,
+        enderecoSitef: pinpad.url,
         modalidade: modalidade,
+        clsit: JSON.stringify(clsitJson),
         timeoutColeta: "30",
         acessibilidadeVisual: "0",
         comExtra: "0"
@@ -89,6 +84,10 @@ export const adminCliSitef = async (modalidade, pinpad) => {
     if (pinpad.dispositivo) {
         intentParams.pinpadMac= pinpad.dispositivo
     }
+    if (modalidade == '113' | modalidade == '114') {
+        intentParams.transacoesHabilitadas = '725;726;'
+    }
+    
 
     const result = await IntentLauncher.startActivityAsync(
         "br.com.softwareexpress.sitef.msitef.ACTIVITY_CLISITEF", 

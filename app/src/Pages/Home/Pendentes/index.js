@@ -19,9 +19,9 @@ const PendentesView = ({ navigation }) => {
         })
     }
 
-    // useFocusEffect(useCallback(() => {
-    //     mutate()
-    // }, []))
+    useFocusEffect(useCallback(() => {
+        mutate()
+    }, []))
     return (
         <SafeAreaView style={{ flex: 1}}>
             <TopBarHome navigation={navigation}/>

@@ -15,3 +15,7 @@ class FormaInline(admin.TabularInline):
 class VendaAdmin(admin.ModelAdmin):
     list_display = ('ordem','create_at','total_venda', 'vendedor', )
     inlines = [CorpoInline, FormaInline]
+
+@admin.register(RecebimentoSITEF)
+class RecebimentoSITEFAdmin(admin.ModelAdmin):
+    list_display = ('ordem','id_forma', 'nsu_host', 'nsu_sitef', 'cancelado', )

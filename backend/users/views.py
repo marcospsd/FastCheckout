@@ -14,14 +14,15 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        variaveis = VariaveisdoSistema.objects.all().values()
+        variaveis = VariaveisdoSistema.objects.all().values('chave', 'valor')
+        variaveis_dict = {variavel['chave']: variavel['valor'] for variavel in variaveis}
         return Response({
             'token': token.key,
             'codvend': user.codvend,
             'nome': user.first_name,
             'tipouser': user.tipouser,
             'id': user.id,
-            'variaveis': variaveis
+            'variaveis': variaveis_dict
         })
 
 class CreateUserView(viewsets.ModelViewSet):
