@@ -30,7 +30,7 @@ def ComprovanteResumoPagamento(formas):
         return True
     p.set(align='center', width=2, height=2, font='a')
     p.image(img_source=os.path.abspath('print/functions/image.png'))
-    p.text(f"\n\nData: {date.today().strftime("%d/%m/%Y")}\n\n")
+    p.text(f"\n\nData: {date.today().strftime(r"%d/%m/%Y")}\n\n")
     p.set(align='left', width=2, height=1, font='b')
     formpag = Texttable()
     formpag.set_cols_align(["l", "r"])
