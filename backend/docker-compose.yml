@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  APIFC:
+  api-fc:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8000"
+      - "5000"
     env_file: .env
     volumes:
       - .:/dados
