@@ -39,7 +39,8 @@ export const AuthProvider = ({children}) => {
                         cod_empresa: res.data?.variaveis?.SITEF_CODEMPRESA,
                         url: res.data?.variaveis?.SITEF_URL,
                         cnpj: res.data?.variaveis?.SITEF_CNPJ,
-                        cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO
+                        cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO,
+                        comExtra: res.data?.variaveis?.SITEF_COMEXTRA
                     })
                 }
             if (pinpad) {
@@ -47,7 +48,8 @@ export const AuthProvider = ({children}) => {
                     cod_empresa: res.data?.variaveis?.SITEF_CODEMPRESA,
                     url: res.data?.variaveis?.SITEF_URL,
                     cnpj: res.data?.variaveis?.SITEF_CNPJ,
-                    cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO
+                    cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO,
+                    comExtra: res.data?.variaveis?.SITEF_COMEXTRA
                 })
             }
         })

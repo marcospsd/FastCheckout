@@ -70,6 +70,7 @@ const ViewConciliacao = ({ route, navigation}) => {
                     estorno: 'T',
                     ordem: data.ordem,
                     id: item.id,
+                    nsu_host: item.nsu_host,
                     nsu_host_cancelamento: recibo.success.NSU_HOST,
                     nsu_sitef_cancelamento: recibo.success.NSU_SITEF,
                     VIA_CLIENTE: recibo.success.VIA_CLIENTE || null,

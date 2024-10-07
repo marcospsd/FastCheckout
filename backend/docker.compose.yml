@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  APIFC:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000"
+    env_file: .env
+    deploy:
+      replicas: 4

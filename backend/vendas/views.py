@@ -233,6 +233,7 @@ class RemoveRecebimentoSITEF(views.APIView):
         estorno = request.data.get('estorno')
         ordem = request.data.get('ordem')
         id = request.data.get('id')
+        nsu_remove = request.data.get('nsu_host')
         nsu_host_cancelamento = request.data.get('nsu_host_cancelamento')
         nsu_sitef_cancelamento = request.data.get('nsu_sitef_cancelamento')
         printerCliente = request.data.get('VIA_CLIENTE', None)
@@ -245,7 +246,7 @@ class RemoveRecebimentoSITEF(views.APIView):
             serializer.autorizacao = None
             serializer.save()
         if estorno == 'T':
-            comprovante = RecebimentoSITEF.objects.filter(ordem=ordem, id_forma=id).first()
+            comprovante = RecebimentoSITEF.objects.filter(ordem=ordem, id_forma=id, nsu_host=nsu_remove).first()
             if comprovante:
                 comprovante.cancelado = True
                 comprovante.nsu_host_cancelamento = nsu_host_cancelamento

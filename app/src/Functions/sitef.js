@@ -33,11 +33,11 @@ export const receberCliSitef = async (recebimento, pinpad) => {
         operador: "0001",
         data: date,
         hora: time,
-        numeroCupom: `${date}${recebimento.id}`,
+        numeroCupom: `${date}${time}`,
         valor: String(recebimento.valor)+"00",
         timeoutColeta: "30", 
         acessibilidadeVisual: "0",
-        comExtra: "0",
+        comExtra: pinpad.comExtra || "0",
         clsit: JSON.stringify(clsitJson)
     }
     if (pinpad.dispositivo) {
@@ -78,7 +78,7 @@ export const adminCliSitef = async (modalidade, pinpad) => {
         clsit: JSON.stringify(clsitJson),
         timeoutColeta: "30",
         acessibilidadeVisual: "0",
-        comExtra: "0"
+        comExtra: pinpad.comExtra || "0"
     }
 
     if (pinpad.dispositivo) {
