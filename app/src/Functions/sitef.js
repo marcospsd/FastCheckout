@@ -37,8 +37,11 @@ export const receberCliSitef = async (recebimento, pinpad) => {
         valor: String(recebimento.valor)+"00",
         timeoutColeta: "30", 
         acessibilidadeVisual: "0",
-        comExtra: pinpad.comExtra || "0",
+        comExterna: pinpad.comexterna || "1",
         clsit: JSON.stringify(clsitJson)
+    }
+    if (pinpad.comexterna == "1") {
+        intentParams.isDoubleValidation = "0"
     }
     if (pinpad.dispositivo) {
         intentParams.pinpadMac= pinpad.dispositivo
@@ -78,7 +81,11 @@ export const adminCliSitef = async (modalidade, pinpad) => {
         clsit: JSON.stringify(clsitJson),
         timeoutColeta: "30",
         acessibilidadeVisual: "0",
-        comExtra: pinpad.comExtra || "0"
+        comExterna: pinpad.comexterna || "1",
+        
+    }
+    if (pinpad.comexterna == "1") {
+        intentParams.isDoubleValidation = "0"
     }
 
     if (pinpad.dispositivo) {

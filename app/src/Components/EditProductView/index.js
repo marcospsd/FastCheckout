@@ -42,7 +42,7 @@ const EditProducts = ({ navigation, route }) => {
   
     return (
           <View style={{flex: 1}}>
-            <TopBar PageName={route.name} navigation={navigation}/>
+            <TopBar PageName={route.name} title={"Editar Produto"} goBack={() => navigation.goBack()} navigation={navigation}/>
             <View style={{ padding: 10}}>
                 <View>
                     <TextInput 

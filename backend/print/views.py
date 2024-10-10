@@ -7,7 +7,8 @@ from vendas.models import Venda, Formapagamento
 from vendas.serializers import VendaSerializers, ResumoCondPagSerializer
 from decouple import config
 from datetime import date
-from django.db.models import Sum
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 
 class PrintVenda(APIView):
     def post(self, request, *args, **kwargs):
@@ -32,13 +33,11 @@ class PrintResumoVendas(APIView):
             return Response({"Error": "Impressão em rede está desativada."})
         result = Formapagamento.objects.filter(
             key_id__status="F",
-            key_id__create_at=date.today()
+            # key_id__create_at=date.today()
         ).values(
-            'forma', 'valor'
+            'forma',
         ).annotate(
-            total=Sum("valor")
-        ).values(
-            'forma', 'total'
+            valor=Sum('valor')
         ).order_by(
             'forma'
         )

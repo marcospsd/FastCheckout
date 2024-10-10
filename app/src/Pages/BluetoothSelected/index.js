@@ -39,19 +39,41 @@ const SelectedBluetoothPage = ({ navigation }) => {
     // Solicita permissões no Android
     const requestPermissions = async () => {
       if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-          PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        ]);
-        if (
-          granted['android.permission.BLUETOOTH_SCAN'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.BLUETOOTH_CONNECT'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.ACCESS_FINE_LOCATION'] === PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          console.log('Permissões concedidas');
-        } else {
-          Alert.alert('Permissão negada', 'Você precisa conceder permissões de Bluetooth.');
+        try {
+          if (Platform.Version >= 31) {
+            // Para Android 12+ (API 31 e acima)
+            const granted = await PermissionsAndroid.requestMultiple([
+              PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+              PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            ]);
+            if (
+              granted['android.permission.BLUETOOTH_SCAN'] === PermissionsAndroid.RESULTS.GRANTED &&
+              granted['android.permission.BLUETOOTH_CONNECT'] === PermissionsAndroid.RESULTS.GRANTED &&
+              granted['android.permission.ACCESS_FINE_LOCATION'] === PermissionsAndroid.RESULTS.GRANTED
+            ) {
+              console.log('Permissões concedidas para Android 12+');
+              BleManager.start({ showAlert: false });
+            } else {
+              Alert.alert('Permissão negada', 'Você precisa conceder permissões de Bluetooth.');
+            }
+          } else if (Platform.Version >= 27) {
+            // Para Android 10 e 11 (API 29 e 30)
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              console.log('Permissão de localização concedida');
+              BleManager.start({ showAlert: false });
+            } else {
+              Alert.alert('Permissão negada', 'Você precisa conceder permissão de localização.');
+            }
+          } else {
+            // Para Android abaixo de 10 (API 28 ou inferior)
+            BleManager.start({ showAlert: false });
+          }
+        } catch (err) {
+          console.warn(err);
         }
       }
     };

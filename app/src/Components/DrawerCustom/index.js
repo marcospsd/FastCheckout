@@ -2,7 +2,6 @@ import { VStack, HStack, Text, Image, Divider, Pressable } from '@gluestack-ui/t
 import React, { useContext } from 'react'
 import { AuthContext } from '../../Context/authcontext'
 import { MaterialIcons } from '@expo/vector-icons';
-import IMG from '../../Assets/fastbranco.png'
 
 const DrawerCustom = ({ navigation }) => {
     const { user:dadosUser, Logout } = useContext(AuthContext)
@@ -28,7 +27,8 @@ const DrawerCustom = ({ navigation }) => {
                 <Image
                     width={"$full"}
                     resizeMode='contain'
-                    source={IMG}
+                    borderRadius="$none"
+                    source={require('../../../assets/fastbranco.png')}
                     alt="LogoGrande"
                     />
                 <Text

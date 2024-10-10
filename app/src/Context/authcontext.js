@@ -40,7 +40,7 @@ export const AuthProvider = ({children}) => {
                         url: res.data?.variaveis?.SITEF_URL,
                         cnpj: res.data?.variaveis?.SITEF_CNPJ,
                         cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO,
-                        comExtra: res.data?.variaveis?.SITEF_COMEXTRA
+                        comexterna: res.data?.variaveis?.SITEF_COMEXTERNA
                     })
                 }
             if (pinpad) {
@@ -49,7 +49,7 @@ export const AuthProvider = ({children}) => {
                     url: res.data?.variaveis?.SITEF_URL,
                     cnpj: res.data?.variaveis?.SITEF_CNPJ,
                     cnpj_automacao: res.data?.variaveis?.SITEF_CNPJAUTO,
-                    comExtra: res.data?.variaveis?.SITEF_COMEXTRA
+                    comexterna: res.data?.variaveis?.SITEF_COMEXTERNA
                 })
             }
         })
