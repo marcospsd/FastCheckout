@@ -33,7 +33,7 @@ class PrintResumoVendas(APIView):
             return Response({"Error": "Impressão em rede está desativada."})
         result = Formapagamento.objects.filter(
             key_id__status="F",
-            # key_id__create_at=date.today()
+            key_id__create_at=date.today()
         ).values(
             'forma',
         ).annotate(
