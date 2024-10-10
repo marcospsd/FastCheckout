@@ -30,7 +30,7 @@ export const receberCliSitef = async (recebimento, pinpad) => {
         CNPJ_CPF: pinpad.cnpj,
         cnpj_automacao: pinpad.cnpj_automacao,
         enderecoSitef: pinpad.url,
-        operador: "0001",
+        operador: pinpad.operador,
         data: date,
         hora: time,
         numeroCupom: `${date}${time}`,

@@ -22,7 +22,7 @@ def FormasdePag(forma):
 def ComprovanteResumoPagamento(formas):
     formaitem = [['Forma', 'Valor'],]
     for item in formas:
-        formaitem.append([FormasdePag(item['forma']), f"R$ {item['total']},00"])
+        formaitem.append([FormasdePag(item['forma']), f"R$ {item['valor']},00"])
 
     try:
         p = printer.Network(host=config('PRINT_HOST', "127.0.0.1"), port=9100)

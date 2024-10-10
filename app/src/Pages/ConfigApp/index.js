@@ -118,6 +118,25 @@ const ConfigAppPage = ({ navigation }) => {
                 </HStack>
             </VStack>
             <Divider marginVertical={15}/>
+            <VStack
+                alignItems='start'
+                gap={5}
+                >
+                <Text
+                    fontWeight="bold"
+                    fontSize={18}
+                    >Operador SITEF</Text>
+                <HStack>
+                    <Input flex={1}>
+                        <InputField 
+                            value={pinpad?.operador}
+                            disabled={true}
+                            onChangeText={(text) => setPinPad({...pinpad, operador: text})}
+                            placeholder="0001"/>
+                    </Input>
+                </HStack>
+            </VStack>
+            <Divider marginVertical={15}/>
             <HStack
                 alignItems='center'
                 justifyContent='space-between'

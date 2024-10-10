@@ -36,6 +36,7 @@ export const AuthProvider = ({children}) => {
                     setPinPad({
                         habilitar: false,
                         dispositivo: "",
+                        operador: "0001",
                         cod_empresa: res.data?.variaveis?.SITEF_CODEMPRESA,
                         url: res.data?.variaveis?.SITEF_URL,
                         cnpj: res.data?.variaveis?.SITEF_CNPJ,
