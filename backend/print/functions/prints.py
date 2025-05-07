@@ -48,16 +48,6 @@ def ImprimirComprovanteVenda(venda):
     corpoitem = [['Código', 'Desc', 'Valor'],]
     for item in corpovenda:
         corpoitem.append([item['codpro'], item['descripro'], f"{item['valor_unitpro']},00"])
-    # dadosurl = {
-    #     "valor_total": venda['total_venda'],
-    #     "ordem": venda['ordem'],
-    #     "cpf": venda["cpf"],
-    #     "nome_completo": venda["dadoscliente"]["nome"],
-    #     "telefone": venda["dadoscliente"]["telefone"]
-    # }
-#    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{urllib.parse.quote(json.dumps(dadosurl))}"
-#    url = f"https://cashback.cupomdiniz.com.br/gerarcashback/{base64.b64encode(json.dumps(dadosurl).encode('utf-8')).decode('utf-8')}"
-    # Imprimir cabeçalho centralizado
     p.image(img_source=os.path.abspath('print/functions/image.png'))
     p.text("\n\n")
     p.set(align='center', width=2, height=2, font='b')
