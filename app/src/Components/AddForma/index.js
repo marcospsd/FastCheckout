@@ -90,18 +90,18 @@ const AddForma = ({ navigation, route }) => {
                     <Picker
                         selectedValue={data?.parcelas}
                         onValueChange={(itemValue, itemIndex) => setData({ ...data, parcelas: itemValue })}
-                        enabled={data.forma !== 'CC' && data.foma !== 'FO' ? false : true}
+                        enabled={data.forma == 'CC' || data.forma == 'FO' ? true : false}
                     >
                         <Picker.Item label="1" value={1} />
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*2 ? <Picker.Item label="2" value={2} /> : null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*3 ? <Picker.Item label="3" value={3} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*4 ? <Picker.Item label="4" value={4} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*5 ? <Picker.Item label="5" value={5} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*6 ? <Picker.Item label="6" value={6} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*7 ? <Picker.Item label="7" value={7} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*8 ? <Picker.Item label="8" value={8} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*9 ? <Picker.Item label="9" value={9} />: null}
-                        {user.tipouser != "V" || data.forma == 'FO' || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*10 ? <Picker.Item label="10" value={10} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*2 ? <Picker.Item label="2" value={2} /> : null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*3 ? <Picker.Item label="3" value={3} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*4 ? <Picker.Item label="4" value={4} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*5 ? <Picker.Item label="5" value={5} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*6 ? <Picker.Item label="6" value={6} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*7 ? <Picker.Item label="7" value={7} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*8 ? <Picker.Item label="8" value={8} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*9 ? <Picker.Item label="9" value={9} />: null}
+                        {user.tipouser != "V" || data.forma == 'CC' && parseInt(total_venda) >= parseInt(parcelaMin)*10 ? <Picker.Item label="10" value={10} />: null}
                     </Picker>
                 </View>
                 <View>
