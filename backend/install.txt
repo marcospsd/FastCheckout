@@ -1,0 +1,11 @@
+Para instalação do BackEND
+
+
+obrigatório adicionar as seguinte variaveis de sistema na tabela.
+
+PARCELA_MINIMA
+SITEF_CODEMPRESA,
+SITEF_URL,
+SITEF_CNPJ,
+SITEF_CNPJAUTO,
+SITEF_COMEXTERNA

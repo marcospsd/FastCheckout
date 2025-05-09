@@ -24,7 +24,7 @@ const OptionsButtonsVenda = ({ venda, setVenda, navigation }) => {
 
     const AprovarCompra = () => {
         setDisabled(true)
-        const isReceiver = venda.formavenda.filter((item) => ['CC', 'CD'].includes(item.forma) && !item.nsu_sitef).length
+        const isReceiver = venda.formavenda.filter((item) => ['CC', 'CD', 'DP'].includes(item.forma) && !item.nsu_sitef).length
         if (pinpad.habilitar == true & isReceiver > 0) {
             setDisabled(false)
             return setOpenModal(true)

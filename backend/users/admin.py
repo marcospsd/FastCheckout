@@ -13,6 +13,13 @@ class UserAdmin(auth_admin.UserAdmin):
     fieldsets = auth_admin.UserAdmin.fieldsets + (
         ("Campos Personalizados", {"fields": ("codvend", "tipouser", )}),
     )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2', 'first_name', 'codvend', 'tipouser'),  # Adicione aqui os mesmos campos que no seu form
+        }),
+    )
+
 
 @admin.register(VariaveisdoSistema)
 class VariaveisAdmin(admin.ModelAdmin):

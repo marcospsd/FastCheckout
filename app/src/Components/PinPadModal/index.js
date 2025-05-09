@@ -15,7 +15,7 @@ import * as Clipboard from 'expo-clipboard'
 
 const PinPadModal = ({openModal, closeModal, data, setData, AprovarCompra }) => {
     const [ pinpad ] = useMMKVObject("FC@PINPAD", storage)
-    const NewData = data.formavenda.filter((item) => ['CC','CD'].includes(item.forma))
+    const NewData = data.formavenda.filter((item) => ['CC','CD', 'DP'].includes(item.forma))
     const fecharVenda = NewData.filter((res) => !res.nsu_host).length
     
     if (fecharVenda == 0 & data.status == 'P') {
