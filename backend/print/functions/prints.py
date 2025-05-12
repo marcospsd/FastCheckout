@@ -30,8 +30,7 @@ def DataCashBack(venda):
 
 
 
-def ImprimirComprovanteVenda(venda):
-    bonus = None
+def ImprimirComprovanteVenda(venda, bonus=None):
     if config("DINIZBONUS_ATIVAR") == "True":
         bonus = GerarCupom(venda)
     try:

@@ -3,7 +3,7 @@ from decouple import config
 from datetime import timedelta, datetime
 
 def GerarCupom(venda):
-    data_obj = datetime.strptime(venda['data_emissao'], "%d/%m/%Y")
+    data_obj = datetime.strptime(venda['create_at'], "%d/%m/%Y")
     nova_data = data_obj + timedelta(days=90)
     nova_data_str = nova_data.strftime("%Y-%m-%d")
     dados = {
@@ -11,19 +11,21 @@ def GerarCupom(venda):
         'telefone': venda['dadoscliente']['telefone'],
         'cpf': venda['cpf'],
         'campanha': 2,
-        'venda_origem': f"EX052025-{venda['id']}",
-        'valor_cupom': round(venda['total_venda']*0.2, 0),
+        'venda_origem': f"EX052025-{venda['ordem']}",
+        'valor_cupom': int(round(venda['total_venda']*0.2, 0)),
         'data_validade': nova_data_str,
-        'filial': '30 CM'
+        "filial": "30 CM"
     }
-
+    headers = {
+        "Authorization": f"token {config('DINIZBONUS_TOKEN')}",
+        "Content-Type": "application/json"
+    }
     try:
-        headers = {
-            "Authorization": f"Token {config('DINIZBONUS_TOKEN')}"
-        }
-        response = requests.post(url=config('DINIZBONUS_URL'), json=venda, headers=headers)
-        return response.json()
+        response = requests.post(url=config('DINIZBONUS_URL'), json=dados, headers=headers)
+        data = response.json()
+        return data['id']
     except:
         return None
+
 
 
