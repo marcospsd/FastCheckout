@@ -125,7 +125,7 @@ fique por dentro de todas \nas novidades. \n
     p.set(align='center', width=2, height=1, font='b')
     p.text(" \n \n \n")
     if bonus:
-        p.text(f"CASHBACK {str(bonus['id']).zfill(6)} válido entre\n {config('DINIZBONUS_DATE_INIT')} até {DataCashBack(venda['create_at'])}")
+        p.text(f"CASHBACK {str(bonus).zfill(6)} válido entre\n {config('DINIZBONUS_DATE_INIT')} até {DataCashBack(venda['create_at'])}")
     else:
         p.text(f"CASHBACK válido entre\n {config('DINIZBONUS_DATE_INIT')} até {DataCashBack(venda['create_at'])}")
     p.text(" \n \n \n")
