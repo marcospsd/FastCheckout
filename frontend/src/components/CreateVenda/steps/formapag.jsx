@@ -31,7 +31,7 @@ const FormpagStep = ({ setStep, step, setData, data}) => {
                 forma: forma,
                 parcelas: parcela,
                 valor: valor,
-                id: key
+                id_key: key
             }]})
             setKey(key+1)
             setForma("DH")
@@ -43,7 +43,7 @@ const FormpagStep = ({ setStep, step, setData, data}) => {
     }
 
     const DeleteForma = (id) => {
-        const x = data.formavenda.filter((res) => res.id !== id)
+        const x = data.formavenda.filter((res) => res.id_key !== id)
         setData({...data, formavenda: x})
     }
 

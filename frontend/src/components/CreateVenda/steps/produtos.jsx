@@ -73,7 +73,7 @@ const ProdutoStep = ({ step, setStep, setData, data }) => {
     const AddCard = () => {
         if (codigo != ""){
             setData({...data, corpovenda: [...data.corpovenda, { 
-                id: key,
+                id_key: key,
                 codpro: codigo,
                 descripro: descricao,
                 valor_unitsis: valorsis,
@@ -92,7 +92,7 @@ const ProdutoStep = ({ step, setStep, setData, data }) => {
     }
 
     const DeleteCard = (id) => {
-        const x = data.corpovenda.filter((res) => res.id !== id)
+        const x = data.corpovenda.filter((res) => res.id_key !== id)
         setData({...data, corpovenda: x})
     }
 
@@ -150,7 +150,7 @@ const ProdutoStep = ({ step, setStep, setData, data }) => {
             <br/>
             {data.corpovenda.length > 0 ? 
                 data.corpovenda.map((data) => (
-                    <CardProducts data={data} DeleteCard={DeleteCard} key={data.id} />))
+                    <CardProducts data={data} DeleteCard={DeleteCard} key={data.id_key} />))
                 : <label>Não possui produtos adicionados...</label>}
             <hr/>
             <Coluna>
