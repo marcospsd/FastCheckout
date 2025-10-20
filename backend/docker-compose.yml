@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   api-fc-1:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,6 +12,7 @@ services:
     volumes:
       - .:/dados
   api-fc-2:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +22,7 @@ services:
     volumes:
       - .:/dados
   api-fc-3:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
