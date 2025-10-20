@@ -11,6 +11,7 @@ services:
     env_file: .env
     volumes:
       - .:/dados
+    restart: always
   api-fc-2:
     restart: always
     build:
@@ -21,6 +22,7 @@ services:
     env_file: .env
     volumes:
       - .:/dados
+    restart: always
   api-fc-3:
     restart: always
     build:
@@ -31,3 +33,4 @@ services:
     env_file: .env
     volumes:
       - .:/dados
+    restart: always

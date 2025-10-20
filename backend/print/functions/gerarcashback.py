@@ -3,6 +3,9 @@ from decouple import config
 from datetime import timedelta, datetime
 
 def GerarCupom(venda):
+    formas = [fp["forma"] for fp in venda["formavenda"]]
+    if "FO" in formas:
+        return None
     data_obj = datetime.strptime(venda['create_at'], "%d/%m/%Y")
     nova_data = data_obj + timedelta(days=90)
     nova_data_str = nova_data.strftime("%Y-%m-%d")

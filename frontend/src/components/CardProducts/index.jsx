@@ -9,7 +9,7 @@ const CardProducts = ({ data, DeleteCard  }) => {
     return (
         <Container>
             <DeleteButton>
-                <IconButton onClick={() => DeleteCard(data.id)}>
+                <IconButton onClick={() => DeleteCard(data.id_key)}>
                     <DeleteIcon/>
                 </IconButton>
             </DeleteButton>

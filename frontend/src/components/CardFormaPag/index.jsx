@@ -18,11 +18,11 @@ const CardFormaPag = ({ data, DeleteForma}) => {
                         <td><strong>Delete</strong></td>
                     </tr>
                 { data.map((forma) => (
-                    <tr key={forma.id}>
+                    <tr key={forma.id_key}>
                         <td className='formaconteudo' >{NameForma(forma.forma)}</td>
                         <td className='formaconteudo' >{forma.parcelas}</td>
                         <td className='formaconteudo' >{parseInt(forma.valor).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}</td>
-                        <td className='formaconteudo'><IconButton id='delete' onClick={() => DeleteForma(forma.id)}><DeleteIcon/></IconButton></td>
+                        <td className='formaconteudo'><IconButton id='delete' onClick={() => DeleteForma(forma.id_key)}><DeleteIcon/></IconButton></td>
                     </tr>
                     ))}
                 </tbody>
