@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name' , 'password', 'codvend', 'tipouser', 'id']
+        fields = ['username', 'first_name' , 'password', 'codvend', 'tipouser', 'id']
         fields_ready = ['id']
 
     def save(self):
@@ -15,8 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             username=self.validated_data['username'],
             codvend=self.validated_data['codvend'],
             first_name=self.validated_data['first_name'],
-            tipouser=self.validated_data['tipouser'],
-            last_name=self.validated_data['last_name']
+            tipouser=self.validated_data['tipouser']
             
         )
         senha = self.validated_data['password']
