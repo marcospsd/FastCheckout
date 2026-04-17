@@ -5,7 +5,10 @@ import { formatDinheiro, NameForma2 } from '../../../Functions/format'
 import { Col, Row, Grid} from 'react-native-easy-grid'
 import { Provider } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons';
-import { HStack, Text, VStack, Divider } from '@gluestack-ui/themed'
+import { HStack } from '../../../Components/ui/hstack'
+import { VStack } from '../../../Components/ui/vstack'
+import { Text } from '../../../Components/ui/text'
+import { Divider } from '../../../Components/ui/divider'
 import Feather from '@expo/vector-icons/Feather';
 
 
@@ -25,7 +28,7 @@ const FormaPagamento = ({ navigation }) => {
     const Delete = (item) => {
         Alert.alert(
             'ATENÇÃO',
-            'Deseja voltar ? seus dados serão perdidos !', 
+            'Deseja voltar ? seus dados serão perdidos !',
             [
                 {text: 'Sim', onPress: () => DeleteItem(item)},
                 {text: 'Cancelar', style: 'cancel', color: 'red'}
@@ -36,22 +39,25 @@ const FormaPagamento = ({ navigation }) => {
 
     const CardFormaPag = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('AddForma', { item, saldo })} onLongPress={() => Delete(item)} style={{ marginTop: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 15}}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('AddForma', { item, saldo })}
+                onLongPress={() => Delete(item)}
+                style={{ marginTop: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 15 }}
+            >
                 <HStack>
-                    <Text w={'40%'}>{NameForma2(item.forma)}</Text>
-                    <Text w={'20%'}>{item.parcelas}</Text>
-                    <Text w={'30%'}>R$ {formatDinheiro(item.valor)}</Text>
-                    <VStack w={'10%'}>
-                            {item?.nsu_host && <Feather name="check-circle" size={24} color="green" />}    
+                    <Text className="w-[40%]">{NameForma2(item.forma)}</Text>
+                    <Text className="w-[20%]">{item.parcelas}</Text>
+                    <Text className="w-[30%]">R$ {formatDinheiro(item.valor)}</Text>
+                    <VStack className="w-[10%]">
+                        {item?.nsu_host && <Feather name="check-circle" size={24} color="green" />}
                     </VStack>
                 </HStack>
             </TouchableOpacity>
-
         )
     }
 
-    return ( 
-        <View style={{ flex: 1}}>
+    return (
+        <View style={{ flex: 1 }}>
             <Provider>
             <View style={styles.container}>
                 <View style={styles.content}>
@@ -63,21 +69,21 @@ const FormaPagamento = ({ navigation }) => {
                     <Text style={[styles.secundarytext, saldo !== 0 ? { color: 'red'} : { color: 'green'}]}>R$ {formatDinheiro(saldo)}</Text>
                 </View>
             </View>
-            <VStack flex={1} p={10} marginBottom={10}>
+            <VStack className="flex-1 p-[10px] mb-[10px]">
                 <HStack>
-                    <Text w={'40%'} fontWeight={'bold'} fontSize={18}>Formas</Text>
-                    <Text w={'20%'} fontWeight={'bold'} fontSize={18}>Parc.</Text>
-                    <Text w={'30%'} fontWeight={'bold'} fontSize={18}>Valor</Text>
-                    <Text w={'10%'} fontWeight={'bold'} fontSize={18}></Text>
+                    <Text className="w-[40%] font-bold text-[18px]">Formas</Text>
+                    <Text className="w-[20%] font-bold text-[18px]">Parc.</Text>
+                    <Text className="w-[30%] font-bold text-[18px]">Valor</Text>
+                    <Text className="w-[10%] font-bold text-[18px]"></Text>
                 </HStack>
-                <Divider h={3} bgColor={'#c9c9c9'}/>
+                <Divider className="h-[3px] bg-[#c9c9c9]" />
                 <FlatList
-                        data={state.formavenda}
-                        keyExtractor={( item ) => String(item.id)}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={ ({ item }) => <CardFormaPag item={item}/>}
-                        ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não há formas inseridas</Text></View>}
-                        />
+                    data={state.formavenda}
+                    keyExtractor={( item ) => String(item.id)}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={ ({ item }) => <CardFormaPag item={item}/>}
+                    ListEmptyComponent={<View style={{alignItems: 'center', marginTop: 10}}><Text style={{ fontSize: 20 }}>Não há formas inseridas</Text></View>}
+                />
             </VStack>
             <TouchableOpacity style={styles.buttonfab} activeOpacity={0.9} onPress={() => navigation.navigate('AddForma', { saldo: saldo})}>
                 <AntDesign name="plus" size={24} color="white" />
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         justifyContent: 'space-around'
-    },  
+    },
     container2: {
         width: '100%',
         justifyContent: 'center',
@@ -143,6 +149,5 @@ const styles = StyleSheet.create({
             height: 10
         },
         elevation: 5
-
     },
 })

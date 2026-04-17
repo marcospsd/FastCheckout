@@ -1,5 +1,3 @@
-import { MMKV } from "react-native-mmkv";  
+import { MMKV } from 'react-native-mmkv'
 
-export const storage = new MMKV({
-    id: 'FastCheckout'
-})
+export const storage = new MMKV()

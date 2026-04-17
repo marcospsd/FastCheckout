@@ -1,10 +1,10 @@
+import "./global.css";
 import AppRoutes from './src/Routes/index';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { SWRConfig } from 'swr';
 import { AuthProvider } from './src/Context/authcontext';
-import { GluestackUIProvider } from '@gluestack-ui/themed';
-import { config as configGluestack } from "./config/gluestack-ui.config"
+import { GluestackUIProvider } from './src/Components/ui/gluestack-ui-provider';
 import { useState } from 'react';
 import { Splash } from './src/Components/Splash';
 
@@ -12,9 +12,7 @@ export default function App() {
   const [splashComplete, setSplashComplete] = useState(false)
 
   return (
-    <GluestackUIProvider
-      config={configGluestack}
-      >
+    <GluestackUIProvider mode="light">
       <SWRConfig
         value={{
           revalidateOnFocus: true,
@@ -35,6 +33,6 @@ export default function App() {
           </AuthProvider>
         </NavigationContainer>
       </SWRConfig>
-    </GluestackUIProvider>
+     </GluestackUIProvider>
   );
 }

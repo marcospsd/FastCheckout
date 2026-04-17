@@ -7,8 +7,6 @@ import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config as configGluestack } from "./config/gluestack-ui.config"
 import { useState } from 'react';
 import { Splash } from './src/Components/Splash';
-import { NativeModules, Platform } from 'react-native';
-
 
 
 export default function App() {

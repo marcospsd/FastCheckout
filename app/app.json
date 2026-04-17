@@ -2,7 +2,7 @@
   "expo": {
     "name": "FastCheckout",
     "slug": "fastcheckoutapp",
-    "version": "1.9.5",
+    "version": "2.0.0",
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
@@ -28,7 +28,7 @@
       }
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#C52F33"
@@ -50,6 +50,16 @@
       }
     },
     "plugins": [
+        [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0"
+          }
+        }
+      ],
       [
         "expo-camera",
         {
@@ -57,9 +67,13 @@
           "microphonePermission": "O $(PRODUCT_NAME) deseja acesso ao seu Microfone",
           "recordAudioAndroid": true
         }
-      ]
+      ],
+      "react-native-ble-manager",
+      "expo-font"
     ],
-
+    "experiments": {
+      "reactCompiler": true
+    },
     "updates": {
       "url": "https://u.expo.dev/2069e253-e2ed-45f0-b74b-15b845b7d779"
     }

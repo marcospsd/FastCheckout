@@ -7,7 +7,8 @@ import { CreateVendaContext } from '../../Context/createvendacontext';
 import { TopBar } from '../TopBar'
 import { formatDinheiro } from '../../Functions/format'
 import shortid from 'shortid'
-import { VStack, Text as GluestackText } from '@gluestack-ui/themed';
+import { VStack } from '../ui/vstack';
+import { Text as GluestackText } from '../ui/text';
 
 
 const AddForma = ({ navigation, route }) => {
@@ -122,19 +123,14 @@ const AddForma = ({ navigation, route }) => {
                     >{route.params?.item ? "Editar" : "Adicionar"}</Button>
                 </View>
                 {data.nsu_host && (
-                    <VStack
-                        marginTop={25}
-                        justifyContent='center'
-                        alignItems='center'
-                        >
+                    <VStack className="mt-[25px] justify-center items-center">
                         <GluestackText>
                             OBSERVAÇÃO
                         </GluestackText>
-                        <GluestackText
-                            fontWeight={'bold'}
-                            >Essa forma de pagamento já possui um recebimento SITEF.</GluestackText>
-                        <GluestackText
-                            >NSU: {data.nsu_host}</GluestackText>
+                        <GluestackText className="font-bold">
+                            Essa forma de pagamento já possui um recebimento SITEF.
+                        </GluestackText>
+                        <GluestackText>NSU: {data.nsu_host}</GluestackText>
                     </VStack>
                 )}
                 <AlertSnack open={alert} setOpen={setAlert} text={alert.text} />
@@ -152,7 +148,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     primarytext: {
-        fontSize: 16.
-
+        fontSize: 16,
     }
 })

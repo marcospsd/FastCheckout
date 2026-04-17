@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react'
-import { SafeAreaView,} from 'react-native'
+import { SafeAreaView } from 'react-native'
 import { FlatListDisplay } from '../../../Components/FlatListDisplay'
 import { TopBarHome } from '../../../Components/TopBarHome'
 import { useAxios, api } from '../../../Services/api'
 import LoadingComponent from '../../../Components/LoadingComponent'
-import { Input, InputField } from '@gluestack-ui/themed'
+import { Input, InputField } from '../../../Components/ui/input'
 import { useFocusEffect } from '@react-navigation/native'
 
 
@@ -34,27 +34,21 @@ const FinalizadosView = ({ navigation }) => {
     useFocusEffect(useCallback(() => {
         mutate()
     }, []))
-            
+
     return (
-        <SafeAreaView style={{ flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <TopBarHome navigation={navigation}/>
-            <Input
-                variant='outline'
-                size="md"
-                marginHorizontal={10}
-                marginVertical={2}
-                >
-                <InputField 
+            <Input className="mx-[10px] my-[2px]">
+                <InputField
                     placeholder='Filtre por CPF | Nome | Ordem'
-                    onChangeText={(text) => setSearch(text)} 
-                    value={search}/>
+                    onChangeText={(text) => setSearch(text)}
+                    value={search}
+                />
             </Input>
-           { data ? <FlatListDisplay data={newData} navigation={navigation} DeleteItem={DeleteItem} mutate={mutate}/> : <LoadingComponent background="white" color="black"/> }
+            { data ? <FlatListDisplay data={newData} navigation={navigation} DeleteItem={DeleteItem} mutate={mutate}/> : <LoadingComponent background="white" color="black"/> }
         </SafeAreaView>
     )
 }
 
 
 export default FinalizadosView;
-
-

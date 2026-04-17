@@ -65,7 +65,8 @@ class FormaVendaViewSet(viewsets.ModelViewSet):
                                             forma=request.data.get('forma'),
                                             parcelas=request.data.get('parcelas')
                                                          )
-            ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento })
+            if config('PRINT_REDE') == 'True':
+                ImprimirComprovantePagamento({"VIA_CLIENTE": printerCliente, 'VIA_ESTABELECIMENTO': printerEstabelecimento })
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers) 
     
 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+      @page {
+      size: 28mm 106mm;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        background-color: red;
+      }
+      
+      h1, h4 {
+        text-align: center;
+        margin: 0;
+      }
+
+      p {
+          margin: 0
+      }
+
+      table {
+          width: 100%;
+          justify-content: baseline;
+      }
+
+      .col {
+          display: flex;
+          flex-direction: column;
+          justify-content: baseline;
+          margin-bottom: 3px;
+      }
+      .row {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-bottom: 6px;
+      }
+      
+      .avisos {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: center;
+      }
+
+  </style>
+</head>
+<body>
+  <h4>----- Documento Auxiliar de Venda ------</h4>
+  <br/>
+  <div class="container">
+      <div class="row">
+        <div class="col">
+            <b>Ordem</b>
+            <p>896</p>
+        </div>
+        <div class="col">
+            <b>CPF</b>
+            <p>145.305.617-39</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <b>Vendedor</b>
+            <p>Josue Medeiros Silva</p>
+        </div>
+        <div class="col">
+            <b>Total da Venda</b>
+            <p>R$ 95.000,00</p>
+        </div>
+      </div>
+      <div class="col1">
+            <b>Nome:</b>
+            <p>Marcos Paulo Silva Dias</p>
+      </div>
+      <br/>
+      <hr/>
+      <br/>
+      <h4>Formas de Pagamento</h4>
+      <br/>
+      <table>
+        <tr>
+            <th align="start">Forma</th>
+            <th>Parcelas</th>
+            <th align="end">Valor</th>
+        </tr>
+        <tr>
+            <td >Dinheiro</td>
+            <td align="center">1</td>
+            <td align="end">R$ 3000,00</td>
+        </tr>
+      </table>
+      <br/>
+      <hr/>
+      <br/>
+      <h4>Produtos</h4>
+      <br/> 
+      <table>
+        <tr>
+            <th align="start">Codigo</th>
+            <th>Descrição</th>
+            <th align="end" width="30%">Valor</th>
+        </tr>
+        <tr>
+            <td>1113265</td>
+            <td align="center">OC RBAN 3025L L2823 58 MET</td>
+            <td align="end">R$ 3000,00</td>
+        </tr>
+      </table>
+      <br/>
+      <hr/>
+      <div class="avisos">
+            <h3>ATENÇÃO</h3>
+            <p>Esse documento não é um documento
+                fiscal. Sua nota fiscal será enviada através do E-mail: mdias@dinizvitoria.com.br ou
+                Whatsapp: (28) 99966-9008 que foram
+                fornecidos no cadastro.</p>
+            <p>Qualquer dúvida, entre em contato com
+                nosso DiniZAP pelo telefone (27) 3185-8101. Siga nossas redes sociais e fique por dentro de todas novidades.</p>
+      </div>
+  </div>
+</body>
+</html>

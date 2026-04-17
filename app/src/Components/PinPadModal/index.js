@@ -1,12 +1,23 @@
-import { Modal, HStack, VStack, Text, Button, ButtonText, ModalBackdrop, ModalContent, ModalHeader, Heading, ModalCloseButton,
-    Icon, CloseIcon, ModalBody, ModalFooter, Divider
-  } from "@gluestack-ui/themed"
-import { NameForma2, formatDinheiro} from '../../Functions/format'
+import {
+    Modal,
+    ModalBackdrop,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+} from '../ui/modal';
+import { HStack } from '../ui/hstack';
+import { VStack } from '../ui/vstack';
+import { Text } from '../ui/text';
+import { Heading } from '../ui/heading';
+import { Divider } from '../ui/divider';
+import { AntDesign } from '@expo/vector-icons';
+import { NameForma2, formatDinheiro } from '../../Functions/format'
 import { adminCliSitef, receberCliSitef } from '../../Functions/sitef'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TouchableOpacity, Alert } from 'react-native'
-import { api  } from "../../Services/api";
+import { api } from "../../Services/api";
 import { mutate } from "swr";
 import { useMMKVObject } from "react-native-mmkv";
 import { storage } from "../../Functions/storage";
@@ -17,7 +28,7 @@ const PinPadModal = ({openModal, closeModal, data, setData, AprovarCompra }) => 
     const [ pinpad ] = useMMKVObject("FC@PINPAD", storage)
     const NewData = data.formavenda.filter((item) => ['CC','CD', 'DP'].includes(item.forma))
     const fecharVenda = NewData.filter((res) => !res.nsu_host).length
-    
+
     if (fecharVenda == 0 & data.status == 'P') {
         closeModal()
         AprovarCompra()
@@ -28,18 +39,18 @@ const PinPadModal = ({openModal, closeModal, data, setData, AprovarCompra }) => 
             headers: {
               'Content-Type': 'multipart/form-data'
             }
-          };
+        };
         const recibo = await receberCliSitef(item, pinpad)
-        if (!recibo.success & !recibo.error) { return; } 
+        if (!recibo.success & !recibo.error) { return; }
         if (recibo.success.CODRESP == '0'){
             api.patch(`/vendas/formavenda/${item.id}/`, {
-                ...item, 
+                ...item,
                 nsu_host: recibo.success.NSU_HOST,
                 nsu_sitef:recibo.success.NSU_SITEF,
                 bandeira:recibo.success.BANDEIRA || null,
                 autorizacao:recibo.success.COD_AUTORIZACAO || null,
                 printerVias: {
-                    VIA_CLIENTE: recibo.success.VIA_CLIENTE, 
+                    VIA_CLIENTE: recibo.success.VIA_CLIENTE,
                     VIA_ESTABELECIMENTO: recibo.success.VIA_ESTABELECIMENTO
                 }
             }, configPatch)
@@ -67,114 +78,79 @@ const PinPadModal = ({openModal, closeModal, data, setData, AprovarCompra }) => 
         }
     }
 
-
-    const EditConciliacao = (item) => {
-        navigation.navigate("ViewConciliacao", { conciliacao: item })
-    }
     return (
-        <Modal 
+        <Modal
             isOpen={openModal}
             onClose={closeModal}
             size='full'
-            >
+        >
             <ModalBackdrop />
-                    <ModalContent>
-                    <ModalHeader>
-                        <Heading size="lg">Recebimentos no PinPad</Heading>
-                        <ModalCloseButton>
-                        <Icon as={CloseIcon} />
-                        </ModalCloseButton>
-                    </ModalHeader>
-                    <ModalBody>
-                        <VStack
-                            gap={10}
-                            >
-
-                            <HStack
-                                justifyContent='space-between'
-                                alignItems='center'
-                                >
-                                <Text w='30%' fontWeight={'bold'}>Forma</Text>
-                                <Text w='20%' fontWeight={'bold'}>Parc.</Text>
-                                <Text w='20%' fontWeight={'bold'}>Valor</Text>
-                                <Text w='20%' fontWeight={'bold'} textAlign='center'>Status</Text>
-                            </HStack>
-                        {
-                            NewData.map((item) => (
-                                <VStack
-                                gap={10}
-                                key={item.id}
-                                >
-                                    <HStack
-                                    alignItems='center'
-                                    justifyContent='space-between'
-                                    >
-                                    <Text w='30%'>{NameForma2(item.forma)}</Text>
-                                    <Text w='20%'>{item.parcelas}</Text>
-                                    <Text w='20%'>{formatDinheiro(item.valor)}</Text>
-                                    {data.status == 'P' && 
+            <ModalContent>
+                <ModalHeader>
+                    <Heading className="text-lg font-semibold">Recebimentos no PinPad</Heading>
+                    <ModalCloseButton>
+                        <AntDesign name="close" size={18} />
+                    </ModalCloseButton>
+                </ModalHeader>
+                <ModalBody>
+                    <VStack className="gap-[10px]">
+                        <HStack className="justify-between items-center">
+                            <Text className="w-[30%] font-bold">Forma</Text>
+                            <Text className="w-[20%] font-bold">Parc.</Text>
+                            <Text className="w-[20%] font-bold">Valor</Text>
+                            <Text className="w-[20%] font-bold text-center">Status</Text>
+                        </HStack>
+                        {NewData.map((item) => (
+                            <VStack className="gap-[10px]" key={item.id}>
+                                <HStack className="items-center justify-between">
+                                    <Text className="w-[30%]">{NameForma2(item.forma)}</Text>
+                                    <Text className="w-[20%]">{item.parcelas}</Text>
+                                    <Text className="w-[20%]">{formatDinheiro(item.valor)}</Text>
+                                    {data.status == 'P' &&
                                         <>
-                                            {!item.nsu_sitef ? 
-                                            <VStack
-                                                w='20%'
-                                                alignItems='center'
-                                                >
-                                                <TouchableOpacity
-                                                    activeOpacity={0.5}
-                                                    onPress={() => Recebimento(item)}
-                                                        >
+                                            {!item.nsu_sitef ?
+                                                <VStack className="w-[20%] items-center">
+                                                    <TouchableOpacity
+                                                        activeOpacity={0.5}
+                                                        onPress={() => Recebimento(item)}
+                                                    >
                                                         <FontAwesome name="credit-card-alt" size={30} color="red" />
-                                                </TouchableOpacity>
-                                            </VStack>
-                                            : 
-                                            <VStack
-                                            w='20%'
-                                            alignItems='center'
-                                            >
-                                                <FontAwesome name="check-circle" size={30} color="green" />
-                                            </VStack>
+                                                    </TouchableOpacity>
+                                                </VStack>
+                                                :
+                                                <VStack className="w-[20%] items-center">
+                                                    <FontAwesome name="check-circle" size={30} color="green" />
+                                                </VStack>
                                             }
-                                        
                                         </>
                                     }
-                                    
-                                    {data.status == "F" && 
-                                    <>
-                                        {item.nsu_sitef ? 
-                                        <VStack
-                                            w='20%'
-                                            alignItems='center'
-                                            >
-                                            <TouchableOpacity
-                                                activeOpacity={0.5}
-                                                onPress={() => ReimpressaoPrinter(item)}
+                                    {data.status == "F" &&
+                                        <>
+                                            {item.nsu_sitef ?
+                                                <VStack className="w-[20%] items-center">
+                                                    <TouchableOpacity
+                                                        activeOpacity={0.5}
+                                                        onPress={() => ReimpressaoPrinter(item)}
                                                     >
-                                                    <MaterialIcons name="print" size={30} color="black" />
-                                            </TouchableOpacity>
-                                        </VStack>
-                                        : 
-                                        <VStack
-                                        w='20%'
-                                        alignItems='center'
-                                        >
-                                        <TouchableOpacity
-                                                activeOpacity={0.5}
-                                                disabled={true}
-                                                    >
-                                                    <MaterialIcons name="print" size={30} color="gray" />
-                                            </TouchableOpacity>
-                                        </VStack>
-                                        }
-                                    </>}
+                                                        <MaterialIcons name="print" size={30} color="black" />
+                                                    </TouchableOpacity>
+                                                </VStack>
+                                                :
+                                                <VStack className="w-[20%] items-center">
+                                                    <TouchableOpacity activeOpacity={0.5} disabled={true}>
+                                                        <MaterialIcons name="print" size={30} color="gray" />
+                                                    </TouchableOpacity>
+                                                </VStack>
+                                            }
+                                        </>
+                                    }
                                 </HStack>
-                            <Divider />
+                                <Divider />
                             </VStack>
-                            
-                        ))
-                    }
+                        ))}
                     </VStack>
-                    </ModalBody>
-                </ModalContent>
+                </ModalBody>
+            </ModalContent>
         </Modal>
     )
 }

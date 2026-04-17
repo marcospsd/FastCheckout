@@ -1,5 +1,9 @@
-
-import { HStack, VStack, Text, Switch, Divider, TextareaInput, Input, InputField, Button, ButtonText } from "@gluestack-ui/themed";
+import { HStack } from '../../Components/ui/hstack'
+import { VStack } from '../../Components/ui/vstack'
+import { Text } from '../../Components/ui/text'
+import { Switch } from '../../Components/ui/switch'
+import { Divider } from '../../Components/ui/divider'
+import { Input, InputField } from '../../Components/ui/input'
 import { TopBar } from "../../Components/TopBar";
 import { useMMKVBoolean, useMMKVObject } from "react-native-mmkv";
 import { storage } from "../../Functions/storage";
@@ -26,161 +30,102 @@ const ConfigAppPage = ({ navigation }) => {
         }
     }
 
-
     return (
         <>
         <TopBar title="Configuração do App" goBack={() => navigation.toggleDrawer()}/>
-        <VStack
-            flex={1}
-            p={10}
-            >
-            <HStack
-                alignItems='center'
-                justifyContent='space-between'
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Imprimir pela Rede</Text>
-                <Switch 
-                    trackColor={{ true: '$dinizred' }}
+        <VStack className="flex-1 p-[10px]">
+            <HStack className="items-center justify-between">
+                <Text className="font-bold text-[18px]">Imprimir pela Rede</Text>
+                <Switch
+                    trackColor={{ true: '#c52f33' }}
                     size="lg"
                     value={printRede}
                     onToggle={() => setPrintRede(!printRede)}
-                    />
+                />
             </HStack>
             { user.tipouser == "A" || user.tipouser == "C" ?
             <>
-            <Divider marginVertical={15}/>
-            <HStack
-                alignItems='center'
-                justifyContent='space-between'
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Habilitar PinPad</Text>
-                <Switch 
-                    trackColor={{ true: '$dinizred' }}
+            <Divider className="my-[15px]" />
+            <HStack className="items-center justify-between">
+                <Text className="font-bold text-[18px]">Habilitar PinPad</Text>
+                <Switch
+                    trackColor={{ true: '#c52f33' }}
                     size="lg"
-                    color={"$dinizred"}
                     value={pinpad?.habilitar}
                     onToggle={() => setPinPad({...pinpad, habilitar: !pinpad.habilitar})}
-                    />
+                />
             </HStack>
-           
-            <Divider marginVertical={15}/>
-            <VStack
-                alignItems='start'
-                gap={5}
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >MAC Dispositivo Bluetooth</Text>
+
+            <Divider className="my-[15px]" />
+            <VStack className="items-start gap-[5px]">
+                <Text className="font-bold text-[18px]">MAC Dispositivo Bluetooth</Text>
                 <HStack>
-                    <Input flex={1} isReadOnly={true}>
-                        <InputField 
+                    <Input className="flex-1" isReadOnly={true}>
+                        <InputField
                             value={pinpad?.dispositivo}
                             onChangeText={(text) => setPinPad({...pinpad, dispositivo: text})}
                             placeholder="padrão 00:00:00:00:00:00"
-                            />
+                        />
                     </Input>
-                    <VStack 
-                        justifyContent='center'
-                        marginHorizontal={15}
-                        >
+                    <VStack className="justify-center mx-[15px]">
                         <TouchableOpacity
                             onPress={() => navigation.navigate('BluetoothPage')}
-                            >
+                        >
                             <FontAwesome name="bluetooth" size={35} color="black" />
                         </TouchableOpacity>
                     </VStack>
                 </HStack>
             </VStack>
-            <Divider marginVertical={15}/>
-            <VStack
-                alignItems='start'
-                gap={5}
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Empresa SITEF</Text>
+            <Divider className="my-[15px]" />
+            <VStack className="items-start gap-[5px]">
+                <Text className="font-bold text-[18px]">Empresa SITEF</Text>
                 <HStack>
-                    <Input flex={1}>
-                        <InputField 
+                    <Input className="flex-1">
+                        <InputField
                             value={pinpad?.cod_empresa}
                             disabled={true}
                             onChangeText={(text) => setPinPad({...pinpad, cod_empresa: text})}
-                            placeholder="Empresa padrão 00000000"/>
+                            placeholder="Empresa padrão 00000000"
+                        />
                     </Input>
                 </HStack>
             </VStack>
-            <Divider marginVertical={15}/>
-            <VStack
-                alignItems='start'
-                gap={5}
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Operador SITEF</Text>
+            <Divider className="my-[15px]" />
+            <VStack className="items-start gap-[5px]">
+                <Text className="font-bold text-[18px]">Operador SITEF</Text>
                 <HStack>
-                    <Input flex={1}>
-                        <InputField 
+                    <Input className="flex-1">
+                        <InputField
                             value={pinpad?.operador}
                             disabled={true}
                             onChangeText={(text) => setPinPad({...pinpad, operador: text})}
-                            placeholder="0001"/>
+                            placeholder="0001"
+                        />
                     </Input>
                 </HStack>
             </VStack>
-            <Divider marginVertical={15}/>
-            <HStack
-                alignItems='center'
-                justifyContent='space-between'
-                gap={5}
-                
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Conciliação</Text>
-                <VStack 
-                    
-                    marginHorizontal={15}
-                    >
+            <Divider className="my-[15px]" />
+            <HStack className="items-center justify-between gap-[5px]">
+                <Text className="font-bold text-[18px]">Conciliação</Text>
+                <VStack className="mx-[15px]">
                     <TouchableOpacity
                         onPress={() => navigation.navigate("ViewConciliacao")}
-                        >
+                    >
                         <MaterialCommunityIcons name="credit-card-sync" size={35} color="black" />
                     </TouchableOpacity>
-                </VStack>   
+                </VStack>
             </HStack>
-            <Divider marginVertical={15}/>
-            <HStack
-                alignItems='center'
-                justifyContent='space-between'
-                gap={5}
-                
-                >
-                <Text
-                    fontWeight="bold"
-                    fontSize={18}
-                    >Menu Administrativo SITEF</Text>
-                <VStack 
-                    
-                    marginHorizontal={15}
-                    >
+            <Divider className="my-[15px]" />
+            <HStack className="items-center justify-between gap-[5px]">
+                <Text className="font-bold text-[18px]">Menu Administrativo SITEF</Text>
+                <VStack className="mx-[15px]">
                     <TouchableOpacity
                         onPress={MenuAdministrativo}
-                        >
+                    >
                         <Feather name="menu" size={35} color="black" />
                     </TouchableOpacity>
-                </VStack>   
+                </VStack>
             </HStack>
-            
             </>
             : null
             }

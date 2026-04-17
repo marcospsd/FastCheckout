@@ -1,7 +1,13 @@
-import { Input, VStack, InputField, HStack, ButtonText, Button, Text, ScrollView, Spinner } from "@gluestack-ui/themed"
+import { ScrollView } from 'react-native'
+import { Input, InputField } from '../../Components/ui/input'
+import { VStack } from '../../Components/ui/vstack'
+import { HStack } from '../../Components/ui/hstack'
+import { Button, ButtonText } from '../../Components/ui/button'
+import { Text } from '../../Components/ui/text'
+import { Spinner } from '../../Components/ui/spinner'
 import { TopBar } from "../../Components/TopBar"
-import { api, useAxios } from "../../Services/api"
-import { useState, useEffect } from "react"
+import { api } from "../../Services/api"
+import { useState } from "react"
 import { Alert, Keyboard } from "react-native"
 import { formatDinheiro, NameForma2 } from "../../Functions/format"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -21,7 +27,6 @@ const ViewConciliacao = ({ route, navigation}) => {
     const [loading, setLoading] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [dataModal, setDataModal] = useState(null)
-
 
     const BuscarVenda = () => {
         Keyboard.dismiss()
@@ -51,11 +56,10 @@ const ViewConciliacao = ({ route, navigation}) => {
     const PerguntaEstornarVenda = (id) => {
         Alert.alert(
             'ATENÇÃO',
-            'Qual ação você deseja realizar ?', 
+            'Qual ação você deseja realizar ?',
             [
                 {text: 'Estornar', onPress: () => EstornoDesassociado(id, true)},
                 {text: 'Desassociar', onPress: () => EstornoDesassociado(id, false) }
-                
             ],
             { cancelable: true }
         )
@@ -95,112 +99,90 @@ const ViewConciliacao = ({ route, navigation}) => {
     return (
         <>
         <TopBar title={"Conciliação"} goBack={() => navigation.goBack()}/>
-        <VStack
-            flex={1}
-            >
-            <HStack
-                justifyContent='space-between'
-                alignItems={"center"}
-                gap={5}
-                m={10}
-                >
-                <Input
-                    w={"70%"}   
-                    >
-                    <InputField 
-                    value={idVenda}
-                    onChangeText={(text) => setidVenda(text)}
-                    placeholder="Digite a Ordem da Venda" 
-                    keyboardType="numeric"/>            
+        <VStack className="flex-1">
+            <HStack className="justify-between items-center gap-[5px] m-[10px]">
+                <Input className="w-[70%]">
+                    <InputField
+                        value={idVenda}
+                        onChangeText={(text) => setidVenda(text)}
+                        placeholder="Digite a Ordem da Venda"
+                        keyboardType="numeric"
+                    />
                 </Input>
                 <Button
+                    className="bg-[#c52f33]"
                     onPress={BuscarVenda}
-                    bgColor={'$dinizred'}
                     isDisabled={blockbutton}
-                    >
+                >
                     <ButtonText>Buscar</ButtonText>
                 </Button>
             </HStack>
-            <VStack flex={1} gap={10}>
-            <ScrollView flex={1} marginBottom={10}>
-                {loading && <Spinner color={'$dinizred'} size={'large'} />}
-                {data?.formavenda && 
-                    data.formavenda.map((item) => (
-                        <VStack
-                            key={item.id}
-                            gap={5}
-                            bgColor='#f9f9f9'
-                            margin={5}
-                            p={10}
-                            elevation={15}
+            <VStack className="flex-1 gap-[10px]">
+                <ScrollView style={{ flex: 1, marginBottom: 10 }}>
+                    {loading && <Spinner size="large" className="color-[#c52f33]" />}
+                    {data?.formavenda &&
+                        data.formavenda.map((item) => (
+                            <VStack
+                                key={item.id}
+                                className="gap-[5px] bg-[#f9f9f9] m-[5px] p-[10px]"
+                                style={{ elevation: 15 }}
                             >
-                            <HStack
-                                justifyContent='space-between'
-                                >
-                                <HStack gap={10}>
-                                    <Text fontWeight={'bold'}>ID Recebimento:</Text>
-                                    <Text>{item.id}</Text>
+                                <HStack className="justify-between">
+                                    <HStack className="gap-[10px]">
+                                        <Text className="font-bold">ID Recebimento:</Text>
+                                        <Text>{item.id}</Text>
+                                    </HStack>
+                                    <HStack className="gap-[10px]">
+                                        <Text className="font-bold">Valor:</Text>
+                                        <Text>R$ {formatDinheiro(item.valor)}</Text>
+                                    </HStack>
                                 </HStack>
-                                <HStack gap={10}>
-                                    <Text fontWeight={'bold'}>Valor:</Text>
-                                    <Text>R$ {formatDinheiro(item.valor)}</Text>
+                                <HStack className="justify-between">
+                                    <HStack className="gap-[10px]">
+                                        <Text className="font-bold">Forma:</Text>
+                                        <Text>{NameForma2(item.forma)}</Text>
+                                    </HStack>
+                                    <HStack className="gap-[10px]">
+                                        <Text className="font-bold">Parcela:</Text>
+                                        <Text>{item.parcelas}</Text>
+                                    </HStack>
                                 </HStack>
-                            </HStack>
-                            <HStack
-                                justifyContent='space-between'
-                                >
-                                <HStack gap={10}>
-                                    <Text fontWeight={'bold'}>Forma:</Text>
-                                    <Text>{NameForma2(item.forma)}</Text>
+                                <HStack className="justify-between">
+                                    <VStack className="gap-[2px]">
+                                        <Text className="font-bold">NSU Host:</Text>
+                                        <Text>{item.nsu_host || 'Não possui.'}</Text>
+                                    </VStack>
+                                    <VStack className="gap-[2px]">
+                                        <Text className="font-bold">NSU Sitef:</Text>
+                                        <Text>{item.nsu_sitef || 'Não possui.'}</Text>
+                                    </VStack>
                                 </HStack>
-                                <HStack gap={10}>
-                                    <Text fontWeight={'bold'}>Parcela:</Text>
-                                    <Text>{item.parcelas}</Text>
-                                </HStack>
-                            </HStack>
-                            <HStack
-                                justifyContent='space-between'
-                                >
-                                <VStack gap={2}>
-                                    <Text fontWeight={'bold'}>NSU Host:</Text>
-                                    <Text>{item.nsu_host || 'Não possui.'}</Text>
-                                </VStack>
-                                <VStack gap={2}>
-                                    <Text fontWeight={'bold'}>NSU Sitef:</Text>
-                                    <Text>{item.nsu_sitef|| 'Não possui.'}</Text>
-                                </VStack>
-                            </HStack>
-                            <HStack
-                                justifyContent='space-around'
-                                >
-                                <Button 
-                                    size={'sm'}
-                                    isDisabled={item.nsu_host | blockbutton ? true : false}
-                                    bgColor={'green'}
-                                    gap={5}
-                                    onPress={() => OpenModal(item)}
+                                <HStack className="justify-around">
+                                    <Button
+                                        size="sm"
+                                        className="bg-green-600 gap-[5px]"
+                                        isDisabled={item.nsu_host | blockbutton ? true : false}
+                                        onPress={() => OpenModal(item)}
                                     >
-                                    <MaterialCommunityIcons name="credit-card-plus-outline" size={24} color="white" />
-                                    <ButtonText>Associar</ButtonText>
-                                </Button>
-                                <Button
-                                    size={'sm'}
-                                    isDisabled={!item.nsu_host | blockbutton ? true : false} 
-                                    bgColor={'$dinizred'}
-                                    gap={5}
-                                    onPress={() => PerguntaEstornarVenda(item)}
+                                        <MaterialCommunityIcons name="credit-card-plus-outline" size={24} color="white" />
+                                        <ButtonText>Associar</ButtonText>
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        className="bg-[#c52f33] gap-[5px]"
+                                        isDisabled={!item.nsu_host | blockbutton ? true : false}
+                                        onPress={() => PerguntaEstornarVenda(item)}
                                     >
-                                    <ButtonText>Estornar</ButtonText>
-                                    <MaterialCommunityIcons name="credit-card-remove-outline" size={24} color="white" />
-                                </Button>
-                            </HStack>
-                        </VStack>
-                    ))
-                
-                }
-            </ScrollView>
+                                        <ButtonText>Estornar</ButtonText>
+                                        <MaterialCommunityIcons name="credit-card-remove-outline" size={24} color="white" />
+                                    </Button>
+                                </HStack>
+                            </VStack>
+                        ))
+                    }
+                </ScrollView>
             </VStack>
-        {openModal && <ModalConciliacao openModal={openModal} closeModal={closeModal} data={dataModal} setData={setDataModal} BuscarVenda={BuscarVenda} />}
+            {openModal && <ModalConciliacao openModal={openModal} closeModal={closeModal} data={dataModal} setData={setDataModal} BuscarVenda={BuscarVenda} />}
         </VStack>
         </>
     )
