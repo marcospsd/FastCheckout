@@ -14,7 +14,7 @@ def GerarCupom(venda):
         'telefone': venda['dadoscliente']['telefone'],
         'cpf': venda['cpf'],
         'campanha': 2,
-        'venda_origem': f"EX052025-{venda['ordem']}",
+        'venda_origem': f"EX{data_obj.strftime('%m-%Y')}-{venda['ordem']}",
         'valor_cupom': int(round(venda['total_venda']*0.2, 0)),
         'data_validade': nova_data_str,
         "filial": "30 CM"

@@ -43,6 +43,11 @@ export const receberCliSitef = async (recebimento, pinpad) => {
     if (pinpad.comexterna == "1") {
         intentParams.isDoubleValidation = "0"
     }
+    
+    if (pinpad.comexterna == "4") {
+        intentParams.isDoubleValidation = "0"
+        intentParams.tokenRegistroTls = pinpad.tokentls
+    }
     if (pinpad.dispositivo) {
         intentParams.pinpadMac= pinpad.dispositivo
     }
@@ -86,6 +91,11 @@ export const adminCliSitef = async (modalidade, pinpad) => {
     }
     if (pinpad.comexterna == "1") {
         intentParams.isDoubleValidation = "0"
+    }
+
+    if (pinpad.comexterna == "4") {
+        intentParams.isDoubleValidation = "0"
+        intentParams.tokenRegistroTls = pinpad.tokentls
     }
 
     if (pinpad.dispositivo) {
