@@ -9,6 +9,7 @@ from datetime import date, timedelta, datetime
 from decouple import config
 from .gerarcashback import GerarCupom
 
+
 def FormasdePag(forma):
     match forma:
         case 'CC':
@@ -36,6 +37,9 @@ def ImprimirComprovanteVenda(venda, bonus=None):
     try:
     # Criar uma instância da impressora
         p = printer.Network(host=config('PRINT_HOST', False), port=9100)
+        if config('PRINT_TIPO') == 'EPSON':
+            p._raw(b'\x1b\x74\x02')
+            p.codepage = 'CP850'
     except:
         return True
     formadepag = venda['formavenda']
@@ -55,7 +59,10 @@ def ImprimirComprovanteVenda(venda, bonus=None):
     p.text("DATA: ")
     p.set(align='left', width=2, height=1, font='b')
     p.text(f"{venda['create_at']} \n")
-    p.set(align='left', width=2, height=1, font='b', text_type='b', flip=True)
+    if config("PRINT_TIPO") == "EPSON":
+        p.set(align='left', width=2, height=1, font='b', text_type='b')
+    else:
+        p.set(align='left', width=2, height=1, font='b', text_type='b', flip=True)
     p.text("ORDEM: ")
     p.set(align='left', width=2, height=1, font='b')
     p.text(f"{venda['ordem']} \n")
@@ -134,7 +141,10 @@ fique por dentro de todas \nas novidades. \n
     p.text("PRODUTOS SEM TROCA \n")
     p.text("-----------------------\n")
     p.cut()
-    p.set(align='left', width=2, height=1, font='b', text_type='b', flip=True)
+    if config("PRINT_TIPO") == "EPSON":
+        p.set(align='left', width=2, height=1, font='b', text_type='b')
+    else:
+        p.set(align='left', width=2, height=1, font='b', text_type='b', flip=True)
     p.text("ORDEM: ")
     p.set(align='left', width=2, height=1, font='b')
     p.text(f"{venda['ordem']} \n")
